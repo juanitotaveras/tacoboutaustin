@@ -1,0 +1,1 @@
+docker run -it -d -p 5000:5000 -v /Users/carolineshi/Desktop/Github/:/usr/cs373 -w /usr/cs373 juanitotaveras/tacoboutaustin
