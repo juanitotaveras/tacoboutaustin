@@ -28,6 +28,10 @@ Tacoboutaustin award-winning website
 		
 `docker run --name taco -d -p 3000:3000 -v ``pwd``/app/src:/app/src tacoboutaustin`
 
+##### To bring container back from detached mode to interactive mode:
+
+`docker exec -it taco /bin/bash`
+
 ##### Now if you go to your browser and type "localhost:3000" you should see the web app!
 
 
