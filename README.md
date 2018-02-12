@@ -22,11 +22,11 @@ Tacoboutaustin award-winning website
 5. Now build a new container (you can use the optional --name to give your container a name, which is "taco" in this case):
 ##### To run the new container in interactive mode:
 
-`docker run --name taco -it -p 3000:3000 -v \`pwd\`/app/src:/app/src tacoboutaustin` 
+`docker run --name taco -it -p 3000:3000 -v ``pwd``/app/src:/app/src tacoboutaustin` 
 
 ##### To run the container in detached mode (this is what you want if you still  need to use the terminal):
 		
-`docker run --name taco -d -p 3000:3000 -v \`pwd\`/app/src:/app/src tacoboutaustin`
+`docker run --name taco -d -p 3000:3000 -v ``pwd``/app/src:/app/src tacoboutaustin`
 
 ##### Now if you go to your browser and type "localhost:3000" you should see the web app!
 
