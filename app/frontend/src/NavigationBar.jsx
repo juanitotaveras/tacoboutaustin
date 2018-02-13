@@ -36,16 +36,16 @@ export default class Example extends React.Component {
           height="30" width="30" /></NavbarBrand>
           <Nav pills>
             <NavItem>
-              <NavLink href="#" active>Restaurants</NavLink>
+              <NavLink href="/restaurants" active>Restaurants</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="#">Attractions</NavLink>
+              <NavLink href="/attractions">Attractions</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="#">Hotels</NavLink>
+              <NavLink href="/hotels">Hotels</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink>About</NavLink>
+              <NavLink href="/about">About</NavLink>
             </NavItem>
           </Nav>
         </Navbar>

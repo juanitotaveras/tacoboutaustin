@@ -5,6 +5,7 @@ import NavigationBar from './NavigationBar';
 import Splash from './Splash';
 import About from './About';
 import { Route } from 'react-router-dom';
+import Router from './Router';
 
 
 class App extends Component {
@@ -12,8 +13,7 @@ class App extends Component {
     return (
     	<div>
         	<NavigationBar/>
-        	<Route path="/about" component={About} />
-        	{/*<Splash />*/}
+        	<Router />
         </div>
     );
   }
