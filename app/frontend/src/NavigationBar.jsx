@@ -1,8 +1,3 @@
-// import React, { Component } from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-// import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'reactstrap';
-
 import React from 'react';
 import {
   Collapse,
@@ -31,41 +26,32 @@ export default class Example extends React.Component {
       isOpen: !this.state.isOpen
     });
   }
+
   render() { 
     return (
       <div>
         <Navbar color="faded" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="/components/">Components</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">Github</NavLink>
-              </NavItem>
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Options
-                </DropdownToggle>
-                <DropdownMenu >
-                  <DropdownItem>
-                    Option 1
-                  </DropdownItem>
-                  <DropdownItem>
-                    Option 2
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>
-                    Reset
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </Nav>
-          </Collapse>
+          <NavbarBrand href="/"><img src="https://www.tacobueno.com/assets/food/tacos/Taco_BFT_Beef_990x725.jpg" 
+          height="30" width="30" /></NavbarBrand>
+          <Nav pills>
+            <NavItem>
+              <NavLink href="#" active>Restaurants</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink href="#">Attractions</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink href="#">Hotels</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink href="#">About</NavLink>
+            </NavItem>
+          </Nav>
         </Navbar>
       </div>
     );
   }
 }
+
+
+

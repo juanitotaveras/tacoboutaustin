@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
+export default class Splash extends Component {
   render() {
     return (
       <h1>Splash! </h1>
@@ -10,4 +10,3 @@ class App extends Component {
   }
 }
 
-export default App;

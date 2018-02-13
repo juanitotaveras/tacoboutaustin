@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Bootstrap, Button } from 'react-bootstrap';
-import NavigationBar from './NavigationBar'
+import NavigationBar from './NavigationBar';
+import Splash from './Splash';
 
 
 class App extends Component {
   render() {
     return (
-
-        <NavigationBar/>
+    	<div>
+        	<NavigationBar/>
+        	{/*<Splash />*/}
+        </div>
     );
   }
 }
