@@ -21,9 +21,8 @@ COPY ./app/frontend ./
 
 # install dependencies
 RUN npm install
-RUN npm install --save reactstrap@next react react-dom
-RUN npm install bootstrap --save     
-RUN npm install --save reactstrap@next react react-dom
+RUN npm install --save reactstrap@next react react-dom 
+RUN npm install bootstrap reactstrap@next react-router-dom
 
 # Install Python dependencies (from Downing's site)
 #FROM python:3.5.2
