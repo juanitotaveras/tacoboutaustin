@@ -6,13 +6,13 @@ headers = {'x-api-key': SYGIC_KEY}
 #  Atraction in Austin
 AUSTIN_ATRACTION = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=going_out"
 
-# three sample Hotels in Austin
+# three sample atractions in Austin
 SIX_STREET = "https://api.sygictravelapi.com/1.0/en/places/poi:12246"
 PARAMOUNT = "https://api.sygictravelapi.com/1.0/en/places/poi:49042"
 LONG_CENTRE = "https://api.sygictravelapi.com/1.0/en/places/poi:36887"
 
 
-# scrap 3 hotel and return it to a list
+# scrap 3 atractions and return them in a list
 def scrap_three_atractions():
 	response = requests.get(SIX_STREET, headers = headers)
 	atraction1 = response.json()
