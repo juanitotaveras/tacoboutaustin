@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import {
   Collapse,
   Navbar,
@@ -44,7 +45,7 @@ export default class Example extends React.Component {
               <NavLink href="#">Hotels</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="#">About</NavLink>
+              <NavLink>About</NavLink>
             </NavItem>
           </Nav>
         </Navbar>

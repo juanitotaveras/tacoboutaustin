@@ -3,6 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import NavigationBar from './NavigationBar';
 import Splash from './Splash';
+import About from './About';
+import { Route } from 'react-router-dom';
 
 
 class App extends Component {
@@ -10,6 +12,7 @@ class App extends Component {
     return (
     	<div>
         	<NavigationBar/>
+        	<Route path="/about" component={About} />
         	{/*<Splash />*/}
         </div>
     );
