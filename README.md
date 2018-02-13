@@ -11,22 +11,20 @@ Tacoboutaustin award-winning website
 
 `cd tacoboutaustin`
 
-3. Build the docker container from the Dockerfile in this directory and give the image a name (which will be "tacoboutaustin", in this case):
+3. Build the docker container from the Dockerfile in this directory and give the image a name:
 
-`docker build --tag "tacoboutaustin" .`
+`docker build --tag "OPTIONAL_IMAGE_NAME" .`
 
-4. Observe that you have a newly created Docker image named "tacoboutaustin".
+4. Observe that you have a newly created Docker image named "OPTIONAL_IMAGE_NAME".
 
 `docker images`
 
 5. Now build a new container (you can use the optional --name to give your container a name, which is "taco" in this case):
 ##### To run the new container in interactive mode:
-
-`docker run --name taco -it -p 3000:3000 -v ``pwd``/app/src:/app/src tacoboutaustin` 
+```docker run --name OPTIONAL_CONTAINER_NAME -it -p 3000:3000 -v `pwd`/app/frontend/src:/frontend/src tacoboutaustin```
 
 ##### To run the container in detached mode (this is what you want if you still  need to use the terminal):
-		
-`docker run --name taco -d -p 3000:3000 -v ``pwd``/app/src:/app/src tacoboutaustin`
+```docker run --name OPTIONAL_CONTAINER_NAME -d -p 3000:3000 -v `pwd`/app/frontend/src:/frontend/src tacoboutaustin```
 
 ##### To bring container back from detached mode to interactive mode:
 
