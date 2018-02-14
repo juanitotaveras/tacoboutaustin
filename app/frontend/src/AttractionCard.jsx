@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle, Button } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-export default class AttractionDetail extends Component {
+
+export default class AttractionCard extends Component {
   render() {
     return (
       <div>
@@ -12,9 +15,13 @@ export default class AttractionDetail extends Component {
             <CardTitle>Mount Bonnell</CardTitle>
             <CardSubtitle>Views of rich people</CardSubtitle>
             <CardText>Reviews, and google maps location</CardText>
-            <Button>Check it out!</Button>
+            <Button outline ><Link to={'/attractions/' + this.props.id}>Check it out!</Link></Button>
           </CardBody>
         </Card>
       </div>
   )};
 }
+
+AttractionCard.propTypes = {
+    id: PropTypes.string
+  }

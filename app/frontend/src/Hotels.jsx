@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Container, Row, Col } from 'reactstrap';
-import HotelDetail from './HotelDetail';
+import HotelCard from './HotelCard';
 
 
 export default class Hotels extends Component {
@@ -16,13 +16,13 @@ export default class Hotels extends Component {
 	    	<Container>
 	  			<Row>
 	  				<Col>
-	  					<HotelDetail />
+	  					<HotelCard id="1"/>
 	  				</Col>
 	  				<Col>
-	  					<HotelDetail />
+	  					<HotelCard id="2"/>
 	  				</Col>
 	  				<Col>
-	  					<HotelDetail />
+	  					<HotelCard id="3"/>
 	  				</Col>
 	  			</Row>
 	  		</Container>

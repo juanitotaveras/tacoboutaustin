@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle, Button } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-export default class HotelDetail extends Component {
+
+export default class HotelCard extends Component {
   render() {
     return (
       <div>
@@ -12,9 +15,13 @@ export default class HotelDetail extends Component {
             <CardTitle>Four Seasons Hotel</CardTitle>
             <CardSubtitle>Downtown Austin</CardSubtitle>
             <CardText>Reviews, and google maps location</CardText>
-            <Button>Check it out!</Button>
+            <Button outline ><Link to={'/hotels/' + this.props.id}>Check it out!</Link></Button>
           </CardBody>
         </Card>
       </div>
   )};
 }
+
+HotelCard.propTypes = {
+    id: PropTypes.string
+  }

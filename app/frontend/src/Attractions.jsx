@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Container, Row, Col } from 'reactstrap';
-import AttractionDetail from './AttractionDetail';
+import AttractionCard from './AttractionCard';
 
 
 export default class Attractions extends Component {
@@ -16,13 +16,13 @@ export default class Attractions extends Component {
 	  		<Container>
 	  			<Row>
 	  				<Col>
-	  					<AttractionDetail />
+	  					<AttractionCard id="1"/>
 	  				</Col>
 	  				<Col>
-	  					<AttractionDetail />
+	  					<AttractionCard id="2"/>
 	  				</Col>
 	  				<Col>
-	  					<AttractionDetail />
+	  					<AttractionCard id="3"/>
 	  				</Col>
 	  			</Row>
 	  		</Container>
