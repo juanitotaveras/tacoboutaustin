@@ -12,7 +12,19 @@ export default class Restaurants extends Component {
 	      			<h1>Restaurants </h1>
 	      		</Row>
       		</Container>
-      		<RestaurantDetail />
+      		<Container>
+      			<Row>
+      				<Col>
+      					<RestaurantDetail />
+      				</Col>
+      				<Col>
+      					<RestaurantDetail />
+      				</Col>
+      				<Col>
+      					<RestaurantDetail />
+      				</Col>
+      			</Row>
+      		</Container>
       	</div>
     );
   }
