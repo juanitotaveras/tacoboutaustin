@@ -11,7 +11,10 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem } from 'reactstrap';
+  DropdownItem,
+  Container,
+  Row,
+  Col } from 'reactstrap';
 
 export default class Example extends React.Component {
   constructor(props) {
@@ -31,24 +34,28 @@ export default class Example extends React.Component {
   render() { 
     return (
       <div>
-        <Navbar color="faded" light expand="md">
-          <NavbarBrand href="/"><img src="https://www.tacobueno.com/assets/food/tacos/Taco_BFT_Beef_990x725.jpg" 
-          height="30" width="30" /></NavbarBrand>
-          <Nav pills>
-            <NavItem>
-              <NavLink href="/restaurants" active>Restaurants</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="/attractions">Attractions</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="/hotels">Hotels</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="/about">About</NavLink>
-            </NavItem>
-          </Nav>
-        </Navbar>
+        <Container>
+          <Row>
+            <Navbar color="faded" light expand="md">
+              <NavbarBrand href="/"><img src="https://www.tacobueno.com/assets/food/tacos/Taco_BFT_Beef_990x725.jpg" 
+              height="30" width="30" /></NavbarBrand>
+              <Nav pills>
+                <NavItem>
+                  <NavLink href="/restaurants">Restaurants</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/attractions">Attractions</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/hotels">Hotels</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/about">About</NavLink>
+                </NavItem>
+              </Nav>
+            </Navbar>
+          </Row>
+        </Container>
       </div>
     );
   }

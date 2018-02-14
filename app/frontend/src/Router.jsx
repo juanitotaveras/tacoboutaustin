@@ -7,16 +7,21 @@ import Hotels from './Hotels';
 import Attractions from './Attractions';
 import About from './About';
 import Splash from './Splash';
+import RestaurantDetails from './RestaurantDetails';
+import AttractionDetails from './AttractionDetails';
+import HotelDetails from './HotelDetails';
 
 export default class Router extends Component {
   render() {
     return (
       <Switch>
 	  	<Route exact path='/' component={Splash}/>
-	  {/* both /roster and /roster/:number begin with /roster */}
 	  	<Route exact path='/restaurants' component={Restaurants}/>
+	  		<Route path='/restaurants/:res_id' component={RestaurantDetails} />
 	  	<Route exact path='/attractions' component={Attractions}/>
+	  		<Route path='/attractions/:att_id' component={AttractionDetails} />
 	  	<Route exact path='/hotels' component={Hotels}/>
+	  		<Route path='/hotels/:hot_id' component={HotelDetails} />
 	  	<Route exact path='/about' component={About}/>
 	  </Switch>
     );
