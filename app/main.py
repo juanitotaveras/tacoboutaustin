@@ -1,21 +1,27 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template
 
+# BASE_DIR is directory above config.py
+BASE_DIR = os.path.abspath(os.path.dirname('__file__'))
 
-app = Flask(__name__, static_folder= 'frontend/build')
+# append path BASE_DIR to parksrus-frontend/build to get absolute path
+REACT_FILES = os.path.join(BASE_DIR, 'frontend/build')
+
+app = Flask(__name__, static_folder= 'frontend/build/static')
 
 # Serve React App
 @app.route('/', defaults={'path': ''})
+@app.route("/<string:path>")
 @app.route('/<path:path>')
 def serve(path):
     if(path == ""):
-        return send_from_directory('frontend/build', 'index.html')
+        return send_from_directory(REACT_FILES, 'index.html')
     else:
-        if(os.path.exists("frontend/build/" + path)):
-            return send_from_directory('frontend/build', path)
+        if(os.path.exists(os.path.join(REACT_FILES, path))):
+            return send_from_directory(REACT_FILES, path)
         else:
-            return send_from_directory('frontend/build', 'index.html')
+            return send_from_directory(REACT_FILES, 'index.html')
 
 
 if __name__ == '__main__':
-    app.run(use_reloader=True, port=5000, threaded=True)
+    app.run(port=5000, use_reloader=True, threaded=True)

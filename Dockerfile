@@ -48,5 +48,12 @@ COPY requirements.txt /tmp/
 RUN pip install -U pip
 RUN pip install -r /tmp/requirements.txt
 
+RUN apt-get install curl
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash
+RUN apt-get install nodejs
+RUN npm install
+RUN npm install --save reactstrap@next react react-dom 
+RUN npm install bootstrap reactstrap@next react-router-dom
+
 COPY ./app /app
 
