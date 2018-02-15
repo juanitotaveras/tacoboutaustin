@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Jumbotron, Button, Row, Col } from 'reactstrap';
 
-export default class RestaurantJumbotron extends Component {
+export default class HotelJumbotron extends Component {
   render(props) {
     return (
     <div>
@@ -21,9 +21,9 @@ export default class RestaurantJumbotron extends Component {
   )};
 }
 
-RestaurantJumbotron.propTypes = {
+HotelJumbotron.propTypes = {
   name: PropTypes.string,
-  foodtype: PropTypes.string,
+  address: PropTypes.string,
   image: PropTypes.string,
   map: PropTypes.map
 };
