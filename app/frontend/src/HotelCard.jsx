@@ -10,11 +10,11 @@ export default class HotelCard extends Component {
     return (
       <div>
         <Card>
-          <CardImg top width="100%" src="http://texashillcountry.com/wp-content/uploads/2014/02/Four-Season-Hotel-Austin-640x321.jpg" alt="Card image cap" />
+          <CardImg top width="100%" src={this.props.image} alt="Card image cap" />
           <CardBody>
-            <CardTitle>Four Seasons Hotel</CardTitle>
-            <CardSubtitle>Downtown Austin</CardSubtitle>
-            <CardText>Reviews, and google maps location</CardText>
+            <CardTitle>{this.props.name}</CardTitle>
+            <CardSubtitle>{this.props.address}</CardSubtitle>
+            <CardText>{this.props.rating}</CardText>
             <Button outline ><Link to={'/hotels/' + this.props.id}>Check it out!</Link></Button>
           </CardBody>
         </Card>
@@ -23,5 +23,9 @@ export default class HotelCard extends Component {
 }
 
 HotelCard.propTypes = {
-    id: PropTypes.string
+    name: PropTypes.string,
+    image: PropTypes.string,
+    id: PropTypes.string,
+    address: PropTypes.string,
+    rating: PropTypes.string
   }
