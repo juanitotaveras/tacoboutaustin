@@ -1,40 +1,40 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
+import HotelJumbotron from './HotelJumbotron';
+import { hotels } from './Hotels';
+import { Link } from 'react-router-dom';
 
 export default class HotelDetails extends Component {
 	render(props)
 	{
-		return(
+		var id = this.props.match.params.hot_id;
+		var h = hotels[parseInt(id)];
+		return (
 			<Container>
 				<Row>
-				  <Col sm="12">
-					<h1>Hotel Details {this.props.id}</h1>
-				  </Col>
+					<Col sm="12">
+					<h1>Hotel Details</h1>
+					</Col>
+					<Col>
+                		<HotelJumbotron
+                		name={h.name}
+                		address={h.address}
+                		image={h.image}
+                		map="http://texspine.com/wp-content/uploads/2012/01/map.jpg"
+                		amenities={h.amenities}
+                		rating={h.rating}
+                		reviews={h.reviews}
+                		/>
+              		</Col>
 				</Row>
 				<Row>
-                  <Col sm="5">
-                    <img src="http://texashillcountry.com/wp-content/uploads/2014/02/Four-Season-Hotel-Austin-640x321.jpg" alt="Card image cap" />
-                  </Col>
-                  <Col sm="2">
-                  </Col>
-                  <Col sm="5">
-                    <img src="https://snazzy-maps-cdn.azureedge.net/assets/1243-xxxxxxxxxxx.png?v=20170626083204" alt="Map"/>
-                  </Col>
+					<h1>Nearby things!</h1>
 				</Row>
-
 				<Row>
-				  <Col sm="5">
-				  
-
-				  </Col>
-				  <Col sm="2">
-
-				  </Col>
-				  <Col sm="5">
-
-				  </Col>
-
-
+					<h2><Link to='/restaurants'>Restaurants!</Link></h2>
+				</Row>
+				<Row>
+					<h2><Link to='/attractions'>Attractions!</Link></h2>
 				</Row>
 			</Container>
 		);

@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import tacoLogo from './assets/taco_logo.png';
 import {
   Collapse,
   Navbar,
@@ -31,31 +32,29 @@ export default class Example extends React.Component {
     });
   }
 
-  render() { 
+  render(props) { 
     return (
       <div>
-        <Container>
-          <Row>
-            <Navbar color="faded" light expand="md">
-              <NavbarBrand href="/"><img src="https://www.tacobueno.com/assets/food/tacos/Taco_BFT_Beef_990x725.jpg" 
-              height="30" width="30" /></NavbarBrand>
-              <Nav pills>
-                <NavItem>
-                  <NavLink href="/restaurants">Restaurants</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/attractions">Attractions</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/hotels">Hotels</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/about">About</NavLink>
-                </NavItem>
-              </Nav>
-            </Navbar>
-          </Row>
-        </Container>
+        <Navbar color="dark" light expand="md">
+          <NavbarBrand href="/"><img src={tacoLogo} height="60em" width="60em" /></NavbarBrand>
+          <NavbarToggler onClick={this.toggle} />
+          <Collapse isOpen={this.state.isOpen} navbar>
+            <Nav className="navbar text-white container-fluid" navbar>
+                 <NavItem>
+                   <NavLink href="/restaurants"><h3 className="text-white">Restaurants</h3></NavLink>
+                 </NavItem>
+                 <NavItem>
+                   <NavLink href="/attractions"><h3 className="text-white">Attractions</h3></NavLink>
+                 </NavItem>
+                 <NavItem>
+                   <NavLink href="/hotels"><h3 className="text-white">Hotels</h3></NavLink>
+                 </NavItem>
+                 <NavItem>
+                   <NavLink href="/about"><h3 className="text-white">About</h3></NavLink>
+                 </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
       </div>
     );
   }
