@@ -21,6 +21,9 @@ export default class HotelDetails extends Component {
                 		address={h.address}
                 		image={h.image}
                 		map="http://texspine.com/wp-content/uploads/2012/01/map.jpg"
+                		amenities={h.amenities}
+                		rating={h.rating}
+                		reviews={h.reviews}
                 		/>
               		</Col>
 				</Row>
@@ -28,10 +31,10 @@ export default class HotelDetails extends Component {
 					<h1>Nearby things!</h1>
 				</Row>
 				<Row>
-					<Link to='/restaurants'>Restaurants!</Link>
+					<h2><Link to='/restaurants'>Restaurants!</Link></h2>
 				</Row>
 				<Row>
-					<Link to='/attractions'>Attractions!</Link>
+					<h2><Link to='/attractions'>Attractions!</Link></h2>
 				</Row>
 			</Container>
 		);

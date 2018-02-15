@@ -32,10 +32,10 @@ export default class RestaurantDetails extends Component {
 					<h1>Nearby things!</h1>
 				</Row>
 				<Row>
-					<Link to='/hotels'>Hotels!</Link>
+					<h2><Link to='/hotels'>Hotels!</Link></h2>
 				</Row>
 				<Row>
-					<Link to='/attractions'>Attractions!</Link>
+					<h2><Link to='/attractions'>Attractions!</Link></h2>
 				</Row>
 			</Container>
 		);
