@@ -9,7 +9,9 @@ const restaurants = [
   name: "Franklin BBQ",
   image: "https://static01.nyt.com/images/2017/03/15/dining/15REST-FRANKLIN-slide-HMM7/15REST-FRANKLIN-slide-HMM7-videoSixteenByNineJumbo1600.jpg",
   food: "Barbecue Restaurant",
-  rating: "★★★★★"
+  rating: "★★★★★",
+  hours: "11AM-3PM",
+  reviews: "While on every barbecue list, this famed spot deserves its reputation for some of the best barbecue in the country."
 },
 
 {
@@ -17,14 +19,18 @@ const restaurants = [
   name:"The Oasis",
   image:"https://laketravis.com/listify/wp-content/uploads/2016/10/oasis-10.jpg",
   food:"Tex-Mex Restaurant",
-  rating:"★★★★☆"
+  rating:"★★★★☆",
+  hours: "11:30AM-8PM",
+  reviews: "Good Place to Eat with wonderful view, but a bit pricy and hard to get a table."
 },
 {
   id:"2",
   name:"Torchy's Tacos",
   image:"https://www.papercitymag.com/wp-content/uploads/2017/04/56a66a7b2c26c.image_.jpg",
   food:"Tacos",
-  rating:"★★★☆☆"
+  rating:"★★★☆☆",
+  hours: "7AM-10PM",
+  reviews: "My personal lunch favorites are 'the democrat' and \"the brushfire\", but don't let that keep you from trying them all!"
 }];
 
 export{restaurants};
