@@ -10,11 +10,11 @@ export default class AttractionCard extends Component {
     return (
       <div>
         <Card>
-          <CardImg top width="100%" src="http://www.austintexas.gov/sites/default/files/images/Parks/Parks/mtbonnell__1_.jpg" alt="Card image cap" />
+          <CardImg top width="100%" src={this.props.image} alt="Card image cap" />
           <CardBody>
-            <CardTitle>Mount Bonnell</CardTitle>
-            <CardSubtitle>Views of rich people</CardSubtitle>
-            <CardText>Reviews, and google maps location</CardText>
+            <CardTitle>{this.props.name}</CardTitle>
+            <CardSubtitle>{this.props.type}</CardSubtitle>
+            <CardText>{this.props.rating}</CardText>
             <Button outline ><Link to={'/attractions/' + this.props.id}>Check it out!</Link></Button>
           </CardBody>
         </Card>
@@ -23,5 +23,9 @@ export default class AttractionCard extends Component {
 }
 
 AttractionCard.propTypes = {
-    id: PropTypes.string
+    name: PropTypes.string,
+    image: PropTypes.string,
+    id: PropTypes.string,
+    type: PropTypes.string,
+    rating: PropTypes.string
   }
