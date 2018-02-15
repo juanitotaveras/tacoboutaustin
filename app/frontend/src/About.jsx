@@ -128,8 +128,9 @@ class About extends Component {
           if (members[i]["gitLogin"] == author) {
             members[i]["issues"] += 1;
           }
-          tempTotalIssues += 1;
         }
+        tempTotalIssues += 1;
+
       }
     }
 
