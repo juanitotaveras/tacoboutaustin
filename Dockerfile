@@ -20,7 +20,9 @@ WORKDIR /frontend
 COPY ./app/frontend ./           
 
 # install dependencies
-RUN npm install              
+RUN npm install
+RUN npm install --save reactstrap@next react react-dom 
+RUN npm install bootstrap reactstrap@next react-router-dom
 
 # Install Python dependencies (from Downing's site)
 #FROM python:3.5.2
@@ -65,7 +67,7 @@ RUN pip install --upgrade pip 	&& \
 	#pip install mypy 	&& \
 	pip install numpy 	&& \
 	pip install pylint
-	
+
 RUN pip install Flask
 
 WORKDIR /frontend            
