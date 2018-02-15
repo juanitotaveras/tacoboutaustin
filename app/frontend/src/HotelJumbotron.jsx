@@ -9,8 +9,8 @@ export default class HotelJumbotron extends Component {
       <Jumbotron>
         <h1 className="display-3">{this.props.name}</h1>
         <p className="lead">{this.props.foodtype}</p>
-        <img top width="50%" src={this.props.image} alt="Card image cap" />
-        <img top width="50%" src={this.props.map} alt="Card image cap" />
+        <img top width="50%" height="300em" src={this.props.image} alt="Card image cap" />
+        <img top width="50%" height="300em" src={this.props.map} alt="Card image cap" />
         <hr className="my-2" />
         <p>More info.</p>
         <p className="lead">
