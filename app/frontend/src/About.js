@@ -257,8 +257,9 @@ class About extends Component {
             </ul>
           </Col>
           <Col sm="12" md="6" style={scoreboardStyle}>
-            <h1> <a href="https://tienlatien252.gitbooks.io/tacoboutaustin/content/">GitBook </a> </h1>
-            <h1> <a href="https://github.com/juanitotaveras/tacoboutaustin">Github </a></h1>
+            <h1> <a href="https://tienlatien252.gitbooks.io/tacoboutaustin/content/">API Documentation</a> </h1>
+            <h1> <a href="https://carorineee.gitbooks.io/report-and-critiques/content/">Technical Report</a></h1>
+            <h1> <a href="https://github.com/juanitotaveras/tacoboutaustin">Github Repo</a></h1>
           </Col>
         </Row>
  
