@@ -17,11 +17,6 @@ import {
   Row,
   Col } from 'reactstrap';
 
-  const navButtonStyle = {
-    textColor: 'white',
-    color: 'white'
-  };
-
 export default class Example extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +34,7 @@ export default class Example extends React.Component {
 
   render(props) { 
     return (
-      <div style={navButtonStyle}>
+      <div>
         <Navbar color="dark" light expand="md">
           <NavbarBrand href="/"><img src={tacoLogo} height="60em" width="60em" /></NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
