@@ -19,9 +19,12 @@ export default class AttractionsDetails extends Component {
 					<Col>
                 		<AttractionJumbotron
                 		name={a.name}
-                		activitytype={a.type}
+                		activitytype={a.activitytype}
                 		image={a.image}
                 		map="http://texspine.com/wp-content/uploads/2012/01/map.jpg"
+                		hours={a.hours}
+                		rating={a.rating}
+                		reviews={a.reviews}
                 		/>
               		</Col>
 				</Row>
@@ -29,10 +32,10 @@ export default class AttractionsDetails extends Component {
 					<h1>Nearby things!</h1>
 				</Row>
 				<Row>
-					<Link to='/hotels'>Hotels!</Link>
+					<h2><Link to='/hotels'>Hotels!</Link></h2>
 				</Row>
 				<Row>
-					<Link to='/restaurants'>Restaurants!</Link>
+					<h2><Link to='/restaurants'>Restaurants!</Link></h2>
 				</Row>
 			</Container>
 		);

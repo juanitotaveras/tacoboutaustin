@@ -8,24 +8,30 @@ const attractions = [
   id: "0",
   name: "Zilker Park",
   image: "http://laketravislifestyle.com/wp-content/uploads/2014/05/IMG_3356.jpg",
-  type: "Park and recreational area",
-  rating: "★★★★☆"
+  activitytype: "Park and recreational area",
+  rating: "★★★★☆",
+  hours: "5AM-10PM",
+  reviews: "Staff is always friendly and a good group of people to work with."
 },
 
 {
   id: "1",
   name: "Texas State Capitol",
   image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/TexasStateCapitol-2010-01.JPG/1200px-TexasStateCapitol-2010-01.JPG",
-  type: "Tour offices and chambers of the Texas Legislature",
+  activitytype: "Tour offices and chambers of the Texas Legislature",
   rating: "★★★★☆",
+  hours: "7AM-10PM",
+  reviews: "Beautiful place to walk around, but sometimes the guards are a bit jumpy."
 },
 
 {
   id: "2",
   name: "Lady Bird Lake",
   image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/AustinSkylineLouNeffPoint-Jun2010-a.JPG/1200px-AustinSkylineLouNeffPoint-Jun2010-a.JPG",
-  type: "Lake, hiking, running, bat, and fishing",
-  rating: "★★★★☆"
+  activitytype: "Lake, hiking, running, bat, and fishing",
+  rating: "★★★★☆",
+  hours: "24/7",
+  reviews: "We Austinites are so lucky to have such a big, beautiful lake circled by fantastic walking/biking/running trails."
 }];
 
 export {attractions};
