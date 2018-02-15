@@ -7,15 +7,16 @@ import PropTypes from 'prop-types';
 
 export default class AttractionCard extends Component {
   render() {
+    var a = this.props.attraction;
     return (
       <div>
         <Card>
-          <CardImg top width="100%" src={this.props.image} alt="Card image cap" />
+          <CardImg top width="100%" src={a.image} alt="Card image cap" />
           <CardBody>
-            <CardTitle>{this.props.name}</CardTitle>
-            <CardSubtitle>{this.props.type}</CardSubtitle>
-            <CardText>{this.props.rating}</CardText>
-            <Button outline ><Link to={'/attractions/' + this.props.id}>Check it out!</Link></Button>
+            <CardTitle>{a.name}</CardTitle>
+            <CardSubtitle>{a.type}</CardSubtitle>
+            <CardText>{a.rating}</CardText>
+            <Button outline ><Link to={'/attractions/' + a.id}>Check it out!</Link></Button>
           </CardBody>
         </Card>
       </div>
@@ -23,9 +24,5 @@ export default class AttractionCard extends Component {
 }
 
 AttractionCard.propTypes = {
-    name: PropTypes.string,
-    image: PropTypes.string,
-    id: PropTypes.string,
-    type: PropTypes.string,
-    rating: PropTypes.string
-  }
+    attraction: PropTypes.object
+}
