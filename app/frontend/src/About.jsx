@@ -201,12 +201,9 @@ class About extends Component {
           </Col>
         </Row>
        <Row>
-	       <h1> About the team </h1>	
-       </Row>
-       <Row>
          <Col sm="12" >
            <div style={scoreboardStyle}>
-           <h1>Scoreboard</h1>
+           <h1>Meet the team: <b>Keepin' It Weird</b></h1>
            <h3>Commits: {this.state.totalCommits}</h3>
            <h3>Issues: {this.state.totalIssues}</h3>
            <h3>Unit tests: {this.state.totalUnitTests}</h3>
@@ -224,6 +221,45 @@ class About extends Component {
           <Col sm="1"></Col>
           <Col xs="12" sm="4">{this.memberCards[4]}</Col>
           <Col sm="1"></Col>
+        </Row>
+        <Row>
+          <Col sm="12"> 
+            <h1> Our data </h1>
+            <p>
+              <a href="https://developers.google.com/maps/">Google maps</a><br/>
+              <a href="http://docs.sygictravelapi.com/1.0/">Sygic Travel</a><br/>
+              <a href="https://www.yelp.com/developers/documentation/v3">Yelp</a><br/>
+              <a href="https://www.instagram.com/developer/">Instagram API</a><br/>
+              (Possibly) <a href="https://www.meetup.com/meetup_api/?_cookie-check=qBSOM6LC84XYUoLi">Meetup.com API</a><br/>
+              (Possibly) <a href="https://developers.facebook.com/docs/graph-api">Facebook Graph API</a>
+          </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm="12" md="6">
+            <h1> Tools </h1>
+            <ul>
+              <li>
+                <a href="">Docker</a> We used Docker to set up an identical environment on every person's computer and on the server, which
+                                      made it super easy to handle any dependencies.
+              </li>
+              <li>
+                <a href="">ReactJS</a> ReactJS allowed us to create all our site's components using a minimal amount of JSX,
+                                       and made it really easy to create reusable components.
+
+              </li>
+              <li>
+                <a href="">Bootstrap</a> (and Reactstrap) allowed us to easily establish a common theme across components on the site.
+              </li>
+              <li>
+                <a href="">Flask</a> We used this Python microframework to handle our backend operations and to host our API.
+              </li>
+            </ul>
+          </Col>
+          <Col sm="12" md="6" style={scoreboardStyle}>
+            <h1> <a href="https://tienlatien252.gitbooks.io/tacoboutaustin/content/">GitBook </a> </h1>
+            <h1> <a href="https://github.com/juanitotaveras/tacoboutaustin">Github </a></h1>
+          </Col>
         </Row>
  
       </Container>
