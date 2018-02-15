@@ -19,7 +19,7 @@ export default class Restaurants extends Component {
                 id="1"
                 name="Franklin BBQ"
                 image="https://static01.nyt.com/images/2017/03/15/dining/15REST-FRANKLIN-slide-HMM7/15REST-FRANKLIN-slide-HMM7-videoSixteenByNineJumbo1600.jpg"
-                food="Barbecue Restaurant"
+                food="Barbecue Restauant"
                 rating="★★★★★"
                 />
       				</Col>
