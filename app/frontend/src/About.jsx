@@ -13,7 +13,7 @@ import {
   CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
 
 
-var styles = {
+const styles = {
 	color:'red',
 	backgroundColor:'black',
 	fontWeight:'bold'
@@ -27,8 +27,8 @@ class About extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      totalCommits: 7,
-      totalIssues: 5,
+      totalCommits: 0,
+      totalIssues: 0,
       totalUnitTests: 0
       //methods
     }
@@ -57,7 +57,7 @@ class About extends Component {
       },
       {
         name: "An Vo",
-        gitLogin: "",
+        gitLogin: "tienlatien252",
         imageSrc: An,
         imageAlt: "About An",
         bio: "An is a cool dude",
@@ -68,7 +68,7 @@ class About extends Component {
       },
       {
         name: "Caroline Shi",
-        gitLogin: "",
+        gitLogin: "carorineee",
         imageSrc: Caroline,
         imageAlt: "About Caroline",
         bio: "Caroline is a cool dude",
@@ -93,6 +93,8 @@ class About extends Component {
     var urlCommits="https://api.github.com/repos/juanitotaveras/tacoboutaustin/stats/contributors";
     var urlIssues="https://api.github.com/repos/juanitotaveras/tacoboutaustin/issues";
 
+    var tempTotalCommits = 0;
+    var tempTotalIssues = 0;
     // let mem = this.members;
     let memCards = this.memberCards;
     // Parse response from GitHub API
@@ -107,6 +109,7 @@ class About extends Component {
         for (var i = 0; i < members.length; i++) {
           if (members[i]["gitLogin"] == author) {
             members[i]["commits"] = stats["total"];
+            tempTotalCommits += members[i]["commits"];
           }
         }
       }
@@ -114,7 +117,20 @@ class About extends Component {
 
     function updateIssues(responseText) {
       var dict = eval(responseText);
+      console.log("ISSUES DICT: ");
       console.log(dict);
+      for (var key in dict) {
+        let stats = dict[key];
+        let author = stats["user"]["login"];
+        console.log("AUTHOR: " + author);
+
+        for (var i = 0; i < members.length; i++) {
+          if (members[i]["gitLogin"] == author) {
+            members[i]["issues"] += 1;
+          }
+          tempTotalIssues += 1;
+        }
+      }
     }
 
     function request(url, parseResponse) {
@@ -139,6 +155,15 @@ class About extends Component {
       // console.log(members[i]["commits"]);
       this.memberCards.push(this.createTeamMember(members[i]));
     }
+
+    // this.setState({
+    //   totalCommits: tempTotalCommits
+    // });
+
+    this.state.totalCommits = tempTotalCommits;
+    this.state.totalIssues = tempTotalIssues;
+
+    console.log("tempTotalCommits: " + tempTotalCommits);
 
   }
 
