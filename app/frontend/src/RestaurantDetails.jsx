@@ -14,7 +14,7 @@ export default class RestaurantDetails extends Component {
 					</Col>
 					<Col>
                 		<RestaurantJumbotron
-                		name="Franklin BBQ"
+                		name= "Franklin BBQ"
                 		foodtype="Barbecue Restauant"
                 		image="https://static01.nyt.com/images/2017/03/15/dining/15REST-FRANKLIN-slide-HMM7/15REST-FRANKLIN-slide-HMM7-videoSixteenByNineJumbo1600.jpg"
                 		map="http://texspine.com/wp-content/uploads/2012/01/map.jpg"
