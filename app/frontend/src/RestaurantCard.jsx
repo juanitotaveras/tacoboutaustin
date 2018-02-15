@@ -12,8 +12,8 @@ export default class RestaurantCard extends Component {
           <CardImg top width="100%" src={this.props.image} alt="Card image cap" />
           <CardBody>
             <CardTitle>{this.props.name}</CardTitle>
-            <CardSubtitle>Type of food</CardSubtitle>
-            <CardText>Reviews, and google maps location</CardText>
+            <CardSubtitle>{this.props.food}</CardSubtitle>
+            <CardText>{this.props.rating}</CardText>
             <Button outline ><Link to={'/restaurants/' + this.props.id}>Check it out!</Link></Button>
           </CardBody>
         </Card>
@@ -24,5 +24,7 @@ export default class RestaurantCard extends Component {
 RestaurantCard.propTypes = {
     name: PropTypes.string,
     image: PropTypes.string,
-    id: PropTypes.string
+    id: PropTypes.string,
+    food: PropTypes.string,
+    rating: PropTypes.string
   }
