@@ -34,17 +34,17 @@ class Restaurant (db.Model):
     rating = db.Column(db.Float)
     address = db.Column(db.String(100))
     open_hour = db.Column(db.String(50))
-"""
+
     def __init__(self, id, name, image, longtitude, latitude, rating, address, open_hour):
         self.id = id
         self.name = name
         self.image = image
-        self.longti = longtitude
+        self.longtitude = longtitude
         self.latitude = latitude
         self.rating = rating
         self.address = address
         self.open_hour = open_hour
-"""
+
 class Attraction (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))

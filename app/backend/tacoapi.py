@@ -23,9 +23,22 @@ def get_restaurants():
         output.append(restaurant_data)
     return jsonify({'list': output})
 
-"""
-@app.route('api/restaurant/<anid>', method = ['GET'])
-def get_restaurant(anid):
-    return 'hello {anid}'
-"""
+
+@app.route('/api/restaurant/<id>', methods=['GET'])
+def get_restaurant(id):
+    restaurant = Restaurant.query.filter_by(id=id).first()
+
+    if not restaurant:
+        return jsonify({'message' : 'no user found!'})
+
+    restaurant_data = {}
+    restaurant_data['id'] = restaurant.id
+    restaurant_data['name'] = restaurant.name
+    restaurant_data['image'] = restaurant.image
+    restaurant_data['location'] = {'lat': restaurant.latitude, 'long': restaurant.longtitude}
+    restaurant_data['rating'] = restaurant.rating
+    restaurant_data['address'] = restaurant.address
+
+    return jsonify({'restaurant' : restaurant_data})
+
 
