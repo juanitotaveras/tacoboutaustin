@@ -1,10 +1,19 @@
-from flask import Flask, render_template
-app = Flask(__name__)
+from flask import Flask, render_template, jsonify
+from flask_sqlalchemy import SQLAlchemy
 
-@app.route('/hello/<user>')
-def hello_user(user):
-    return render_template('hello.html', name = user)
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///idb.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
+"""
+@app.route('api/restaurant?id=<id>', method = ['GET'])
+def get_restaurant(id):
+    return 'hello id'
+"""
+
+import tacoapi
+from models import *
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
-
+    app.run()
