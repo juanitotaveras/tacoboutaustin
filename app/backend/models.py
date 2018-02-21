@@ -41,7 +41,7 @@ class Restaurant (db.Model):
         self.id = id
         self.name = name
         self.image = image
-        self.longti = longtitude
+        self.longtitude = longtitude
         self.latitude = latitude
         self.rating = rating
         self.address = address
