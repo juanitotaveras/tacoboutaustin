@@ -41,3 +41,17 @@ def get_restaurant(id):
     return jsonify({'restaurant': restaurant_data})
 
 
+@app.route('/api/hotels')
+def get_hotels():
+    hotels = Hotel.query.all()
+    output = []
+    for hotel in hotels:
+        hotel_data = {}
+        hotel_data['id'] = hotel.id
+        hotel_data['name'] = hotel.name
+        hotel_data['image'] = hotel.image
+        hotel_data['location'] = {'lat': hotel.latitude, 'long': hotel.longtitude}
+        hotel_data['rating'] = hotel.rating
+        hotel_data['address'] = hotel.address
+        output.append(hotel_data)
+    return jsonify({'list': output})
