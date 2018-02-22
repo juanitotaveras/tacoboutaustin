@@ -189,7 +189,7 @@ class About extends Component {
     	<Jumbotron>
     	      <h1 className="display-3">Where am I?</h1>
       <p className="lead">Tacoboutaustin is your one-stop shop to find out 
-      where to sleep, where to eat, and what to do in Austin, Texas.</p>
+      where to stay, where to eat, and what to do in Austin, Texas.</p>
       <p>Kids and adults alike will find this site useful, but keep 
       in mind that for several attractions you must be at 
       least 18 or 21 years of age. </p>
