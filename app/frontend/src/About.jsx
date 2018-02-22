@@ -79,7 +79,7 @@ class About extends Component {
       },
       {
         name: "James Crabtree",
-        gitLogin: "",
+        gitLogin: "JamesCrabtree",
         imageSrc: James,
         imageAlt: "About James",
         bio: "James is a cool dude",
