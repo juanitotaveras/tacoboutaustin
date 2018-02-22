@@ -44,6 +44,10 @@ export default class Attractions extends Component {
   }
 
   render() {
+    var cards = attractions.map(function(attraction){
+            return <Col xs="12" sm="6" md="6" lg="3"><AttractionCard attraction={attraction} /></Col>;
+          })
+
     return (
       <div>
         <Container>
@@ -53,15 +57,7 @@ export default class Attractions extends Component {
           </Container>
           <Container>
             <Row>
-              <Col>
-                <AttractionCard attraction={this.state[0]}/>
-              </Col>
-              <Col>
-                <AttractionCard attraction={this.state[1]}/>
-              </Col>
-              <Col>
-                <AttractionCard attraction={this.state[2]}/>
-              </Col>
+                {cards}
             </Row>
           </Container>
         </div>

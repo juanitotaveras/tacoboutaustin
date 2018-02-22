@@ -53,7 +53,7 @@ export default class Restaurants extends Component {
 
   render() {
     var cards = restaurants.map(function(restaurant){
-            return <Col><RestaurantCard restaurant={restaurant} /></Col>;
+            return <Col xs="12" sm="6" md="6" lg="3"><RestaurantCard restaurant={restaurant} /></Col>;
           })
 
     return (

@@ -43,27 +43,23 @@ export default class Hotels extends Component {
   }
 
   render() {
+    var cards = hotels.map(function(hotel){
+            return <Col xs="12" sm="6" md="6" lg="3"><HotelCard hotel={hotel} /></Col>;
+          })
+
     return (
-    	<div>
-    		<Container>
-	    		<Row>
-	      			<h1>Hotels </h1>
-	      		</Row>
-      		</Container>
-      		<Container>
-      			<Row>
-      				<Col>
-      					<HotelCard hotel={this.state[0]}/>
-      				</Col>
-      				<Col>
-      					<HotelCard hotel={this.state[1]}/>
-      				</Col>
-      				<Col>
-      					<HotelCard hotel={this.state[2]}/>
-      				</Col>
-      			</Row>
-      		</Container>
-      	</div>
+      <div>
+        <Container>
+          <Row>
+              <h1>Hotels </h1>
+            </Row>
+          </Container>
+          <Container>
+            <Row>
+                {cards}
+            </Row>
+          </Container>
+        </div>
     );
   }
 }
