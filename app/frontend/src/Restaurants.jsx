@@ -35,13 +35,27 @@ const restaurants = [
 
 export{restaurants};
 
+// var restaurants = []
+
 export default class Restaurants extends Component {
   constructor(props) {
     super(props);
     this.state = restaurants;
   }
 
+  componentWillMount()
+  {
+      //HTTP request
+
+      //Set restaurants
+      // restaurants = json;
+  }
+
   render() {
+    var cards = restaurants.map(function(restaurant){
+            return <Col><RestaurantCard restaurant={restaurant} /></Col>;
+          })
+
     return (
     	<div>
     		<Container>
@@ -51,15 +65,7 @@ export default class Restaurants extends Component {
       		</Container>
       		<Container>
       			<Row>
-      				<Col>
-      					<RestaurantCard restaurant={this.state[0]}/>
-      				</Col>
-      				<Col>
-      					<RestaurantCard restaurant={this.state[1]}/>
-      				</Col>
-      				<Col>
-      					<RestaurantCard restaurant={this.state[2]}/>
-      				</Col>
+                {cards}
       			</Row>
       		</Container>
       	</div>
