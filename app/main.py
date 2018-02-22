@@ -13,9 +13,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///idb.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 sys.path.append('backend')
-import tacoapi
+from tacoapi import *
 
-Serve React App
+
+#Serve React App
 @app.route('/', defaults={'path': ''})
 @app.route("/<string:path>")
 @app.route('/<path:path>')
