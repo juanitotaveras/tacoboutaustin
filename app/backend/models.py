@@ -62,7 +62,7 @@ class Attraction (db.Model):
         self.id = id
         self.name = name
         self.image = image
-        self.longtitude = longtitudes
+        self.longtitude = longtitude
         self.latitude = latitude
         self.rating = rating
         self.address = address    
