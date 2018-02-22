@@ -1,6 +1,6 @@
 import requests
 import sys
-sys.path.append('/mnt/c/Users/thaia/Documents/projects/tacoboutaustin/app/backend')
+sys.path.append('..')
 
 from models import *
 

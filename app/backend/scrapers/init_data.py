@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 import sys
-sys.path.append('/mnt/c/Users/thaia/Documents/projects/tacoboutaustin/app/backend')
+sys.path.append('..')
 from models import *
 from hotel_scraper import *
 from restaurant_scraper import *
