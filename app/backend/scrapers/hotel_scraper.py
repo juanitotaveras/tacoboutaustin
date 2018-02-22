@@ -16,9 +16,8 @@ OMNI = "https://api.sygictravelapi.com/1.0/en/places/poi:698874"
 RESIDENCE = "https://api.sygictravelapi.com/1.0/en/places/poi:382553"
 
 def scrap_hotels():
-#	db.drop_all()
-#   db.create_all()
-    
+	#	db.drop_all()
+	#   db.create_all()
 	response = requests.get(AUSTIN_HOTEL, headers = headers)
 	hotels = response.json()['data']['places']
 	id = 1
