@@ -17,7 +17,7 @@ export default class Router extends Component {
       <Switch>
 	  	<Route exact path='/' component={Splash}/>
 	  	<Route exact path='/restaurants' component={Restaurants}/>
-	  		<Route path='/restaurants/id=:res_id' component={RestaurantDetails} />
+	  		<Route path='/restaurants/:res_id' component={RestaurantDetails} />
 	  	<Route exact path='/attractions' component={Attractions}/>
 	  		<Route path='/attractions/:att_id' component={AttractionDetails} />
 	  	<Route exact path='/hotels' component={Hotels}/>

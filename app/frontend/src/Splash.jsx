@@ -23,9 +23,11 @@ const items = [
   },
   {
     src: 'https://cdn.vox-cdn.com/uploads/chorus_image/image/54444777/austin_taco_project_tacos.0.0.jpg',
-    altText: 'TACOZ'
+    altText: 'TACOZ',
+    caption: 'Our bread and butter'
   }
 ];
+
 
 export default class Splash extends Component {
 	constructor(props) {
@@ -82,16 +84,18 @@ export default class Splash extends Component {
     return (
     	<Container>
     		<Row>
-		      <Carousel
-		        activeIndex={activeIndex}
-		        next={this.next}
-		        previous={this.previous}
-		      >
-		        <CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
-		        {slides}
-		        <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
-		        <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
-		      </Carousel>
+          <Col>
+  		      <Carousel
+  		        activeIndex={activeIndex}
+  		        next={this.next}
+  		        previous={this.previous}
+  		      >
+  		        {/*<CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={this.goToIndex} />*/}
+  		        {slides}
+  		        <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
+  		        <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
+  		      </Carousel>
+          </Col>
 	      </Row>
 	    </Container>
   )};
