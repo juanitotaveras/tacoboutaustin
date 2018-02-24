@@ -1,6 +1,10 @@
 import os
 import sys
-from flask import Flask, send_from_directory, render_template
+from flask import Flask, send_from_directory,render_template, jsonify
+
+from routes import app
+from models import *
+import tacoapi
 
 # BASE_DIR is directory above config.py
 BASE_DIR = os.path.abspath(os.path.dirname('__file__'))
@@ -8,12 +12,9 @@ BASE_DIR = os.path.abspath(os.path.dirname('__file__'))
 # append path BASE_DIR to parksrus-frontend/build to get absolute path
 REACT_FILES = os.path.join(BASE_DIR, 'frontend/build')
 
-app = Flask(__name__, static_folder= 'frontend/build/static')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///idb.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
-sys.path.append('backend')
-from tacoapi import *
+# app = Flask(__name__, static_folder= 'frontend/build/static')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///idb.db'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 
 #Serve React App

@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder= 'frontend/build/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///idb.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from routes import app
 from models import *
