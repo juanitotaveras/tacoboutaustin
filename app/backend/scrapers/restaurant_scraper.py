@@ -1,7 +1,11 @@
 import requests
-import sys
-sys.path.append('..')
+import sys, os
 
+FILE_ABSOLUTE_PATH = os.path.abspath(__file__)  # get absolute filepath
+CURRENT_DIR = os.path.dirname(FILE_ABSOLUTE_PATH)  # get directory path of file
+PARENT_DIR = os.path.dirname(CURRENT_DIR)  # get parent directory path
+BASE_DIR = os.path.dirname(PARENT_DIR)  # get grand parent directory path
+sys.path.append(BASE_DIR)
 from models import *
 
 SYGIC_KEY = "EPrgMMQzpr9RMzaj25Tsw9QXrjtKbVMX2kY4NdWz"
