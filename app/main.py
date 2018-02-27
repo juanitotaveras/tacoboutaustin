@@ -31,4 +31,4 @@ def serve(path):
             return send_from_directory(REACT_FILES, 'index.html')
 
 if __name__ == '__main__':
-    app.run(port=5000, use_reloader=True, threaded=True)
+    app.run(host='0.0.0.0',port=5000, use_reloader=True, threaded=True)
