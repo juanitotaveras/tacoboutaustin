@@ -15,9 +15,11 @@ GOOGLE_KEY = "AIzaSyD6F4xULR2I7GtEAH82L9vL6dAaEQAqnpQ"
 sygic_headers = {'x-api-key': SYGIC_KEY}
 yelp_headers = {'Authorization': YELP_KEY}
 
-def scrap_yelp_data(latitude, longtitude, name):
-    url = "https://api.yelp.com/v3/businesses/search?term=" + "\"" + name + "\"&latitude=" + str(latitude) + "&longitude=" + str(longtitude)
+def scrap_yelp_data(name, longitude, latitude):
+    url = "https://api.yelp.com/v3/businesses/search?term=" + "\"" + name + "\"&latitude=" + str(latitude) + "&longitude=" + str(longitude)
     response = requests.get(url, headers = yelp_headers)
+    if response.json()['total'] <= 0:
+        return None, None
     id = response.json()['businesses'][0]['id']
 
     url = "https://api.yelp.com/v3/businesses/" + id

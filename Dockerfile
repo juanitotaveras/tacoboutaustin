@@ -53,7 +53,7 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash
 RUN apt-get install nodejs
 RUN npm install
 RUN npm install --save reactstrap@next react react-dom 
-RUN npm install bootstrap reactstrap@next react-router-dom
+RUN npm install bootstrap reactstrap@next react-router-dom	
 
 COPY ./app /app
 

@@ -23,7 +23,7 @@ def get_restaurants():
     return jsonify({'list': output})
 
 
-@app.route('/api/restaurant/<id>')
+@app.route('/api/restaurants/<id>')
 def get_restaurant(id):
     restaurant = Restaurant.query.filter_by(id=id).first()
     if (restaurant == None):
@@ -36,6 +36,8 @@ def get_restaurant(id):
     restaurant_data['location'] = {'lat': restaurant.latitude, 'long': restaurant.longtitude}
     restaurant_data['rating'] = restaurant.rating
     restaurant_data['address'] = restaurant.address
+    restaurant_data['reviewText1'] = restaurant.reviewText1
+    restaurant_data['reviewLink1'] = restaurant.reviewLink1
 
     return jsonify({'restaurant': restaurant_data})
 
@@ -55,7 +57,7 @@ def get_hotels():
     return jsonify({'list': output})
 
 
-@app.route('/api/hotel/<id>')
+@app.route('/api/hotels/<id>')
 def get_hotel(id):
     hotel = Hotel.query.filter_by(id=id).first()
     if (hotel == None):
@@ -68,6 +70,8 @@ def get_hotel(id):
     hotel_data['location'] = {'lat': hotel.latitude, 'long': hotel.longtitude}
     hotel_data['rating'] = hotel.rating
     hotel_data['address'] = hotel.address
+    hotel_data['reviewText1'] = hotel.reviewText1
+    hotel_data['reviewLink1'] = hotel.reviewLink1
 
     return jsonify({'hotel': hotel_data})
 
@@ -86,7 +90,7 @@ def get_attractions():
     return jsonify({'list': output})
 
 
-@app.route('/api/attraction/<id>')
+@app.route('/api/attractions/<id>')
 def get_attraction(id):
     attraction = Attraction.query.filter_by(id=id).first()
     if (attraction == None):
@@ -99,5 +103,7 @@ def get_attraction(id):
     attraction_data['location'] = {'lat': attraction.latitude, 'long': attraction.longtitude}
     attraction_data['rating'] = attraction.rating
     attraction_data['address'] = attraction.address
+    attraction_data['reviewText1'] = attraction.reviewText1
+    attraction_data['reviewLink1'] = attraction.reviewLink1
 
     return jsonify({'hotel': attraction_data})
