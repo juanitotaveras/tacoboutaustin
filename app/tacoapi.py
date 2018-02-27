@@ -36,8 +36,9 @@ def get_restaurant(id):
     restaurant_data['location'] = {'lat': restaurant.latitude, 'long': restaurant.longtitude}
     restaurant_data['rating'] = restaurant.rating
     restaurant_data['address'] = restaurant.address
-    restaurant_data['reviewText1'] = restaurant.reviewText1
-    restaurant_data['reviewLink1'] = restaurant.reviewLink1
+    restaurant_data['reviews'] = [{'text': restaurant.reviewText1, 'link': restaurant.reviewLink1}, {
+        'text': restaurant.reviewText2, 'link': restaurant.reviewLink2}, {
+        'text': restaurant.reviewText3, 'link': restaurant.reviewLink3}]
 
     return jsonify({'restaurant': restaurant_data})
 
@@ -70,8 +71,9 @@ def get_hotel(id):
     hotel_data['location'] = {'lat': hotel.latitude, 'long': hotel.longtitude}
     hotel_data['rating'] = hotel.rating
     hotel_data['address'] = hotel.address
-    hotel_data['reviewText1'] = hotel.reviewText1
-    hotel_data['reviewLink1'] = hotel.reviewLink1
+    hotel_data['reviews'] = [{'text': hotel.reviewText1, 'link': hotel.reviewLink1}, {
+        'text': hotel.reviewText2, 'link': hotel.reviewLink2}, {
+        'text': hotel.reviewText3, 'link': hotel.reviewLink3}]
 
     return jsonify({'hotel': hotel_data})
 
@@ -103,7 +105,8 @@ def get_attraction(id):
     attraction_data['location'] = {'lat': attraction.latitude, 'long': attraction.longtitude}
     attraction_data['rating'] = attraction.rating
     attraction_data['address'] = attraction.address
-    attraction_data['reviewText1'] = attraction.reviewText1
-    attraction_data['reviewLink1'] = attraction.reviewLink1
+    attraction_data['reviews'] = [{'text': attraction.reviewText1, 'link': attraction.reviewLink1}, {
+        'text': attraction.reviewText2, 'link': attraction.reviewLink2}, {
+        'text': attraction.reviewText3, 'link': attraction.reviewLink3}]
 
-    return jsonify({'hotel': attraction_data})
+    return jsonify({'attraction': attraction_data})
