@@ -31,3 +31,41 @@ def scrap_yelp_data(name, longitude, latitude):
     review = response.json()
     
     return detail, review
+
+"""
+Sun - Thu: 11 am - 10:30 pm 
+Fri - Sat: 11 am - 11:30 pm
+"""
+
+days = {0:"Sunday", 1:"Monday", 2:"Tuesday", 3:"Wednesday", 4:"Thursday", 5:"Friday", 6:"Saturday"}
+
+
+def convert_hour(hours):
+    start_hours = ["closed", "closed", "closed", "closed", "closed", "closed", "closed"]
+    end_hours = ["", "", "", "", "", "", ""]
+    open_hours = ""
+
+    table = {}
+    for i in range(len(hours)):
+        day_num = hours[i]['day']
+        table[day_num] = hours[i]
+
+    for day, value in table.items():
+        start_hours[day] = convert_military(table[day]['start'])
+        end_hours[day] = " - " + convert_military(table[day]['end'])
+    
+    for i in range(7):
+        open_hours += days[i] + ": "
+        if not end_hours is "":
+            open_hours += start_hours[i] + end_hours[i] + "\n"
+    return open_hours
+
+def convert_military(time):
+    hour_num = int(time[:2])
+    if hour_num > 12:
+        return str(hour_num - 12) + ":" + time[-2:] + "PM"
+    else:
+        return str(hour_num) + ":" + time[-2:] +"AM"
+
+if __name__ == "__main__":
+    print(convert_military("1620"))

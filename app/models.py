@@ -74,7 +74,7 @@ class Restaurant (db.Model):
     rating = db.Column(db.Float)
     address1 = db.Column(db.String(100))
     address2 = db.Column(db.String(100))
-    open_hour = db.Column(db.String(50))
+    open_hour = db.Column(db.String(200))
     phone = db.Column(db.String(20))
     
     reviewText1 = db.Column(db.String(200))

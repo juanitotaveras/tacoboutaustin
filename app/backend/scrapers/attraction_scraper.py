@@ -1,7 +1,7 @@
 from helper_methods import *
 
 #  Atractions in Austin
-AUSTIN_ATRACTION = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=going_out"
+AUSTIN_ATRACTION = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=going_out&limit=20"
 
 def scrap_attractions():
 	response = requests.get(AUSTIN_ATRACTION, headers = sygic_headers)
