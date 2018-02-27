@@ -18,7 +18,7 @@ def get_restaurants():
         restaurant_data['name'] = restaurant.name
         restaurant_data['images'] = [restaurant.image1, restaurant.image2, restaurant.image3]
         restaurant_data['rating'] = restaurant.rating
-        restaurant_data['address'] = restaurant.address
+        restaurant_data['address'] = [restaurant.address1, restaurant.address2]
         output.append(restaurant_data)
     return jsonify({'list': output})
 
@@ -35,8 +35,8 @@ def get_restaurant(id):
     restaurant_data['images'] = [restaurant.image1, restaurant.image2, restaurant.image3]
     restaurant_data['phone'] = restaurant.phone
     restaurant_data['location'] = {'lat': restaurant.latitude, 'long': restaurant.longtitude}
+    restaurant_data['address'] = [restaurant.address1, restaurant.address2]
     restaurant_data['rating'] = restaurant.rating
-    restaurant_data['address'] = restaurant.address
     restaurant_data['reviews'] = [{'text': restaurant.reviewText1, 'link': restaurant.reviewLink1}, {
         'text': restaurant.reviewText2, 'link': restaurant.reviewLink2}, {
         'text': restaurant.reviewText3, 'link': restaurant.reviewLink3}]
@@ -54,7 +54,7 @@ def get_hotels():
         hotel_data['name'] = hotel.name
         hotel_data['image1'] = hotel.image1
         hotel_data['rating'] = hotel.rating
-        hotel_data['address'] = hotel.address
+        hotel_data['address'] = [hotel.address1, hotel.address2]
         output.append(hotel_data)
     return jsonify({'list': output})
 
@@ -72,7 +72,7 @@ def get_hotel(id):
     hotel_data['phone'] = hotel.phone
     hotel_data['location'] = {'lat': hotel.latitude, 'long': hotel.longtitude}
     hotel_data['rating'] = hotel.rating
-    hotel_data['address'] = hotel.address
+    hotel_data['address'] = [hotel.address1, hotel.address2]
     hotel_data['reviews'] = [{'text': hotel.reviewText1, 'link': hotel.reviewLink1}, {
         'text': hotel.reviewText2, 'link': hotel.reviewLink2}, {
         'text': hotel.reviewText3, 'link': hotel.reviewLink3}]
@@ -89,7 +89,7 @@ def get_attractions():
         attraction_data['name'] = attraction.name
         attraction_data['image1'] = attraction.image1
         attraction_data['rating'] = attraction.rating
-        attraction_data['address'] = attraction.address
+        attraction_data['address'] = [attraction.address1, attraction.address2]
         output.append(attraction_data)
     return jsonify({'list': output})
 
@@ -109,7 +109,7 @@ def get_attraction(id):
     attraction_data['phone'] = attraction.phone
     attraction_data['location'] = {'lat': attraction.latitude, 'long': attraction.longtitude}
     attraction_data['rating'] = attraction.rating
-    attraction_data['address'] = attraction.address
+    attraction_data['address'] = [attraction.address1, attraction.address2]
     attraction_data['reviews'] = [{'text': attraction.reviewText1, 'link': attraction.reviewLink1}, {
         'text': attraction.reviewText2, 'link': attraction.reviewLink2}, {
         'text': attraction.reviewText3, 'link': attraction.reviewLink3}]

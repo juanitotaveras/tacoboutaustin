@@ -17,14 +17,20 @@ def scrap_hotels():
 		rating = 0.0
 		number = ""
 		image = ['', '', '']
+		address = ['', '']
+
 		if not detail is None:
 			rating = detail['rating']
 			number = detail['display_phone']
 			for x in range(0, len(detail['photos'])):
 				image[x] = detail['photos'][x]
+			address[0] = detail['location']['display_address'][0]
+			address[1] = detail['location']['display_address'][1]
 		
-		new_hotel = Hotel(id, hotel['name'], hotel['location']['lng'],hotel['location']['lat'], rating, hotel['name'] + " address, Austin", number)
+		
+		new_hotel = Hotel(id, hotel['name'], hotel['location']['lng'],hotel['location']['lat'], rating, number)
 		new_hotel.addImage(image)
+		new_hotel.addAddress(address)
 
 		if not review is None:
 			for x in range(0, min(3, review['total'])):
