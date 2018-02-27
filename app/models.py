@@ -10,7 +10,11 @@ class Hotel (db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    image = db.Column(db.String(200))
+
+    image1 = db.Column(db.String(200))
+    image2 = db.Column(db.String(200))
+    image3 = db.Column(db.String(200))
+
     longtitude = db.Column(db.Float)
     latitude = db.Column(db.Float)
     rating = db.Column(db.Float)
@@ -49,7 +53,11 @@ class Restaurant (db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    image = db.Column(db.String(200)) 
+
+    image1 = db.Column(db.String(200))
+    image2 = db.Column(db.String(200))
+    image3 = db.Column(db.String(200))
+
     latitude = db.Column(db.Float)
     longtitude = db.Column(db.Float)
     rating = db.Column(db.Float)
@@ -84,12 +92,22 @@ class Restaurant (db.Model):
             self.reviewText3 = text
             self.reviewLink3 = link
 
+    def addImage(self, images)
+        image1 = images[0]
+        image2 = images[1]
+        image3 = images[2]
+
 class Attraction (db.Model):
     __tablename__ = "attraction"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    image = db.Column(db.String(200))
+    
+
+    image1 = db.Column(db.String(200))
+    image2 = db.Column(db.String(200))
+    image3 = db.Column(db.String(200))
+
     longtitude = db.Column(db.Float)
     latitude = db.Column(db.Float)
     rating = db.Column(db.Float)
@@ -102,7 +120,7 @@ class Attraction (db.Model):
     reviewText3 = db.Column(db.String(200))
     reviewLink3 = db.Column(db.String(200))
 
-    def __init__(self, id, name, image, longtitude, latitude, rating, address):
+    def __init__(self, id, name, longtitude, latitude, rating, address):
         self.id = id
         self.name = name
         self.image = image
@@ -121,6 +139,11 @@ class Attraction (db.Model):
         elif index == 2:
             self.reviewText3 = text
             self.reviewLink3 = link
+
+    def addImage(self, images)
+        image1 = images[0]
+        image2 = images[1]
+        image3 = images[2]
 
 
     

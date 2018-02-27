@@ -16,8 +16,13 @@ def scrap_restaurants():
 		lon, lat =  restaurant['location']['lng'], restaurant['location']['lat']
 		detail, review = scrap_yelp_data(name, lon, lat)
 		rating = 0.0
+		number = ""
+		image = ['', '', '']
 		if not detail is None:
 			rating = detail['rating']
+			number = detail['display_phone']
+			for x in range(0, len(detail['photos'])):
+				image[x] = detail['photos'][x]
 		new_restaurant = Restaurant(id, restaurant['name'], default_image_api, restaurant['location']['lng'], restaurant['location']['lat'], rating, restaurant['name'] + " address, Austin", "hours")
 		if not review is None:
 			for x in range(0, min(3, review['total'])):

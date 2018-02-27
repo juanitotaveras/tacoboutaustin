@@ -14,8 +14,13 @@ def scrap_attractions():
 		lon, lat =  attraction['location']['lng'], attraction['location']['lat']
 		detail, review = scrap_yelp_data(name, lon, lat)
 		rating = 0.0
+		number = ""
+		image = []
 		if not detail is None:
 			rating = detail['rating']
+			number = detail['display_phone']
+			for x in range(0, len(detail['photos'])):
+				image[x] = detail['photos'][x]
 		new_attraction = Attraction(id, attraction['name'], default_image_url, attraction['location']['lng'], attraction['location']['lat'], rating,  attraction['name'] + " address, Austin")
 		if not review is None:
 			for x in range(0, min(3, review['total'])):
