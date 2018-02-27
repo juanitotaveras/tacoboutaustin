@@ -1,7 +1,7 @@
 from helper_methods import *
 
 #  Atractions in Austin
-AUSTIN_ATRACTION = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=going_out"
+AUSTIN_ATRACTION = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=going_out&limit=20"
 
 def scrap_attractions():
 	response = requests.get(AUSTIN_ATRACTION, headers = sygic_headers)
@@ -27,15 +27,15 @@ def scrap_attractions():
 			address[0] = detail['location']['display_address'][0]
 			address[1] = detail['location']['display_address'][1]
 			
-		new_attraction = Attraction(id, attraction['name'], attraction['location']['lng'], attraction['location']['lat'], rating, number)
-		new_attraction.addImage(image)
-		new_attraction.addAddress(address)
+			new_attraction = Attraction(id, attraction['name'], attraction['location']['lng'], attraction['location']['lat'], rating, number)
+			new_attraction.addImage(image)
+			new_attraction.addAddress(address, int(detail['location']['zip_code']))
 
-		if not review is None:
-			for x in range(0, min(3, review['total'])):
-				new_attraction.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)
-		db.session.add(new_attraction)
-		id+=1
+			if not review is None:
+				for x in range(0, min(3, review['total'])):
+					new_attraction.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)
+			db.session.add(new_attraction)
+			id+=1
 	db.session.commit()
 
 if __name__ == '__main__':

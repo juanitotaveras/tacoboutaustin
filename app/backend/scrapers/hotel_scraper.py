@@ -26,15 +26,16 @@ def scrap_hotels():
 				image[x] = detail['photos'][x]
 			address[0] = detail['location']['display_address'][0]
 			address[1] = detail['location']['display_address'][1]
-		
-		
-		new_hotel = Hotel(id, hotel['name'], hotel['location']['lng'],hotel['location']['lat'], rating, number)
-		new_hotel.addImage(image)
-		new_hotel.addAddress(address)
+			new_hotel = Hotel(id, hotel['name'], hotel['location']['lng'],hotel['location']['lat'], rating, number)
+			new_hotel.addImage(image)
+			#print(detail)
+			new_hotel.addAddress(address, int(detail['location']['zip_code']))
 
-		if not review is None:
-			for x in range(0, min(3, review['total'])):
-				new_hotel.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)
-		db.session.add(new_hotel)
-		id+=1
+			if not review is None:
+				for x in range(0, min(3, review['total'])):
+					new_hotel.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)
+			db.session.add(new_hotel)
+			id+=1
+		
+		
 	db.session.commit()

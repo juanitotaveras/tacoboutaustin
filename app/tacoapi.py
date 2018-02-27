@@ -34,6 +34,7 @@ def get_restaurant(id):
     restaurant_data['name'] = restaurant.name
     restaurant_data['images'] = [restaurant.image1, restaurant.image2, restaurant.image3]
     restaurant_data['phone'] = restaurant.phone
+    restaurant_data['hours'] = restaurant.open_hour
     restaurant_data['location'] = {'lat': restaurant.latitude, 'long': restaurant.longtitude}
     restaurant_data['address'] = [restaurant.address1, restaurant.address2]
     restaurant_data['rating'] = restaurant.rating

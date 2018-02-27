@@ -21,6 +21,7 @@ class Hotel (db.Model):
     address1 = db.Column(db.String(100))
     address2 = db.Column(db.String(100))
     phone = db.Column(db.String(20))
+    zipcode = db.Column(db.Integer)
     
     reviewText1 = db.Column(db.String(200))
     reviewLink1 = db.Column(db.String(200))
@@ -53,9 +54,10 @@ class Hotel (db.Model):
         self.image2 = images[1]
         self.image3 = images[2]
     
-    def addAddress(self, address):
+    def addAddress(self, address, zipcode):
         self.address1 = address[0]
         self.address2 = address[1]
+        self.zipcode = zipcode
     
 
 
@@ -74,8 +76,9 @@ class Restaurant (db.Model):
     rating = db.Column(db.Float)
     address1 = db.Column(db.String(100))
     address2 = db.Column(db.String(100))
-    open_hour = db.Column(db.String(50))
+    open_hour = db.Column(db.String(200))
     phone = db.Column(db.String(20))
+    zipcode = db.Column(db.Integer)
     
     reviewText1 = db.Column(db.String(200))
     reviewLink1 = db.Column(db.String(200))
@@ -109,9 +112,10 @@ class Restaurant (db.Model):
         self.image2 = images[1]
         self.image3 = images[2]
     
-    def addAddress(self, address):
+    def addAddress(self, address, zipcode):
         self.address1 = address[0]
         self.address2 = address[1]
+        self.zipcode = zipcode
 
 class Attraction (db.Model):
     __tablename__ = "attraction"
@@ -130,6 +134,7 @@ class Attraction (db.Model):
     address1 = db.Column(db.String(100))
     address2 = db.Column(db.String(100))
     phone = db.Column(db.String(20))
+    zipcode = db.Column(db.Integer)
     
     reviewText1 = db.Column(db.String(200))
     reviewLink1 = db.Column(db.String(200))
@@ -162,9 +167,10 @@ class Attraction (db.Model):
         self.image2 = images[1]
         self.image3 = images[2]
 
-    def addAddress(self, address):
+    def addAddress(self, address, zipcode):
         self.address1 = address[0]
         self.address2 = address[1]
+        self.zipcode = zipcode
 
 
     
