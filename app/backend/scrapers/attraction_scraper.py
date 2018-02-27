@@ -15,16 +15,27 @@ def scrap_attractions():
 		detail, review = scrap_yelp_data(name, lon, lat)
 		rating = 0.0
 		number = ""
-		image = []
+		image = ['', '', '']
+
 		if not detail is None:
 			rating = detail['rating']
 			number = detail['display_phone']
 			for x in range(0, len(detail['photos'])):
 				image[x] = detail['photos'][x]
-		new_attraction = Attraction(id, attraction['name'], default_image_url, attraction['location']['lng'], attraction['location']['lat'], rating,  attraction['name'] + " address, Austin")
+				#print(image[x])
+			
+		new_attraction = Attraction(id, attraction['name'], attraction['location']['lng'], attraction['location']['lat'], rating,  attraction['name'] + " address, Austin", number)
+		new_attraction.addImage(image)
+
 		if not review is None:
 			for x in range(0, min(3, review['total'])):
 				new_attraction.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)
 		db.session.add(new_attraction)
 		id+=1
 	db.session.commit()
+
+if __name__ == '__main__':
+	db.drop_all()
+	db.create_all()
+	db.session.commit()
+	scrap_attractions()

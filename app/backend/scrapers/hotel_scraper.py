@@ -16,13 +16,16 @@ def scrap_hotels():
 		detail, review = scrap_yelp_data(name, lon, lat)
 		rating = 0.0
 		number = ""
-		image = []
+		image = ['', '', '']
 		if not detail is None:
 			rating = detail['rating']
 			number = detail['display_phone']
 			for x in range(0, len(detail['photos'])):
 				image[x] = detail['photos'][x]
-		new_hotel = Hotel(id, hotel['name'], default_image_url, hotel['location']['lng'],hotel['location']['lat'], rating, hotel['name'] + " address, Austin")
+		
+		new_hotel = Hotel(id, hotel['name'], hotel['location']['lng'],hotel['location']['lat'], rating, hotel['name'] + " address, Austin", number)
+		new_hotel.addImage(image)
+
 		if not review is None:
 			for x in range(0, min(3, review['total'])):
 				new_hotel.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)

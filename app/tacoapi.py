@@ -16,7 +16,7 @@ def get_restaurants():
         restaurant_data = {}
         restaurant_data['id'] = restaurant.id
         restaurant_data['name'] = restaurant.name
-        restaurant_data['image'] = restaurant.image
+        restaurant_data['images'] = [restaurant.image1, restaurant.image2, restaurant.image3]
         restaurant_data['rating'] = restaurant.rating
         restaurant_data['address'] = restaurant.address
         output.append(restaurant_data)
@@ -32,7 +32,8 @@ def get_restaurant(id):
     restaurant_data = {}
     restaurant_data['id'] = restaurant.id
     restaurant_data['name'] = restaurant.name
-    restaurant_data['image'] = restaurant.image
+    restaurant_data['images'] = [restaurant.image1, restaurant.image2, restaurant.image3]
+    restaurant_data['phone'] = restaurant.phone
     restaurant_data['location'] = {'lat': restaurant.latitude, 'long': restaurant.longtitude}
     restaurant_data['rating'] = restaurant.rating
     restaurant_data['address'] = restaurant.address
@@ -51,7 +52,7 @@ def get_hotels():
         hotel_data = {}
         hotel_data['id'] = hotel.id
         hotel_data['name'] = hotel.name
-        hotel_data['image'] = hotel.image
+        hotel_data['image1'] = hotel.image1
         hotel_data['rating'] = hotel.rating
         hotel_data['address'] = hotel.address
         output.append(hotel_data)
@@ -67,7 +68,8 @@ def get_hotel(id):
     hotel_data = {}
     hotel_data['id'] = hotel.id
     hotel_data['name'] = hotel.name
-    hotel_data['image'] = hotel.image
+    hotel_data['images'] = [hotel.image1, hotel.image2, hotel.image3]
+    hotel_data['phone'] = hotel.phone
     hotel_data['location'] = {'lat': hotel.latitude, 'long': hotel.longtitude}
     hotel_data['rating'] = hotel.rating
     hotel_data['address'] = hotel.address
@@ -85,7 +87,7 @@ def get_attractions():
         attraction_data = {}
         attraction_data['id'] = attraction.id
         attraction_data['name'] = attraction.name
-        attraction_data['image'] = attraction.image
+        attraction_data['image1'] = attraction.image1
         attraction_data['rating'] = attraction.rating
         attraction_data['address'] = attraction.address
         output.append(attraction_data)
@@ -101,7 +103,10 @@ def get_attraction(id):
     attraction_data = {}
     attraction_data['id'] = attraction.id
     attraction_data['name'] = attraction.name
-    attraction_data['image'] = attraction.image
+    attraction_data['image1'] = attraction.image1
+    attraction_data['image2'] = attraction.image2
+    attraction_data['image3'] = attraction.image3
+    attraction_data['phone'] = attraction.phone
     attraction_data['location'] = {'lat': attraction.latitude, 'long': attraction.longtitude}
     attraction_data['rating'] = attraction.rating
     attraction_data['address'] = attraction.address

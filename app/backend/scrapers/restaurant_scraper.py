@@ -18,12 +18,15 @@ def scrap_restaurants():
 		rating = 0.0
 		number = ""
 		image = ['', '', '']
+
 		if not detail is None:
 			rating = detail['rating']
 			number = detail['display_phone']
 			for x in range(0, len(detail['photos'])):
 				image[x] = detail['photos'][x]
-		new_restaurant = Restaurant(id, restaurant['name'], default_image_api, restaurant['location']['lng'], restaurant['location']['lat'], rating, restaurant['name'] + " address, Austin", "hours")
+
+		new_restaurant = Restaurant(id, restaurant['name'], restaurant['location']['lng'], restaurant['location']['lat'], rating, restaurant['name'] + " address, Austin", "hours", number)
+		new_restaurant.addImage(image)
 		if not review is None:
 			for x in range(0, min(3, review['total'])):
 				new_restaurant.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)

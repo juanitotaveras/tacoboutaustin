@@ -19,6 +19,7 @@ class Hotel (db.Model):
     latitude = db.Column(db.Float)
     rating = db.Column(db.Float)
     address = db.Column(db.String(100))
+    phone = db.Column(db.String(20))
     
     reviewText1 = db.Column(db.String(200))
     reviewLink1 = db.Column(db.String(200))
@@ -27,14 +28,14 @@ class Hotel (db.Model):
     reviewText3 = db.Column(db.String(200))
     reviewLink3 = db.Column(db.String(200))
 
-    def __init__(self, id, name, image, longtitude, latitude, rating, address):
+    def __init__(self, id, name, longtitude, latitude, rating, address, phone):
         self.id = id
         self.name = name
-        self.image = image
         self.longtitude = longtitude
         self.latitude = latitude
         self.rating = rating
         self.address = address
+        self.phone = phone
 
     def addReview(self, text, link, index):
         if index == 0:
@@ -46,6 +47,12 @@ class Hotel (db.Model):
         elif index == 2:
             self.reviewText3 = text
             self.reviewLink3 = link
+    
+    def addImage(self, images):
+        self.image1 = images[0]
+        self.image2 = images[1]
+        self.image3 = images[2]
+    
 
 
 class Restaurant (db.Model):
@@ -63,6 +70,7 @@ class Restaurant (db.Model):
     rating = db.Column(db.Float)
     address = db.Column(db.String(100))
     open_hour = db.Column(db.String(50))
+    phone = db.Column(db.String(20))
     
     reviewText1 = db.Column(db.String(200))
     reviewLink1 = db.Column(db.String(200))
@@ -71,15 +79,15 @@ class Restaurant (db.Model):
     reviewText3 = db.Column(db.String(200))
     reviewLink3 = db.Column(db.String(200))
 
-    def __init__(self, id, name, image, longtitude, latitude, rating, address, open_hour):
+    def __init__(self, id, name, longtitude, latitude, rating, address, open_hour, phone):
         self.id = id
         self.name = name
-        self.image = image
         self.longtitude = longtitude
         self.latitude = latitude
         self.rating = rating
         self.address = address
         self.open_hour = open_hour
+        self.phone = phone
 
     def addReview(self, text, link, index):
         if index == 0:
@@ -92,10 +100,10 @@ class Restaurant (db.Model):
             self.reviewText3 = text
             self.reviewLink3 = link
 
-    def addImage(self, images)
-        image1 = images[0]
-        image2 = images[1]
-        image3 = images[2]
+    def addImage(self, images):
+        self.image1 = images[0]
+        self.image2 = images[1]
+        self.image3 = images[2]
 
 class Attraction (db.Model):
     __tablename__ = "attraction"
@@ -112,6 +120,7 @@ class Attraction (db.Model):
     latitude = db.Column(db.Float)
     rating = db.Column(db.Float)
     address = db.Column(db.String(100))
+    phone = db.Column(db.String(20))
     
     reviewText1 = db.Column(db.String(200))
     reviewLink1 = db.Column(db.String(200))
@@ -120,14 +129,14 @@ class Attraction (db.Model):
     reviewText3 = db.Column(db.String(200))
     reviewLink3 = db.Column(db.String(200))
 
-    def __init__(self, id, name, longtitude, latitude, rating, address):
+    def __init__(self, id, name, longtitude, latitude, rating, address, phone):
         self.id = id
         self.name = name
-        self.image = image
         self.longtitude = longtitude
         self.latitude = latitude
         self.rating = rating
         self.address = address 
+        self.phone = phone
 
     def addReview(self, text, link, index):
         if index == 0:
@@ -140,10 +149,10 @@ class Attraction (db.Model):
             self.reviewText3 = text
             self.reviewLink3 = link
 
-    def addImage(self, images)
-        image1 = images[0]
-        image2 = images[1]
-        image3 = images[2]
+    def addImage(self, images):
+        self.image1 = images[0]
+        self.image2 = images[1]
+        self.image3 = images[2]
 
 
     
