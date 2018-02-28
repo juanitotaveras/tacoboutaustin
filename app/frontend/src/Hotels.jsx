@@ -3,7 +3,7 @@ import './App.css';
 import { Container, Row, Col } from 'reactstrap';
 import HotelCard from './HotelCard';
 
-var hotels = [
+var hotels = [/*
 {
   id: "0",
   name: "Omni Austin Hotel Downtown",
@@ -32,14 +32,72 @@ var hotels = [
   rating: "★★★☆☆",
   amenities: "Breakfast, pool, room service",
   reviews: "I was able to eat all my meals here, hang out in the lobby, frequent the coffee shop and I felt secure and protected."
-}];
+} */];
 
 export {hotels};
+
+class Hotel {
+  constructor(address, id, image1, name) {
+    this.address = address;
+    this.id = id;
+    this.image = image1;
+    this.name = name;
+  }
+}
 
 export default class Hotels extends Component {
   constructor(props) {
     super(props);
     this.state = hotels;
+  }
+  componentWillMount() {
+    function fillInRestaurants(responseText) {
+      // let dict = eval(responseText);
+      // console.log(responseText);
+      let locations = JSON.parse(responseText)["list"];
+      // console.log(list);
+      // console.log("test");
+      // console.log(locations);
+      
+      var idx = 0;
+      for (let location in locations) {
+        // console.log(++idx);
+        // console.log(location, locations[location]);
+        // array of address, id, image1, name
+        let array = locations[location];
+        console.log("IMAGE: " + array["image1"]);
+        hotels.push(new Hotel(array["address"], array["id"], array["image1"], array["name"]));
+      } 
+      // for (var key in dict) {
+      //   let stats = dict[key];
+      //   let author = stats["user"]["login"];
+      //   console.log("AUTHOR: " + author);
+
+      //   for (var i = 0; i < members.length; i++) {
+      //     if (members[i]["gitLogin"] == author) {
+      //       members[i]["issues"] += 1;
+      //     }
+      //   }
+      //   tempTotalIssues += 1;
+
+      // }
+    }
+
+    const url = "http://localhost/api/hotels";
+
+    function request(url, parseResponse) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          // do something with response text
+          parseResponse(xmlHttp.responseText);
+        
+      }
+      xmlHttp.open("GET", url, false) // true for asynchronous
+      xmlHttp.send(null);
+    }
+
+    request(url, fillInRestaurants);
   }
 
   render() {
