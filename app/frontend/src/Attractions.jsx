@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Container, Row, Col } from 'reactstrap';
 import AttractionCard from './AttractionCard';
-
+/*
 const attractions = [
 {
   id: "0",
@@ -33,14 +33,50 @@ const attractions = [
   hours: "24/7",
   reviews: "We Austinites are so lucky to have such a big, beautiful lake circled by fantastic walking/biking/running trails."
 }];
+*/
+
+var attractions = [];
 
 export {attractions};
 
+class Attraction {
+  constructor(address, id, image1, name, rating) {
+    this.address = address;
+    this.id = id;
+    this.image = image1;
+    this.name = name;
+    this.rating = rating;
+  }
+}
 
 export default class Attractions extends Component {
   constructor(props) {
     super(props);
     this.state = attractions;
+  }
+
+  componentWillMount() {
+    function fillInAttractions(responseText) {
+      let locations = JSON.parse(responseText)["list"];
+      for (let location in locations) {
+        let array = locations[location];
+        attractions.push(new Attraction(array["address"], array["id"], array["image1"], array["name"], array["rating"]));
+      } 
+    }
+
+    const url = "http://localhost/api/attractions";
+
+    function request(url, parseResponse) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          parseResponse(xmlHttp.responseText);
+      }
+      xmlHttp.open("GET", url, false) // true for asynchronous
+      xmlHttp.send(null);
+    }
+
+    request(url, fillInAttractions);
   }
 
   render() {
