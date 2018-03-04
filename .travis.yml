@@ -1,0 +1,41 @@
+sudo: false
+
+language: python
+
+python:
+   - "3.6"
+
+before_install:
+    - cat .travis.yml
+    # - pip install --upgrade pip
+    # - pip --version
+    - apt-get install docker.io
+    - docker pull juanitotaveras/tacoboutaustin:back
+
+# install:
+#     - pip install autopep8
+#     - pip install coverage
+#     - pip install mypy
+#     - pip install pylint
+#     - pip install numpy
+#     - pip list
+
+before_script:
+    - date
+    - uname -a
+    # - printenv | sort
+    # - autopep8  --version
+    # - coverage  --version
+    # - git       --version
+    # - make      --version
+    # - mypy      --version
+    # - pydoc     --version
+    # - pylint    --version
+    # - python3.6 --version
+    # - ls -al
+    # - cat makefile
+    #- chmod 777 RunCollatz.py
+    #- cat projects/collatz/makefile
+
+script:
+   - ls
