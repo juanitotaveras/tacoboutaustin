@@ -11,6 +11,8 @@ before_install:
     # - pip --version
     - sudo apt-get install docker.io
     - docker pull juanitotaveras/tacoboutaustin:back
+    - docker images
+    - docker pull juanitotaveras/tacoboutaustin:front
 
 # install:
 #     - pip install autopep8
