@@ -1,7 +1,29 @@
 from flask import render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from routes import app
 from models import *
+
+
+def close_places(place_type, number, zip_code):
+    places = None
+    if place_type == "restaurant":
+        places = Restaurant.query.filter_by(zipcode = zip_code).order_by(func.random()).limit(number).all()
+    if place_type == "hotel":
+        places = Hotel.query.filter_by(zipcode = zip_code).order_by(func.random()).limit(number).all()
+    if place_type == "attraction":
+        places = Attraction.query.filter_by(zipcode = zip_code).order_by(func.random()).limit(number).all() 
+    places_data = []
+    if places is not None:
+        for place in places:
+            place_data = {}
+            place_data['id'] = place.id
+            place_data['name'] = place.name
+            place_data['images'] = [place.image1, place.image2, place.image3]
+            place_data['rating'] = place.rating
+            place_data['address'] = [place.address1, place.address2]
+            places_data.append(place_data)
+    return places_data
 
 
 @app.route('/api')
@@ -42,6 +64,11 @@ def get_restaurant(id):
         'text': restaurant.reviewText2, 'link': restaurant.reviewLink2}, {
         'text': restaurant.reviewText3, 'link': restaurant.reviewLink3}]
 
+    hotels = close_places("hotel", 2, restaurant.zipcode)
+    restaurant_data['close_by_hotels'] = hotels
+    attractions = close_places("attraction", 2, restaurant.zipcode)
+    restaurant_data['close_by_attractions'] = attractions
+
     return jsonify({'restaurant': restaurant_data})
 
 
@@ -77,6 +104,11 @@ def get_hotel(id):
     hotel_data['reviews'] = [{'text': hotel.reviewText1, 'link': hotel.reviewLink1}, {
         'text': hotel.reviewText2, 'link': hotel.reviewLink2}, {
         'text': hotel.reviewText3, 'link': hotel.reviewLink3}]
+    
+    restaurants = close_places("restaurant", 2, hotel.zipcode)
+    hotel_data['close_by_restaurants'] = restaurants
+    attractions = close_places("attraction", 2, hotel.zipcode)
+    hotel_data['close_by_attractions'] = attractions
 
     return jsonify({'hotel': hotel_data})
 
@@ -114,5 +146,10 @@ def get_attraction(id):
     attraction_data['reviews'] = [{'text': attraction.reviewText1, 'link': attraction.reviewLink1}, {
         'text': attraction.reviewText2, 'link': attraction.reviewLink2}, {
         'text': attraction.reviewText3, 'link': attraction.reviewLink3}]
+
+    restaurants = close_places("restaurant", 2, attraction.zipcode)
+    attraction_data['close_by_restaurants'] = restaurants
+    hotels = close_places("hotel", 2, attraction.zipcode)
+    attraction_data['close_by_hotels'] = hotels
 
     return jsonify({'attraction': attraction_data})

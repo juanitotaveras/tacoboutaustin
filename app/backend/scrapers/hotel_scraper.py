@@ -1,7 +1,7 @@
 from helper_methods import *
 
 # Hotels in Austin
-AUSTIN_HOTEL = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=sleeping&limit=20"
+AUSTIN_HOTEL = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=sleeping&limit=50"
 
 
 def scrap_hotels():
@@ -39,3 +39,9 @@ def scrap_hotels():
 		
 		
 	db.session.commit()
+
+if __name__ == '__main__':
+	db.drop_all()
+	db.create_all()
+	db.session.commit()
+	scrap_hotels()

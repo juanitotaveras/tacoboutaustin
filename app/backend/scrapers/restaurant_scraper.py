@@ -3,7 +3,7 @@ from helper_methods import *
 SYGIC_KEY = "EPrgMMQzpr9RMzaj25Tsw9QXrjtKbVMX2kY4NdWz"
 headers = {'x-api-key': SYGIC_KEY}
 
-AUSTIN_EATING = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=eating&limit=40"
+AUSTIN_EATING = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=eating&limit=70"
 
 def is_restaurant(restaurant):
 	return len(restaurant['categories']) == 1
@@ -24,7 +24,7 @@ def scrap_restaurants():
 		image = ['', '', '']
 		address = ['', '']
 
-		if not detail is None:
+		if not detail is None and 'hours' in detail:
 			rating = detail['rating']
 			number = detail['display_phone']
 			for x in range(0, len(detail['photos'])):

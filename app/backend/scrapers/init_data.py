@@ -7,7 +7,9 @@ def init_db():
     db.drop_all()
     db.create_all()
     scrap_hotels()
+    db.session.commit()
     scrap_restaurants()
+    db.session.commit()
     scrap_attractions()
     db.session.commit()
 

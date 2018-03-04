@@ -6,6 +6,7 @@ PARENT_DIR = os.path.dirname(CURRENT_DIR)  # get parent directory path
 BASE_DIR = os.path.dirname(PARENT_DIR)  # get grand parent directory path
 sys.path.append(BASE_DIR)
 from models import *
+#from sqlalchemy import func
 import pprint
 
 SYGIC_KEY = "EPrgMMQzpr9RMzaj25Tsw9QXrjtKbVMX2kY4NdWz"
@@ -18,9 +19,12 @@ yelp_headers = {'Authorization': YELP_KEY}
 def scrap_yelp_data(name, longitude, latitude):
     url = "https://api.yelp.com/v3/businesses/search?term=" + "\"" + name + "\"&latitude=" + str(latitude) + "&longitude=" + str(longitude)
     response = requests.get(url, headers = yelp_headers)
-    if response.json()['total'] <= 0:
+    response_json = response.json()
+    if response_json['total'] <= 0 or len(response_json['businesses']) == 0:
         return None, None
-    id = response.json()['businesses'][0]['id']
+    #pp = pprint.PrettyPrinter(indent=4)
+    #pp.pprint(response.json())
+    id = response_json['businesses'][0]['id']
 
     url = "https://api.yelp.com/v3/businesses/" + id
     response = requests.get(url, headers = yelp_headers)
@@ -67,5 +71,34 @@ def convert_military(time):
     else:
         return str(hour_num) + ":" + time[-2:] +"AM"
 
+"""
+def close_places(place_type, number, zip_code):
+    places = None
+    if place_type == "restaurant":
+        places = Restaurant.query.filter_by(zipcode=zip_code).order_by(
+            func.random()).limit(number).all()
+    if place_type == "hotel":
+        places = Hotel.query.filter_by(zipcode=zip_code).order_by(
+            func.random()).limit(number).all()
+    if place_type == "attraction":
+        places = Attraction.query.filter_by(zipcode=zip_code).order_by(
+            func.random()).limit(number).all()
+    places_data = []
+    if places is not None:
+        for place in places:
+            place_data = {}
+            place_data['id'] = place.id
+            place_data['name'] = place.name
+            place_data['images'] = [place.image1, place.image2, place.image3]
+            place_data['rating'] = place.rating
+            place_data['address'] = [place.address1, place.address2]
+            places_data.append(place_data)
+    return places_data
+"""
+
 if __name__ == "__main__":
-    print(convert_military("1620"))
+    print(convert_military("1130"))
+    #places_data = close_places("restaurant", 2, 78752)
+    #restaurant = Restaurant.query.filter_by(zipcode=78752).all()
+    #print(restaurant)
+    #print(places_data)
