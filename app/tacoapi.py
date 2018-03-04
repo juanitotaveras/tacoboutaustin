@@ -65,11 +65,9 @@ def get_restaurant(id):
         'text': restaurant.reviewText3, 'link': restaurant.reviewLink3}]
 
     hotels = close_places("hotel", 2, restaurant.zipcode)
-    restaurant_data['close_by_hotels'] = hotels
     attractions = close_places("attraction", 2, restaurant.zipcode)
-    restaurant_data['close_by_attractions'] = attractions
 
-    return jsonify({'restaurant': restaurant_data})
+    return jsonify({'restaurant': restaurant_data, 'close_by_hotels': hotels, 'close_by_attractions': attractions})
 
 
 @app.route('/api/hotels')
@@ -106,11 +104,9 @@ def get_hotel(id):
         'text': hotel.reviewText3, 'link': hotel.reviewLink3}]
     
     restaurants = close_places("restaurant", 2, hotel.zipcode)
-    hotel_data['close_by_restaurants'] = restaurants
     attractions = close_places("attraction", 2, hotel.zipcode)
-    hotel_data['close_by_attractions'] = attractions
 
-    return jsonify({'hotel': hotel_data})
+    return jsonify({'hotel': hotel_data, 'close_by_restaurants': restaurants, 'close_by_attractions': attractions})
 
 @app.route('/api/attractions')
 def get_attractions():
@@ -148,8 +144,6 @@ def get_attraction(id):
         'text': attraction.reviewText3, 'link': attraction.reviewLink3}]
 
     restaurants = close_places("restaurant", 2, attraction.zipcode)
-    attraction_data['close_by_restaurants'] = restaurants
     hotels = close_places("hotel", 2, attraction.zipcode)
-    attraction_data['close_by_hotels'] = hotels
 
-    return jsonify({'attraction': attraction_data})
+    return jsonify({'attraction': attraction_data, 'close_by_restaurants': restaurants, 'close_by_hotels': hotels})
