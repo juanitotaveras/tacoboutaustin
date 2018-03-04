@@ -13,6 +13,8 @@ before_install:
     - docker pull juanitotaveras/tacoboutaustin:back
     - docker images
     - docker pull juanitotaveras/tacoboutaustin:front
+    - make start_containers
+    - docker ps
 
 # install:
 #     - pip install autopep8
