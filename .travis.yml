@@ -9,7 +9,7 @@ before_install:
     - cat .travis.yml
     # - pip install --upgrade pip
     # - pip --version
-    - apt-get install docker.io
+    - sudo apt-get install docker.io
     - docker pull juanitotaveras/tacoboutaustin:back
 
 # install:
