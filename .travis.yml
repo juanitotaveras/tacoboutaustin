@@ -13,7 +13,7 @@ before_install:
     - docker pull juanitotaveras/tacoboutaustin:back
     - docker images
     - docker pull juanitotaveras/tacoboutaustin:front
-    - make start_containers
+    - make create_env
     - docker ps
 
 # install:
