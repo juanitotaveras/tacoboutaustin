@@ -6,7 +6,11 @@ start_env:
 	docker start taco_front
 	docker start taco_back
 
-kill_env:
+stop_env:
+	docker stop taco_front
+	docker stop taco_back
+
+clear_env:
 	docker stop taco_front
 	docker rm taco_front
 	docker stop taco_back
