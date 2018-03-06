@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { attractions, Attraction } from './Attractions'
 import { Hotel } from './Hotels'
 import { Restaurant } from './Restaurants';
+import RestaurantCard from './RestaurantCard';
 import HotelCard from './HotelCard';
 import { Link } from 'react-router-dom';
 
@@ -12,13 +13,10 @@ var nearby_restaurants = [];
 var nearby_hotels = [];
 var attraction_details = [];
 
-//export {nearby_restaurants};
-//export {nearby_hotels};
 
 export default class AttractionsDetails extends Component {
   constructor(props) {
       super(props);
-      //this.state = attraction_details;
     }
 
   componentWillMount() {
@@ -27,23 +25,12 @@ export default class AttractionsDetails extends Component {
           let restaurants = JSON.parse(responseText)["close_by_restaurants"];
           let hotels = JSON.parse(responseText)["close_by_hotels"];
 
-          // console.log("HOtel:" + hotels);
+          for (let r of restaurants) {
+            nearby_restaurants.push(r);
+          }
 
-          for (let restaurant in restaurants) {
-            nearby_restaurants.push(new Restaurant(
-              restaurant["address"],
-              restaurant["id"],
-              restaurant["image"],
-              restaurant["name"],
-              restaurant["rating"]));
-          } 
-          for (let hotel in hotels) {
-            nearby_hotels.push(new Hotel(
-              hotel["address"],
-              hotel["id"],
-              hotel["image"],
-              hotel["name"],
-              hotel["rating"]));
+          for(let h of hotels) {
+            nearby_hotels.push(h);
           }
 
           attraction_details = attraction;
@@ -65,9 +52,13 @@ export default class AttractionsDetails extends Component {
   }
   
   render() {
-    var cards = nearby_hotels.map(function(hotel){
-            return <Col xs="12" sm="6" md="6" lg="3"><HotelCard hotel={hotel} /></Col>;
-    })
+    var nearby_restaurant_cards = nearby_restaurants.map(function(restaurant){
+                return <Col xs="12" sm="6" md="6" lg="3"><RestaurantCard restaurant={restaurant} /></Col>;
+              })
+    var nearby_hotel_cards = nearby_hotels.map(function(hotel){
+                return <Col xs="12" sm="6" md="6" lg="3"><HotelCard hotel={hotel} /></Col>;
+              })
+
     return (
       <Container>
         <Row>
@@ -86,13 +77,19 @@ export default class AttractionsDetails extends Component {
           </Col>
         </Row>
         <Row>
-          <h1>Nearby Hotels</h1>
+          <h1>Nearby things!</h1>
         </Row>
-            <Row>
-                {cards}
-            </Row>
         <Row>
-          <h2><Link to='/restaurants'>Restaurants!</Link></h2>
+          <h2> Restaurants </h2>
+        </Row>
+        <Row>
+          {nearby_restaurant_cards}
+        </Row>
+        <Row>
+          <h2> Hotels </h2>
+        </Row>
+        <Row>
+          {nearby_hotel_cards}
         </Row>
       </Container>
     );
