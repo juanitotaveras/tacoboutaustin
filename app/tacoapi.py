@@ -38,7 +38,7 @@ def get_restaurants():
         restaurant_data = {}
         restaurant_data['id'] = restaurant.id
         restaurant_data['name'] = restaurant.name
-        restaurant_data['images'] = [restaurant.image1, restaurant.image2, restaurant.image3]
+        restaurant_data['images'] = restaurant.image1
         restaurant_data['rating'] = restaurant.rating
         restaurant_data['address'] = [restaurant.address1, restaurant.address2]
         output.append(restaurant_data)
