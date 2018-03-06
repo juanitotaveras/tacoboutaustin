@@ -16,7 +16,7 @@ export default class AttractionJumbotron extends Component {
         <p><b>Opening hours</b><br/>
         {this.props.hours}</p>
         <p><b>Reviews</b><br/>
-        <blockquote><q>{this.props.reviews}</q></blockquote></p>
+        {/*// <blockquote><q>{this.props.reviews}</q></blockquote>*/}</p>
         <p><b>More pictures</b></p>
         <Row>
           <Col>
@@ -53,6 +53,6 @@ AttractionJumbotron.propTypes = {
   image: PropTypes.string,
   map: PropTypes.string,
   hours: PropTypes.string,
-  rating: PropTypes.string,
+  rating: PropTypes.number,
   reviews: PropTypes.string
 };

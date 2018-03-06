@@ -16,11 +16,11 @@ var hotels = [/*
 
 export {hotels};
 
-class Hotel {
-  constructor(address, id, image1, name) {
+export class Hotel {
+  constructor(address, id, image, name) {
     this.address = address;
     this.id = id;
-    this.image = image1;
+    this.image = image;
     this.name = name;
     //this.amenities
     // this.reviews
@@ -38,7 +38,7 @@ export default class Hotels extends Component {
       let locations = JSON.parse(responseText)["list"];
       for (let location in locations) {
         let array = locations[location];
-        hotels.push(new Hotel(array["address"], array["id"], array["image1"], array["name"]));
+        hotels.push(new Hotel(array["address"], array["id"], array["image"], array["name"]));
       } 
     }
 

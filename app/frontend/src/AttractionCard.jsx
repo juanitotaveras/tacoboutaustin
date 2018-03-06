@@ -4,9 +4,8 @@ import { Card, CardImg, CardText, CardBody,
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-
 export default class AttractionCard extends Component {
-  render() {
+  render(props) {
     var a = this.props.attraction;
     return (
       <div>
