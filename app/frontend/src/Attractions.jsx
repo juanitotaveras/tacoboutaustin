@@ -5,13 +5,13 @@ import AttractionCard from './AttractionCard';
 
 var attractions = [];
 
-export {attractions};
+//export {attractions};
 
-class Attraction {
-  constructor(address, id, image1, name, rating) {
+export class Attraction {
+  constructor(address, id, image, name, rating) {
     this.address = address;
     this.id = id;
-    this.image = image1;
+    this.image = image;
     this.name = name;
     this.rating = rating;
   }
@@ -28,7 +28,7 @@ export default class Attractions extends Component {
       let locations = JSON.parse(responseText)["list"];
       for (let location in locations) {
         let array = locations[location];
-        attractions.push(new Attraction(array["address"], array["id"], array["image1"], array["name"], array["rating"]));
+        attractions.push(new Attraction(array["address"], array["id"], array["image"], array["name"], array["rating"]));
       } 
     }
 
