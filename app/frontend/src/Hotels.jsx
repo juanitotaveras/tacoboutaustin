@@ -3,18 +3,7 @@ import './App.css';
 import { Container, Row, Col } from 'reactstrap';
 import HotelCard from './HotelCard';
 
-var hotels = [/*
-{
-  id: "0",
-  name: "Omni Austin Hotel Downtown",
-  image: "https://www.omnihotels.com/-/media/images/hotels/ausctr/pool/ausctr-omni-austin-hotel-downtown-evening-pool.jpg",
-  address: "700 San Jacinto Blvd, Austin, TX 78701",
-  rating: "★★★★★",
-  amenities: "Breakfast, pool, room service",
-  reviews: "We didn't get to use the rooftop pool, but my Omni status got us free coffee everyday at their little coffee shop."
-}*/];
-
-export {hotels};
+var hotels = [];
 
 export class Hotel {
   constructor(address, id, image, name) {
