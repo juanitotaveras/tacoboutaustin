@@ -132,9 +132,7 @@ def get_attraction(id):
     attraction_data = {}
     attraction_data['id'] = attraction.id
     attraction_data['name'] = attraction.name
-    attraction_data['image1'] = attraction.image1
-    attraction_data['image2'] = attraction.image2
-    attraction_data['image3'] = attraction.image3
+    attraction_data['images'] = [attraction.image1, attraction.image2, attraction.image3]
     attraction_data['phone'] = attraction.phone
     attraction_data['location'] = {'lat': attraction.latitude, 'long': attraction.longtitude}
     attraction_data['rating'] = attraction.rating
