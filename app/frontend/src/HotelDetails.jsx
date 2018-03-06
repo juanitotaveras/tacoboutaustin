@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import HotelJumbotron from './HotelJumbotron';
+import RestaurantCard from './RestaurantCard';
+import AttractionCard from './AttractionCard';
 import { Link } from 'react-router-dom';
 
 
@@ -44,6 +46,13 @@ export default class HotelDetails extends Component {
 
 	render(props)
 	{
+		var nearby_restaurant_cards = nearby_restaurants.map(function(restaurant){
+		            return <Col xs="12" sm="6" md="6" lg="3"><RestaurantCard restaurant={restaurant} /></Col>;
+		          })
+		var nearby_attraction_cards = nearby_attractions.map(function(attraction){
+		            return <Col xs="12" sm="6" md="6" lg="3"><AttractionCard attraction={attraction} /></Col>;
+		          })
+
 		return (
 			<Container>
 				<Row>
@@ -65,10 +74,16 @@ export default class HotelDetails extends Component {
 					<h1>Nearby things!</h1>
 				</Row>
 				<Row>
-					<h2><Link to='/restaurants'>Restaurants!</Link></h2>
+					<h2> Restaurants </h2>
 				</Row>
 				<Row>
-					<h2><Link to='/attractions'>Attractions!</Link></h2>
+					{nearby_restaurant_cards}
+				</Row>
+				<Row>
+					<h2> Attractions </h2>
+				</Row>
+				<Row>
+					{nearby_attraction_cards}
 				</Row>
 			</Container>
 		);
