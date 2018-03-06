@@ -19,7 +19,7 @@ def close_places(place_type, number, zip_code):
             place_data = {}
             place_data['id'] = place.id
             place_data['name'] = place.name
-            place_data['images'] = [place.image1, place.image2, place.image3]
+            place_data['image'] = place.image1
             place_data['rating'] = place.rating
             place_data['address'] = [place.address1, place.address2]
             places_data.append(place_data)
@@ -38,7 +38,7 @@ def get_restaurants():
         restaurant_data = {}
         restaurant_data['id'] = restaurant.id
         restaurant_data['name'] = restaurant.name
-        restaurant_data['images'] = restaurant.image1
+        restaurant_data['image'] = restaurant.image1
         restaurant_data['rating'] = restaurant.rating
         restaurant_data['address'] = [restaurant.address1, restaurant.address2]
         output.append(restaurant_data)
@@ -78,7 +78,7 @@ def get_hotels():
         hotel_data = {}
         hotel_data['id'] = hotel.id
         hotel_data['name'] = hotel.name
-        hotel_data['image1'] = hotel.image1
+        hotel_data['image'] = hotel.image1
         hotel_data['rating'] = hotel.rating
         hotel_data['address'] = [hotel.address1, hotel.address2]
         output.append(hotel_data)
@@ -116,7 +116,7 @@ def get_attractions():
         attraction_data = {}
         attraction_data['id'] = attraction.id
         attraction_data['name'] = attraction.name
-        attraction_data['image1'] = attraction.image1
+        attraction_data['image'] = attraction.image1
         attraction_data['rating'] = attraction.rating
         attraction_data['address'] = [attraction.address1, attraction.address2]
         output.append(attraction_data)
