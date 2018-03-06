@@ -16,3 +16,7 @@ clear_env:
 	docker stop taco_back
 	docker rm taco_back
 
+gui_testing:
+	sudo apt-get install xserver-xephyr
+	sudo apt-get install xvfb
+	pip install pyvirtualdisplay selenium
