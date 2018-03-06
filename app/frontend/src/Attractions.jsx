@@ -5,8 +5,6 @@ import AttractionCard from './AttractionCard';
 
 var attractions = [];
 
-//export {attractions};
-
 export class Attraction {
   constructor(address, id, image, name, rating) {
     this.address = address;

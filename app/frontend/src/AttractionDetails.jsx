@@ -11,8 +11,6 @@ var nearby_restaurants = [];
 var nearby_hotels = [];
 var attraction_details = [];
 
-//export {nearby_restaurants};
-//export {nearby_hotels};
 
 export default class AttractionsDetails extends Component {
 	constructor(props) {

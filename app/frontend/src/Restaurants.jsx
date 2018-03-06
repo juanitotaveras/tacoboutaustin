@@ -5,8 +5,6 @@ import { Container, Row, Col } from 'reactstrap';
 
 var restaurants = [];
 
-export{restaurants};
-
 export class Restaurant {
   constructor(address, id, image, name, rating) {
     this.address = address;
