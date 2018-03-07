@@ -44,7 +44,7 @@ export default class HotelDetails extends Component {
     	request(url, parseData);
 	}
 
-	componentWillMount() {
+	componentWillUnmount() {
 		nearby_restaurants = [];
 		nearby_attractions = [];
 	}
@@ -68,7 +68,7 @@ export default class HotelDetails extends Component {
                 		<HotelJumbotron
                 		name={h_details.name}
 		        		activitytype="poop activitytype"
-		        		image={h_details.images[2]}
+		        		image={h_details.images[0]}
 		        		map="http://texspine.com/wp-content/uploads/2012/01/map.jpg"
 		        		hours="No hours"
 		        		rating={h_details.rating}
