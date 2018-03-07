@@ -53,11 +53,7 @@ export default class Attractions extends Component {
     return (
       <div>
         <Container>
-          <Row>
               <h1>Attractions </h1>
-            </Row>
-          </Container>
-          <Container>
             <Row>
                 {cards}
             </Row>

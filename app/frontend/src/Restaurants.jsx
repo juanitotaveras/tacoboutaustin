@@ -53,11 +53,7 @@ export default class Restaurants extends Component {
     return (
     	<div>
     		<Container>
-	    		<Row>
 	      			<h1>Restaurants </h1>
-	      		</Row>
-      		</Container>
-      		<Container>
       			<Row>
                 {cards}
       			</Row>

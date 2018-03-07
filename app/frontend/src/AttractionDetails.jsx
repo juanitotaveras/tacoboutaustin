@@ -76,18 +76,12 @@ export default class AttractionsDetails extends Component {
             />
           </Col>
         </Row>
-        <Row>
           <h1>Nearby things!</h1>
-        </Row>
-        <Row>
           <h2> Restaurants </h2>
-        </Row>
         <Row>
           {nearby_restaurant_cards}
         </Row>
-        <Row>
           <h2> Hotels </h2>
-        </Row>
         <Row>
           {nearby_hotel_cards}
         </Row>

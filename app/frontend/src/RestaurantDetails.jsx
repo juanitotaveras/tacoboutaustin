@@ -70,18 +70,12 @@ export default class RestaurantDetails extends Component {
                 		/>
               		</Col>
 				</Row>
-				<Row>
-					<h1>Nearby things!</h1>
-				</Row>
-				<Row>
-					<h2> Hotels </h2>
-				</Row>
+				<h1>Nearby things!</h1>
+				<h2> Hotels </h2>
 				<Row>
 					{nearby_hotel_cards}
 				</Row>
-				<Row>
-					<h2> Attractions </h2>
-				</Row>
+				<h2> Attractions </h2>
 				<Row>
 					{nearby_attraction_cards}
 				</Row>
