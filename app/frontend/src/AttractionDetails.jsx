@@ -50,6 +50,11 @@ export default class AttractionsDetails extends Component {
 
       request(url, parseData);
   }
+
+  componentWillUnmount() {
+      nearby_restaurants = [];
+      nearby_hotels = [];
+  }
   
   render() {
     var nearby_restaurant_cards = nearby_restaurants.map(function(restaurant){

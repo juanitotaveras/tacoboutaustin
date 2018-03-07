@@ -44,6 +44,11 @@ export default class HotelDetails extends Component {
     	request(url, parseData);
 	}
 
+	componentWillMount() {
+		nearby_restaurants = [];
+		nearby_attractions = [];
+	}
+
 	render(props)
 	{
 		var nearby_restaurant_cards = nearby_restaurants.map(function(restaurant){

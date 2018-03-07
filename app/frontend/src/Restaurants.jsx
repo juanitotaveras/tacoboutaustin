@@ -23,10 +23,9 @@ export default class Restaurants extends Component {
 
   componentWillMount() {
     function fillInRestaurants(responseText) {
-      let locations = JSON.parse(responseText)["list"];
-      for (let location in locations) {
-        let array = locations[location];
-        restaurants.push(new Restaurant(array["address"], array["id"], array["image"], array["name"], array["rating"]));
+      let restaurants_parsed = JSON.parse(responseText)["list"];
+      for (let r of restaurants_parsed) {
+        restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
       }
     }
     
@@ -43,6 +42,10 @@ export default class Restaurants extends Component {
     }
 
     request(url, fillInRestaurants);
+  }
+
+  componentWillUnmount() {
+    restaurants = [];
   }
 
   render() {

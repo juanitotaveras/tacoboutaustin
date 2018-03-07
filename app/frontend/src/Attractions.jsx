@@ -23,12 +23,11 @@ export default class Attractions extends Component {
 
   componentWillMount() {
     function fillInAttractions(responseText) {
-      let locations = JSON.parse(responseText)["list"];
-      for (let location in locations) {
-        let array = locations[location];
-        attractions.push(new Attraction(array["address"], array["id"], array["image"], array["name"], array["rating"]));
-      } 
-    }
+      let attractions_parsed = JSON.parse(responseText)["list"];
+      for (let a of attractions_parsed) {
+        attractions.push(new Attraction(a["address"], a["id"], a["image"], a["name"], a["rating"]));
+      }
+    } 
 
     const url = "http://localhost/api/attractions";
 
@@ -43,6 +42,10 @@ export default class Attractions extends Component {
     }
 
     request(url, fillInAttractions);
+  }
+
+  componentWillUnmount() {
+    attractions = [];
   }
 
   render() {

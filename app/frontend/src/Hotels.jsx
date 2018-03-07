@@ -22,12 +22,12 @@ export default class Hotels extends Component {
     super(props);
     this.state = hotels;
   }
+
   componentWillMount() {
-    function fillInRestaurants(responseText) {
-      let locations = JSON.parse(responseText)["list"];
-      for (let location in locations) {
-        let array = locations[location];
-        hotels.push(new Hotel(array["address"], array["id"], array["image"], array["name"]));
+    function fillInHotels(responseText) {
+      let hotels_parsed = JSON.parse(responseText)["list"];
+      for (let h of hotels_parsed) {
+        hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"]));
       } 
     }
 
@@ -45,7 +45,11 @@ export default class Hotels extends Component {
       xmlHttp.send(null);
     }
 
-    request(url, fillInRestaurants);
+    request(url, fillInHotels);
+  }
+
+  componentWillUnmount() {
+    hotels = [];
   }
 
   render() {
