@@ -67,11 +67,11 @@ export default class RestaurantDetails extends Component {
 					<Col>
                 		<RestaurantJumbotron
                 		name={r_details.name}
-		        		activitytype="poop activitytype"
-		        		image={r_details.images[2]}
+		        		images={r_details.images}
 		        		map="http://texspine.com/wp-content/uploads/2012/01/map.jpg"
-		        		hours="No hours"
+		        		hours={r_details.hours}
 		        		rating={r_details.rating}
+		        		reviews={r_details.reviews}
                 		/>
               		</Col>
 				</Row>

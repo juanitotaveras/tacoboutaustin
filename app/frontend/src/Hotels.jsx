@@ -37,9 +37,7 @@ export default class Hotels extends Component {
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-          // do something with response text
-          parseResponse(xmlHttp.responseText);
-        
+          parseResponse(xmlHttp.responseText);        
       }
       xmlHttp.open("GET", url, false) // true for asynchronous
       xmlHttp.send(null);
