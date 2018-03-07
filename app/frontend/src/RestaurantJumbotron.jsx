@@ -14,8 +14,11 @@ export default class RestaurantJumbotron extends Component {
         <h1 className="display-3">{this.props.name}</h1>
         <p className="lead">Rating: {this.props.rating}/5<br/>
         </p>
-        <img top width="50%" height="300em" src={this.props.images[0]} alt="Card image cap" />
-        <img top width="50%" height="300em" src={this.props.map} alt="Card image cap" />
+          <Row>
+          <img top width="50%" height="400em" src={this.props.images[0]} alt="Card image cap" />
+          <iframe top width="50%" height="400em" frameborder="0" src={this.props.map_src} allowfullscreen>
+          </iframe>
+        </Row>
         <p></p>
         <hr className="my-2" />
         <p><b>Opening hours</b><br/>
@@ -56,7 +59,7 @@ RestaurantJumbotron.propTypes = {
   name: PropTypes.string,
   rating: PropTypes.string,
   images: PropTypes.object,
-  map: PropTypes.string,
+  map_src: PropTypes.string,
   hours: PropTypes.string,
   reviews: PropTypes.object
 };

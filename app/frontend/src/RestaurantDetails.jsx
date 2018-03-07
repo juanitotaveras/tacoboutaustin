@@ -49,6 +49,12 @@ export default class RestaurantDetails extends Component {
 		nearby_attractions = [];
 	}
 
+	buildMapSrc() {
+		var address = r_details.name + " " + r_details.address[0] + " " + r_details.address[1];
+		var s = "https://www.google.com/maps/embed/v1/place?q=" + encodeURI(address) + "&key=AIzaSyD7QCCYdGEGvI3J74sDAwqJbaWieKC6V2k";
+		return s;
+	}
+
 	render()
 	{
 		var nearby_hotel_cards = nearby_hotels.map(function(hotel){
@@ -57,6 +63,8 @@ export default class RestaurantDetails extends Component {
 		var nearby_attraction_cards = nearby_attractions.map(function(attraction){
 		            return <Col xs="12" sm="6" md="6" lg="3"><AttractionCard attraction={attraction} /></Col>;
 		          })
+
+		var map = this.buildMapSrc();
 
 		return (
 			<Container>
@@ -68,7 +76,7 @@ export default class RestaurantDetails extends Component {
                 		<RestaurantJumbotron
                 		name={r_details.name}
 		        		images={r_details.images}
-		        		map="http://texspine.com/wp-content/uploads/2012/01/map.jpg"
+		        		map_src={map}
 		        		hours={r_details.hours}
 		        		rating={r_details.rating}
 		        		reviews={r_details.reviews}
