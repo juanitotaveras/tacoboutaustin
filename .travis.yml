@@ -17,6 +17,7 @@ before_install:
     - make create_env
     - docker ps
     - make gui_testing
+    - chmod +x tests/chromedriver
 
 install:
     - npm install -g istanbul
