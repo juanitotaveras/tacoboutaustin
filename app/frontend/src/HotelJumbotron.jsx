@@ -4,6 +4,10 @@ import { Jumbotron, Button, Row, Col } from 'reactstrap';
 
 export default class HotelJumbotron extends Component {
   render(props) {
+    var all_reviews = this.props.reviews.map(function(review){
+      return <p>{review.text}<a href={review.link}>read more!</a></p>
+    })
+
     return (
     <div>
       <Jumbotron>
@@ -17,10 +21,8 @@ export default class HotelJumbotron extends Component {
         </Row>
         <p></p>
         <hr className="my-2" />
-        <p><b>Amenities</b><br/>
-        {this.props.amenities}</p>
         <p><b>Reviews</b><br/>
-        <blockquote><q>{this.props.reviews}</q></blockquote></p>
+        <blockquote><q>{all_reviews}</q></blockquote></p>
         <p><b>More pictures</b></p>
         <Row>
           <Col>
@@ -56,6 +58,6 @@ HotelJumbotron.propTypes = {
   address: PropTypes.string,
   images: PropTypes.object,
   map_src: PropTypes.string,
-  reviews: PropTypes.string,
+  reviews: PropTypes.object,
   amenities: PropTypes.string
 };
