@@ -29,7 +29,7 @@ export default class Attractions extends Component {
       }
     } 
 
-    const url = "http://localhost/api/attractions";
+    const url = "http://tacoboutaustin.me/api/attractions";
 
     function request(url, parseResponse) {
       var xmlHttp = new XMLHttpRequest();

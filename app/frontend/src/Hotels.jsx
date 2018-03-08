@@ -31,7 +31,7 @@ export default class Hotels extends Component {
       } 
     }
 
-    const url = "http://localhost/api/hotels";
+    const url = "http://tacoboutaustin.me/api/hotels";
 
     function request(url, parseResponse) {
       var xmlHttp = new XMLHttpRequest();
