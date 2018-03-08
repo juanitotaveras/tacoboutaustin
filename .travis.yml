@@ -48,5 +48,4 @@ before_script:
     #- cat projects/collatz/makefile
 
 script:
-   - cd tests
    - make travis
