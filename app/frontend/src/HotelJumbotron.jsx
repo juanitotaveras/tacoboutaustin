@@ -8,10 +8,13 @@ export default class HotelJumbotron extends Component {
     <div>
       <Jumbotron>
         <h1 className="display-3">{this.props.name}</h1>
-        <p className="lead">{this.props.rating}<br/>
+        <p className="lead">{this.props.rating}/5<br/>
         {this.props.address}</p>
-        <img top width="50%" height="300em" src={this.props.image} alt="Card image cap" />
-        <img top width="50%" height="300em" src={this.props.map} alt="Card image cap" />
+        <Row>
+          <img top width="50%" height="400em" src={this.props.images[0]} alt="Card image cap" />
+          <iframe top width="50%" height="400em" frameborder="0" src={this.props.map_src} allowfullscreen>
+          </iframe>
+        </Row>
         <p></p>
         <hr className="my-2" />
         <p><b>Amenities</b><br/>
@@ -21,22 +24,22 @@ export default class HotelJumbotron extends Component {
         <p><b>More pictures</b></p>
         <Row>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[1]} alt="Card image cap" />
           </Col>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[2]} alt="Card image cap" />
           </Col>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[0]} alt="Card image cap" />
           </Col>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[0]} alt="Card image cap" />
           </Col>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[0]} alt="Card image cap" />
           </Col>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[0]} alt="Card image cap" />
           </Col>
         </Row>
         <br/>
@@ -51,8 +54,8 @@ export default class HotelJumbotron extends Component {
 HotelJumbotron.propTypes = {
   name: PropTypes.string,
   address: PropTypes.string,
-  image: PropTypes.string,
-  map: PropTypes.string,
+  images: PropTypes.object,
+  map_src: PropTypes.string,
   reviews: PropTypes.string,
   amenities: PropTypes.string
 };
