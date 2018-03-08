@@ -29,8 +29,12 @@ def scrap_restaurants():
 			number = detail['display_phone']
 			for x in range(0, len(detail['photos'])):
 				image[x] = detail['photos'][x]
-			address[0] = detail['location']['display_address'][0]
-			address[1] = detail['location']['display_address'][1]
+			if len(detail['location']['display_address']) == 3:
+				address[0]  =  detail['location']['display_address'][0] + ", " + detail['location']['display_address'][1]
+				address[1] = detail['location']['display_address'][2]
+			else:
+				address[0] = detail['location']['display_address'][0]
+				address[1] = detail['location']['display_address'][1]
 
 			new_restaurant = Restaurant(id, restaurant['name'], restaurant['location']['lng'], restaurant['location']['lat'], rating, convert_hour(detail['hours'][0]['open']), number)
 			new_restaurant.addImage(image)
