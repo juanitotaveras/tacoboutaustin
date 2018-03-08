@@ -16,7 +16,7 @@ before_install:
     - make create_env
     - docker ps
     - pip install pyvirtualdisplay selenium
-    - apt-get install xvfb xserver-xephyr 
+    - sudo apt-get install xvfb xserver-xephyr 
 
 # install:
 #     - pip install autopep8
@@ -44,4 +44,5 @@ before_script:
     #- cat projects/collatz/makefile
 
 script:
-   - ls
+   - cd tests/ui_tests
+   - python test_selenium.py
