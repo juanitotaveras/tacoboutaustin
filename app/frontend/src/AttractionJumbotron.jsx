@@ -4,38 +4,43 @@ import { Jumbotron, Button, Row, Col } from 'reactstrap';
 
 export default class AttractionJumbotron extends Component {
   render(props) {
+    var all_reviews = this.props.reviews.map(function(review) {
+      return <p>{review.text}<a href={review.link}>read more!</a></p>
+    })
     return (
     <div>
       <Jumbotron>
         <h1 className="display-3">{this.props.name}</h1>
-        <p className="lead">{this.props.rating}<br/>
-        {this.props.activitytype}</p>
-        <img top width="50%" height="300em" src={this.props.image} alt="Card image cap" />
-        <img top width="50%" height="300em" src={this.props.map} alt="Card image cap" />
+        <p className="lead">{this.props.rating}/5<br/>
+        </p>
+        <Row>
+          <img top width="50%" height="400em" src={this.props.images[0]} alt="Card image cap" />
+          <iframe top width="50%" height="400em" frameborder="0" src={this.props.map_src} allowfullscreen>
+          </iframe>
+        </Row>
+        <p></p>
         <hr className="my-2" />
-        <p><b>Opening hours</b><br/>
-        {this.props.hours}</p>
         <p><b>Reviews</b><br/>
-        {/*// <blockquote><q>{this.props.reviews}</q></blockquote>*/}</p>
+        <blockquote><q>{all_reviews}</q></blockquote></p>
         <p><b>More pictures</b></p>
         <Row>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[1]} alt="Card image cap" />
           </Col>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[2]} alt="Card image cap" />
           </Col>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[0]} alt="Card image cap" />
           </Col>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[0]} alt="Card image cap" />
           </Col>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[0]} alt="Card image cap" />
           </Col>
           <Col>
-            <img top width="100%" height="100em" src={this.props.image} alt="Card image cap" />
+            <img top width="100%" height="100em" src={this.props.images[0]} alt="Card image cap" />
           </Col>
         </Row>
         <br/>
@@ -50,9 +55,9 @@ export default class AttractionJumbotron extends Component {
 AttractionJumbotron.propTypes = {
   name: PropTypes.string,
   activitytype: PropTypes.string,
-  image: PropTypes.string,
-  map: PropTypes.string,
+  images: PropTypes.object,
+  map_src: PropTypes.string,
   hours: PropTypes.string,
   rating: PropTypes.number,
-  reviews: PropTypes.string
+  reviews: PropTypes.object
 };

@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 var nearby_restaurants = [];
 var nearby_hotels = [];
-var attraction_details = [];
+var a_details = {};
 
 
 export default class AttractionsDetails extends Component {
@@ -33,10 +33,10 @@ export default class AttractionsDetails extends Component {
             nearby_hotels.push(h);
           }
 
-          attraction_details = attraction;
+          a_details = attraction;
       }
     
-      const url = "http://localhost/api/attractions/" + this.props.match.params.att_id;
+      const url = "http://tacoboutaustin.me/api/attractions/" + this.props.match.params.att_id;
 
       function request(url, parseResponse) {
           var xmlHttp = new XMLHttpRequest();
@@ -55,6 +55,12 @@ export default class AttractionsDetails extends Component {
       nearby_restaurants = [];
       nearby_hotels = [];
   }
+
+  buildMapSrc() {
+    var address = a_details.name + " " + a_details.address[0] + " " + a_details.address[1];
+    var s = "https://www.google.com/maps/embed/v1/place?q=" + encodeURI(address) + "&key=AIzaSyD7QCCYdGEGvI3J74sDAwqJbaWieKC6V2k";
+    return s;
+  }
   
   render() {
     var nearby_restaurant_cards = nearby_restaurants.map(function(restaurant){
@@ -64,20 +70,23 @@ export default class AttractionsDetails extends Component {
                 return <Col xs="12" sm="6" md="6" lg="3"><HotelCard hotel={hotel} /></Col>;
               })
 
+    var map = this.buildMapSrc();
+
     return (
       <Container>
         <Row>
           <Col sm="12">
-          <h1>Attractions Details</h1>
+          <h1>Attraction Details</h1>
           </Col>
           <Col>
             <AttractionJumbotron
-            name={attraction_details.name}
+            name={a_details.name}
             activitytype="poop activitytype"
-            image={attraction_details.images[2]}
-            map="http://texspine.com/wp-content/uploads/2012/01/map.jpg"
+            images={a_details.images}
+            map_src={map}
             hours="No hours"
-            rating={attraction_details.rating}
+            rating={a_details.rating}
+            reviews={a_details.reviews}
             />
           </Col>
         </Row>

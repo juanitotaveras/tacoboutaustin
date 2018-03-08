@@ -8,11 +8,14 @@ from models import *
 def close_places(place_type, number, zip_code):
     places = None
     if place_type == "restaurant":
-        places = Restaurant.query.filter_by(zipcode = zip_code).order_by(func.random()).limit(number).all()
+        places = Restaurant.query.filter_by(zipcode=zip_code).order_by(
+            func.random()).limit(number).all()
     if place_type == "hotel":
-        places = Hotel.query.filter_by(zipcode = zip_code).order_by(func.random()).limit(number).all()
+        places = Hotel.query.filter_by(zipcode=zip_code).order_by(
+            func.random()).limit(number).all()
     if place_type == "attraction":
-        places = Attraction.query.filter_by(zipcode = zip_code).order_by(func.random()).limit(number).all() 
+        places = Attraction.query.filter_by(zipcode=zip_code).order_by(
+            func.random()).limit(number).all()
     places_data = []
     if places is not None:
         for place in places:
@@ -29,6 +32,7 @@ def close_places(place_type, number, zip_code):
 @app.route('/api')
 def hello_user():
     return 'hello world'
+
 
 @app.route('/api/restaurants')
 def get_restaurants():
@@ -56,10 +60,12 @@ def get_restaurant(id):
     restaurant_data = {}
     restaurant_data['id'] = restaurant.id
     restaurant_data['name'] = restaurant.name
-    restaurant_data['images'] = [restaurant.image1, restaurant.image2, restaurant.image3]
+    restaurant_data['images'] = [restaurant.image1,
+                                 restaurant.image2, restaurant.image3]
     restaurant_data['phone'] = restaurant.phone
     restaurant_data['hours'] = restaurant.open_hour
-    restaurant_data['location'] = {'lat': restaurant.latitude, 'long': restaurant.longtitude}
+    restaurant_data['location'] = {
+        'lat': restaurant.latitude, 'long': restaurant.longtitude}
     restaurant_data['address'] = [restaurant.address1, restaurant.address2]
     restaurant_data['rating'] = restaurant.rating
     restaurant_data['reviews'] = [{'text': restaurant.reviewText1, 'link': restaurant.reviewLink1}, {
@@ -106,11 +112,12 @@ def get_hotel(id):
     hotel_data['reviews'] = [{'text': hotel.reviewText1, 'link': hotel.reviewLink1}, {
         'text': hotel.reviewText2, 'link': hotel.reviewLink2}, {
         'text': hotel.reviewText3, 'link': hotel.reviewLink3}]
-    
+
     restaurants = close_places("restaurant", 2, hotel.zipcode)
     attractions = close_places("attraction", 2, hotel.zipcode)
 
     return jsonify({'status': "OK", 'hotel': hotel_data, 'close_by_restaurants': restaurants, 'close_by_attractions': attractions})
+
 
 @app.route('/api/attractions')
 def get_attractions():
@@ -138,9 +145,11 @@ def get_attraction(id):
     attraction_data = {}
     attraction_data['id'] = attraction.id
     attraction_data['name'] = attraction.name
-    attraction_data['images'] = [attraction.image1, attraction.image2, attraction.image3]
+    attraction_data['images'] = [attraction.image1,
+                                 attraction.image2, attraction.image3]
     attraction_data['phone'] = attraction.phone
-    attraction_data['location'] = {'lat': attraction.latitude, 'long': attraction.longtitude}
+    attraction_data['location'] = {
+        'lat': attraction.latitude, 'long': attraction.longtitude}
     attraction_data['rating'] = attraction.rating
     attraction_data['address'] = [attraction.address1, attraction.address2]
     attraction_data['reviews'] = [{'text': attraction.reviewText1, 'link': attraction.reviewLink1}, {

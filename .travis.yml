@@ -10,21 +10,26 @@ before_install:
     # - pip install --upgrade pip
     # - pip --version
     - sudo apt-get install docker.io
+    - npm update -g
     - docker pull juanitotaveras/tacoboutaustin:back
     - docker images
     - docker pull juanitotaveras/tacoboutaustin:front
     - make create_env
     - docker ps
-    - pip install pyvirtualdisplay selenium
-    - sudo apt-get install xvfb xserver-xephyr 
+    - make gui_testing
+    - chmod +x tests/chromedriver
 
-# install:
-#     - pip install autopep8
-#     - pip install coverage
-#     - pip install mypy
-#     - pip install pylint
-#     - pip install numpy
-#     - pip list
+install:
+    - npm install -g istanbul
+    - npm install -g jshint
+    - npm install -g mocha
+    - npm install lodash
+    - pip install autopep8
+    - pip install coverage
+    - pip install mypy
+    - pip install numpy
+    - pip install pylint
+    - pip list
 
 before_script:
     - date
@@ -44,5 +49,4 @@ before_script:
     #- cat projects/collatz/makefile
 
 script:
-   - cd tests/ui_tests
-   - python test_selenium.py
+   - make travis

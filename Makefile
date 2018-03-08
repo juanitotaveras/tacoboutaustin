@@ -20,3 +20,7 @@ gui_testing:
 	sudo apt-get install xserver-xephyr
 	sudo apt-get install xvfb
 	pip install pyvirtualdisplay selenium
+
+travis:
+	cd tests/ui_tests; make travis
+	@echo
