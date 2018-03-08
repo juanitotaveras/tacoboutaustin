@@ -42,14 +42,16 @@ def get_restaurants():
         restaurant_data['rating'] = restaurant.rating
         restaurant_data['address'] = [restaurant.address1, restaurant.address2]
         output.append(restaurant_data)
-    return jsonify({'list': output})
+    return jsonify({'status': "OK", 'list': output})
 
 
 @app.route('/api/restaurants/<id>')
 def get_restaurant(id):
     restaurant = Restaurant.query.filter_by(id=id).first()
     if (restaurant == None):
-        return jsonify({'message': "No such restaurant!"})
+        response = jsonify({'status': "INVALID_ID"})
+        response.status_code = 404
+        return response
 
     restaurant_data = {}
     restaurant_data['id'] = restaurant.id
@@ -67,7 +69,7 @@ def get_restaurant(id):
     hotels = close_places("hotel", 2, restaurant.zipcode)
     attractions = close_places("attraction", 2, restaurant.zipcode)
 
-    return jsonify({'restaurant': restaurant_data, 'close_by_hotels': hotels, 'close_by_attractions': attractions})
+    return jsonify({'status': "OK", 'restaurant': restaurant_data, 'close_by_hotels': hotels, 'close_by_attractions': attractions})
 
 
 @app.route('/api/hotels')
@@ -82,14 +84,16 @@ def get_hotels():
         hotel_data['rating'] = hotel.rating
         hotel_data['address'] = [hotel.address1, hotel.address2]
         output.append(hotel_data)
-    return jsonify({'list': output})
+    return jsonify({'status': "OK", 'list': output})
 
 
 @app.route('/api/hotels/<id>')
 def get_hotel(id):
     hotel = Hotel.query.filter_by(id=id).first()
     if (hotel == None):
-        return jsonify({'message': "No such hotel!"})
+        response = jsonify({'status': "INVALID_ID"})
+        response.status_code = 404
+        return response
 
     hotel_data = {}
     hotel_data['id'] = hotel.id
@@ -106,7 +110,7 @@ def get_hotel(id):
     restaurants = close_places("restaurant", 2, hotel.zipcode)
     attractions = close_places("attraction", 2, hotel.zipcode)
 
-    return jsonify({'hotel': hotel_data, 'close_by_restaurants': restaurants, 'close_by_attractions': attractions})
+    return jsonify({'status': "OK", 'hotel': hotel_data, 'close_by_restaurants': restaurants, 'close_by_attractions': attractions})
 
 @app.route('/api/attractions')
 def get_attractions():
@@ -120,14 +124,16 @@ def get_attractions():
         attraction_data['rating'] = attraction.rating
         attraction_data['address'] = [attraction.address1, attraction.address2]
         output.append(attraction_data)
-    return jsonify({'list': output})
+    return jsonify({'status': "OK", 'list': output})
 
 
 @app.route('/api/attractions/<id>')
 def get_attraction(id):
     attraction = Attraction.query.filter_by(id=id).first()
     if (attraction == None):
-        return jsonify({'message': "No such attraction!"})
+        response = jsonify({'status': "INVALID_ID"})
+        response.status_code = 404
+        return response
 
     attraction_data = {}
     attraction_data['id'] = attraction.id
@@ -144,4 +150,4 @@ def get_attraction(id):
     restaurants = close_places("restaurant", 2, attraction.zipcode)
     hotels = close_places("hotel", 2, attraction.zipcode)
 
-    return jsonify({'attraction': attraction_data, 'close_by_restaurants': restaurants, 'close_by_hotels': hotels})
+    return jsonify({'status': "OK", 'attraction': attraction_data, 'close_by_restaurants': restaurants, 'close_by_hotels': hotels})
