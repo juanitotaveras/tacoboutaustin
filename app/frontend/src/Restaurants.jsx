@@ -5,8 +5,6 @@ import { Container, Row, Col } from 'reactstrap';
 
 var restaurants = [];
 
-export{restaurants};
-
 export class Restaurant {
   constructor(address, id, image, name, rating) {
     this.address = address;
@@ -25,10 +23,9 @@ export default class Restaurants extends Component {
 
   componentWillMount() {
     function fillInRestaurants(responseText) {
-      let locations = JSON.parse(responseText)["list"];
-      for (let location in locations) {
-        let array = locations[location];
-        restaurants.push(new Restaurant(array["address"], array["id"], array["image"], array["name"], array["rating"]));
+      let restaurants_parsed = JSON.parse(responseText)["list"];
+      for (let r of restaurants_parsed) {
+        restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
       }
     }
     
@@ -47,6 +44,10 @@ export default class Restaurants extends Component {
     request(url, fillInRestaurants);
   }
 
+  componentWillUnmount() {
+    restaurants = [];
+  }
+
   render() {
     var cards = restaurants.map(function(restaurant){
             return <Col xs="12" sm="6" md="6" lg="3"><RestaurantCard restaurant={restaurant} /></Col>;
@@ -55,11 +56,7 @@ export default class Restaurants extends Component {
     return (
     	<div>
     		<Container>
-	    		<Row>
 	      			<h1>Restaurants </h1>
-	      		</Row>
-      		</Container>
-      		<Container>
       			<Row>
                 {cards}
       			</Row>

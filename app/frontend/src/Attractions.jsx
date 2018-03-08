@@ -5,8 +5,6 @@ import AttractionCard from './AttractionCard';
 
 var attractions = [];
 
-//export {attractions};
-
 export class Attraction {
   constructor(address, id, image, name, rating) {
     this.address = address;
@@ -25,12 +23,11 @@ export default class Attractions extends Component {
 
   componentWillMount() {
     function fillInAttractions(responseText) {
-      let locations = JSON.parse(responseText)["list"];
-      for (let location in locations) {
-        let array = locations[location];
-        attractions.push(new Attraction(array["address"], array["id"], array["image"], array["name"], array["rating"]));
-      } 
-    }
+      let attractions_parsed = JSON.parse(responseText)["list"];
+      for (let a of attractions_parsed) {
+        attractions.push(new Attraction(a["address"], a["id"], a["image"], a["name"], a["rating"]));
+      }
+    } 
 
     const url = "http://localhost/api/attractions";
 
@@ -47,6 +44,10 @@ export default class Attractions extends Component {
     request(url, fillInAttractions);
   }
 
+  componentWillUnmount() {
+    attractions = [];
+  }
+
   render() {
     var cards = attractions.map(function(attraction){
             return <Col xs="12" sm="6" md="6" lg="3"><AttractionCard attraction={attraction} /></Col>;
@@ -55,11 +56,7 @@ export default class Attractions extends Component {
     return (
       <div>
         <Container>
-          <Row>
               <h1>Attractions </h1>
-            </Row>
-          </Container>
-          <Container>
             <Row>
                 {cards}
             </Row>
