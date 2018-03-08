@@ -1,11 +1,9 @@
 # dependencies required: 
 # pip install pyvirtualdisplay selenium  
 # apt-get install xvfb xserver-xephyr 
+from unittest import main, TestCase
 from selenium import webdriver
 from pyvirtualdisplay import Display
-from unittest import main, TestCase
-
-
 
 class UnitTest(TestCase):
 	def test1(self):
@@ -15,7 +13,7 @@ class UnitTest(TestCase):
 		driver.get('http://localhost:3000')
 
 		# Make sure that browser title is tacoboutaustin
-		print (driver.title)
+		self.assertEqual(driver.title, "Tacoboutaustin")
 
 if __name__ == "__main__":
 	main()

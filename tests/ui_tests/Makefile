@@ -26,7 +26,7 @@ clean:
 #docker:
 #	docker run -it -v $(PWD):/usr/cs373 -w /usr/cs373 gpdowning/gcc
 
-run: $(PFILES:=.py)
+run: $(PFILES:=.pyx)
 
 #$(JSFILES:=.jsx) 
 
