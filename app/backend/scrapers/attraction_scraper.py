@@ -24,8 +24,13 @@ def scrap_attractions():
 			for x in range(0, len(detail['photos'])):
 				image[x] = detail['photos'][x]
 				#print(image[x])
-			address[0] = detail['location']['display_address'][0]
-			address[1] = detail['location']['display_address'][1]
+			print(len(detail['location']['display_address']))
+			if len(detail['location']['display_address']) == 3:
+				address[0]  =  detail['location']['display_address'][0] + ", " + detail['location']['display_address'][1]
+				address[1] = detail['location']['display_address'][2]
+			else:
+				address[0] = detail['location']['display_address'][0]
+				address[1] = detail['location']['display_address'][1]
 			
 			new_attraction = Attraction(id, attraction['name'], attraction['location']['lng'], attraction['location']['lat'], rating, number)
 			new_attraction.addImage(image)
