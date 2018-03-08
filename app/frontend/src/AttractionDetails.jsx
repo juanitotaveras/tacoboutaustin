@@ -86,6 +86,7 @@ export default class AttractionsDetails extends Component {
             map_src={map}
             hours="No hours"
             rating={a_details.rating}
+            reviews={a_details.reviews}
             />
           </Col>
         </Row>
