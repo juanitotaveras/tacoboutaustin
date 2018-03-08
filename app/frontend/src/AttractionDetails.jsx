@@ -36,7 +36,7 @@ export default class AttractionsDetails extends Component {
           a_details = attraction;
       }
     
-      const url = "http://localhost/api/attractions/" + this.props.match.params.att_id;
+      const url = "http://tacoboutaustin.me/api/attractions/" + this.props.match.params.att_id;
 
       function request(url, parseResponse) {
           var xmlHttp = new XMLHttpRequest();

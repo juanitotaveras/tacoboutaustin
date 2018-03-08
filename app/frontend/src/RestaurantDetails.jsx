@@ -29,7 +29,7 @@ export default class RestaurantDetails extends Component {
 	        r_details = restaurant;
       	}
 
-        const url = "http://localhost/api/restaurants/" + this.props.match.params.res_id;
+        const url = "http://tacoboutaustin.me/api/restaurants/" + this.props.match.params.res_id;
 
     	function request(url, parseResponse) {
       		var xmlHttp = new XMLHttpRequest();

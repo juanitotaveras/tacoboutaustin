@@ -29,7 +29,7 @@ export default class HotelDetails extends Component {
 	        h_details = hotel;
       	}
 
-        const url = "http://localhost/api/hotels/" + this.props.match.params.hot_id;
+        const url = "http://tacoboutaustin.me/api/hotels/" + this.props.match.params.hot_id;
 
     	function request(url, parseResponse) {
       		var xmlHttp = new XMLHttpRequest();
