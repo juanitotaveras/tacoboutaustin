@@ -1,7 +1,7 @@
 from helper_methods import *
 
 # Hotels in Austin
-AUSTIN_HOTEL = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=sleeping&limit=50"
+AUSTIN_HOTEL = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=sleeping&limit=200"
 
 
 def scrap_hotels():
@@ -24,7 +24,7 @@ def scrap_hotels():
 			number = detail['display_phone']
 			for x in range(0, len(detail['photos'])):
 				image[x] = detail['photos'][x]
-			print(len(detail['location']['display_address']))
+			#print(len(detail['location']['display_address']))
 			if len(detail['location']['display_address']) == 3:
 				address[0]  =  detail['location']['display_address'][0] + ", " + detail['location']['display_address'][1]
 				address[1] = detail['location']['display_address'][2]

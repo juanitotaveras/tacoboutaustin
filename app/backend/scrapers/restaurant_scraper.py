@@ -3,7 +3,7 @@ from helper_methods import *
 SYGIC_KEY = "EPrgMMQzpr9RMzaj25Tsw9QXrjtKbVMX2kY4NdWz"
 headers = {'x-api-key': SYGIC_KEY}
 
-AUSTIN_EATING = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=eating&limit=70"
+AUSTIN_EATING = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=eating&limit=200"
 
 def is_restaurant(restaurant):
 	return len(restaurant['categories']) == 1
