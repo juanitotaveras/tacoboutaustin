@@ -29,12 +29,12 @@ def close_places(place_type, number, zip_code):
     return places_data
 
 
-@app.route('/api')
+@app.route('/')
 def hello_user():
     return 'hello world'
 
 
-@app.route('/api/restaurants')
+@app.route('/restaurants')
 def get_restaurants():
     restaurants = Restaurant.query.all()
     output = []
@@ -49,7 +49,7 @@ def get_restaurants():
     return jsonify({'status': "OK", 'list': output})
 
 
-@app.route('/api/restaurants/<id>')
+@app.route('/restaurants/<id>')
 def get_restaurant(id):
     restaurant = Restaurant.query.filter_by(id=id).first()
     if (restaurant == None):
@@ -78,7 +78,7 @@ def get_restaurant(id):
     return jsonify({'status': "OK", 'restaurant': restaurant_data, 'close_by_hotels': hotels, 'close_by_attractions': attractions})
 
 
-@app.route('/api/hotels')
+@app.route('/hotels')
 def get_hotels():
     hotels = Hotel.query.all()
     output = []
@@ -93,7 +93,7 @@ def get_hotels():
     return jsonify({'status': "OK", 'list': output})
 
 
-@app.route('/api/hotels/<id>')
+@app.route('/hotels/<id>')
 def get_hotel(id):
     hotel = Hotel.query.filter_by(id=id).first()
     if (hotel == None):
@@ -119,7 +119,7 @@ def get_hotel(id):
     return jsonify({'status': "OK", 'hotel': hotel_data, 'close_by_restaurants': restaurants, 'close_by_attractions': attractions})
 
 
-@app.route('/api/attractions')
+@app.route('/attractions')
 def get_attractions():
     attractions = Attraction.query.all()
     output = []
@@ -134,7 +134,7 @@ def get_attractions():
     return jsonify({'status': "OK", 'list': output})
 
 
-@app.route('/api/attractions/<id>')
+@app.route('/attractions/<id>')
 def get_attraction(id):
     attraction = Attraction.query.filter_by(id=id).first()
     if (attraction == None):

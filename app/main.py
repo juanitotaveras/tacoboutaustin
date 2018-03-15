@@ -16,7 +16,7 @@ REACT_FILES = os.path.join(BASE_DIR, 'frontend/build')
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///idb.db'
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-
+"""
 #Serve React App
 @app.route('/', defaults={'path': ''})
 @app.route("/<string:path>")
@@ -29,7 +29,7 @@ def serve(path):
             return send_from_directory(REACT_FILES, path)
         else:
             return send_from_directory(REACT_FILES, 'index.html')
-
+"""
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, use_reloader=True, threaded=True)
