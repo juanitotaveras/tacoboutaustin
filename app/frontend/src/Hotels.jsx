@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Container, Row, Col } from 'reactstrap';
 import HotelCard from './HotelCard';
+import { api_url } from './config';
 
 var hotels = [];
 
@@ -31,7 +32,7 @@ export default class Hotels extends Component {
       } 
     }
 
-    const url = "http://localhost/api/hotels";
+    const url = api_url + "/hotels";
 
     function request(url, parseResponse) {
       var xmlHttp = new XMLHttpRequest();
