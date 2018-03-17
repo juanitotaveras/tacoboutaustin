@@ -4,7 +4,6 @@
 from unittest import main, TestCase
 from selenium import webdriver
 from pyvirtualdisplay import Display
-from base_test_case import BaseTest
 
 class HomePageTest(TestCase):
 	def setUp(self):
