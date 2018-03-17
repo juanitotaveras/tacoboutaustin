@@ -8,6 +8,7 @@ import { Restaurant } from './Restaurants';
 import RestaurantCard from './RestaurantCard';
 import HotelCard from './HotelCard';
 import { Link } from 'react-router-dom';
+import { api_url } from './config';
 
 var nearby_restaurants = [];
 var nearby_hotels = [];
@@ -36,7 +37,7 @@ export default class AttractionsDetails extends Component {
           a_details = attraction;
       }
     
-      const url = "http://localhost/api/attractions/" + this.props.match.params.att_id;
+      const url = api_url + "/attractions/" + this.props.match.params.att_id;
 
       function request(url, parseResponse) {
           var xmlHttp = new XMLHttpRequest();

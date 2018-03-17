@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Container, Row, Col } from 'reactstrap';
 import AttractionCard from './AttractionCard';
+import { api_url } from './config';
 
 var attractions = [];
 
@@ -29,7 +30,7 @@ export default class Attractions extends Component {
       }
     } 
 
-    const url = "http://localhost/api/attractions";
+    const url = api_url + "/attractions";
 
     function request(url, parseResponse) {
       var xmlHttp = new XMLHttpRequest();

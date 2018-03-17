@@ -4,6 +4,7 @@ import HotelJumbotron from './HotelJumbotron';
 import RestaurantCard from './RestaurantCard';
 import AttractionCard from './AttractionCard';
 import { Link } from 'react-router-dom';
+import { api_url } from './config'; 
 
 
 var h_details = {};
@@ -29,7 +30,7 @@ export default class HotelDetails extends Component {
 	        h_details = hotel;
       	}
 
-        const url = "http://localhost/api/hotels/" + this.props.match.params.hot_id;
+        const url = api_url + "/hotels/" + this.props.match.params.hot_id;
 
     	function request(url, parseResponse) {
       		var xmlHttp = new XMLHttpRequest();

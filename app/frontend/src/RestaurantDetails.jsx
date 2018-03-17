@@ -5,6 +5,7 @@ import HotelCard from './HotelCard';
 import AttractionCard from './AttractionCard';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { api_url } from "./config";
 
 var r_details = {};
 var nearby_hotels = [];
@@ -29,7 +30,7 @@ export default class RestaurantDetails extends Component {
 	        r_details = restaurant;
       	}
 
-        const url = "http://localhost/api/restaurants/" + this.props.match.params.res_id;
+        const url = api_url + "/restaurants/" + this.props.match.params.res_id;
 
     	function request(url, parseResponse) {
       		var xmlHttp = new XMLHttpRequest();

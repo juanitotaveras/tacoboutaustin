@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import RestaurantCard from './RestaurantCard'
 import { Container, Row, Col } from 'reactstrap';
+import { api_url } from './config';
 
 var restaurants = [];
 
@@ -23,13 +24,14 @@ export default class Restaurants extends Component {
 
   componentWillMount() {
     function fillInRestaurants(responseText) {
+      console.log(responseText);
       let restaurants_parsed = JSON.parse(responseText)["list"];
       for (let r of restaurants_parsed) {
         restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
       }
     }
     
-    const url = "http://localhost/api/restaurants";
+    const url = api_url + "/restaurants";
 
     function request(url, parseResponse) {
       var xmlHttp = new XMLHttpRequest();
