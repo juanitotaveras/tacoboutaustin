@@ -14,7 +14,7 @@ export default class AttractionCard extends Component {
           <CardBody>
             <CardTitle>{a.name}</CardTitle>
             <CardSubtitle>{a.type}</CardSubtitle>
-            <CardText>{a.rating}</CardText>
+            <CardText>Rating: {a.rating}/5</CardText>
             <Button outline ><Link to={'/attractions/' + a.id}>Check it out!</Link></Button>
           </CardBody>
         </Card>
