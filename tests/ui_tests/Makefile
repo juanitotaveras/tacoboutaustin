@@ -1,7 +1,8 @@
 .DEFAULT_GOAL := all
 
 PFILES :=                   \
-    test_selenium
+    test_home_page 			\
+    test_hotels
 
 %.jsx: %.js
 	-jshint $<
