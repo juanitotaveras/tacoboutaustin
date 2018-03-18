@@ -31,7 +31,7 @@ export default class Restaurants extends Component {
       }
     }
     
-    const url = "http://tacoboutaustin.me/api/restaurants";
+    const url = api_url + "/restaurants";
 
     function request(url, parseResponse) {
       var xmlHttp = new XMLHttpRequest();
