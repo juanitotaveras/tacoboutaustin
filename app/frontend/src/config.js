@@ -1,2 +1,2 @@
-export const api_url = "http://tacoboutaustin.me/api";
+export const api_url = "http://api.tacoboutaustin.me";
 
