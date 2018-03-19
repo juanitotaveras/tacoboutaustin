@@ -24,9 +24,6 @@ gui_testing:
 	sudo apt-get install xvfb
 	pip install pyvirtualdisplay selenium
 
-api_tests:
-	python tests/api_tests/api_tests.py
-
 travis:
 	cd tests/ui_tests; make travis
 	@echo
