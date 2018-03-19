@@ -1,7 +1,18 @@
+#!/usr/bin/env python3
+
+# pylint: disable = bad-whitespace
+# pylint: disable = invalid-name
+# pylint: disable = missing-docstring
+
+# --------------------------------------
+# tests/api_tests/api_tests.py
+# --------------------------------------
+
 import sys
 import os
-import requests
 from unittest import main, TestCase
+import requests
+
 
 FILE_ABSOLUTE_PATH = os.path.abspath(__file__)  # get absolute filepath
 CURRENT_DIR = os.path.dirname(FILE_ABSOLUTE_PATH)  # get directory path of file
@@ -13,8 +24,8 @@ API_URL = "http://api.tacoboutaustin.me/"
 
 #from app.routes import *
 
-
 class TestApi(TestCase):
+
 
     def test_message_restaurant(self):
         response = requests.get(API_URL + "restaurants")

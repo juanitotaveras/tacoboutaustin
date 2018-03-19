@@ -10,7 +10,7 @@ run:
 	-mypy     api_tests.py
 	-pylint   api_tests.py
 	-coverage run    --branch api_tests.py
-	-coverage report -m
+	-coverage report -m --omit="*/lib/*"
 
 all:
 

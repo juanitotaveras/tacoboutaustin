@@ -15,7 +15,7 @@ PFILES :=                   \
 	-mypy     $<
 	-pylint   $<
 	-coverage run    --branch $<
-	-coverage report -m
+	-coverage report -m --omit="*/lib/*"
 
 all:
 
