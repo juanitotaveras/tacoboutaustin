@@ -26,7 +26,7 @@ gui_testing:
 
 travis:
 	cd tests/ui_tests; make travis
-	cd ../api_tests; make travis
+	cd tests/api_tests; make travis
 	@echo
 
 production_back:
