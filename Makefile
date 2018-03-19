@@ -30,8 +30,6 @@ api_tests:
 travis:
 	cd tests/ui_tests; make travis
 	@echo
-	cd ../api_tests; make travis
-	@echo
 
 production_back:
 	docker run -d --name taco_back -p 80:80 -t -v `pwd`/app:/app juanitotaveras/tacoboutaustin:back
