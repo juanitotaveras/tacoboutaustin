@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
 
 PFILES :=                   \
-    test_home_page 			\
+    test_splash_page 			\
     test_hotels
 
 %.jsx: %.js
