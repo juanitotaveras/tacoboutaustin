@@ -1,0 +1,77 @@
+@startuml
+class Hotel {
+  {field}id : Integer
+  {field}name : String(80)
+  {field}image1 : String(200)
+  {field}image2 : String(200)
+  {field}image3 : String(200)
+  {field}longitude : Float
+  {field}latitude : Float
+  {field}rating : Float
+  {field}address1 : String(100) 
+  {field}address2 : String(100) 
+  {field}phone : String(20)
+  {field}zipcode : Integer
+  {field}reviewText1 : String(200)
+  {field}reviewLink1 : String(200) 
+  {field}reviewText2: String(200) 
+  {field}reviewLink2: String(200) 
+  {field}reviewText3: String(200) 
+  {field}reviewLink3: String(200)
+
+  addReview(text: String, link: String, index: Integer)
+  addImage(images: [Image])
+  addAddress(address: [Address], zipcode: Integer)
+}
+
+class Restaurant {
+  {field}id : Integer
+  {field}name : String(80)
+  {field}image1 : String(200)
+  {field}image2 : String(200)
+  {field}image3 : String(200)
+  {field}longitude : Float
+  {field}latitude : Float
+  {field}rating : Float
+  {field}address1 : String(100) 
+  {field}address2 : String(100) 
+  {field}open_hour : String(200)
+  {field}phone : String(20)
+  {field}zipcode : Integer
+  {field}reviewText1 : String(200)
+  {field}reviewLink1 : String(200) 
+  {field}reviewText2: String(200) 
+  {field}reviewLink2: String(200) 
+  {field}reviewText3: String(200) 
+  {field}reviewLink3: String(200)
+
+  addReview(text: String, link: String, index: Integer)
+  addImage(images: [Image])
+  addAddress(address: [Address], zipcode: Integer)
+}
+
+class Attraction {
+  {field}id : Integer
+  {field}name : String(80)
+  {field}image1 : String(200)
+  {field}image2 : String(200)
+  {field}image3 : String(200)
+  {field}longitude : Float
+  {field}latitude : Float
+  {field}rating : Float
+  {field}address1 : String(100) 
+  {field}address2 : String(100) 
+  {field}phone : String(20)
+  {field}zipcode : Integer
+  {field}reviewText1 : String(200)
+  {field}reviewLink1 : String(200) 
+  {field}reviewText2: String(200) 
+  {field}reviewLink2: String(200) 
+  {field}reviewText3: String(200) 
+  {field}reviewLink3: String(200)
+
+  addReview(text: String, link: String, index: Integer)
+  addImage(images: [Image])
+  addAddress(address: [Address], zipcode: Integer)
+}
+@enduml
