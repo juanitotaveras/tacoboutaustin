@@ -51,7 +51,7 @@ export default class HotelDetails extends Component {
 	}
 
 	buildMapSrc() {
-		var address = h_details.name + " " + h_details.address[0]; // + " " + h_details.address[1];
+		var address = h_details.address[0]; // + " " + h_details.address[1];
 		var s = "https://www.google.com/maps/embed/v1/place?q=" + encodeURI(address) + "&key=AIzaSyD7QCCYdGEGvI3J74sDAwqJbaWieKC6V2k";
 		return s;
 	}

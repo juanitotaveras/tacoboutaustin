@@ -51,7 +51,7 @@ export default class RestaurantDetails extends Component {
 	}
 
 	buildMapSrc() {
-		var address = r_details.name + " " + r_details.address[0] + " " + r_details.address[1];
+		var address = r_details.address[0] + " " + r_details.address[1];
 		var s = "https://www.google.com/maps/embed/v1/place?q=" + encodeURI(address) + "&key=AIzaSyD7QCCYdGEGvI3J74sDAwqJbaWieKC6V2k";
 		return s;
 	}
