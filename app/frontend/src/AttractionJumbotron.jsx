@@ -11,7 +11,7 @@ export default class AttractionJumbotron extends Component {
     <div>
       <Jumbotron>
         <h1 className="display-3">{this.props.name}</h1>
-        <p className="lead">{this.props.rating}/5<br/>
+        <p className="lead">Rating: {this.props.rating}/5<br/>
         </p>
         <Row>
           <img top width="50%" height="400em" src={this.props.images[0]} alt="Card image cap" />

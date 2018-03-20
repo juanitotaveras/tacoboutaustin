@@ -9,7 +9,7 @@ export default class AttractionCard extends Component {
     var a = this.props.attraction;
     return (
       <div>
-      <BrowserRouter>
+      /*<BrowserRouter>*/
         <Card>
           <CardImg top width="100%" height="200em" src={a.image} alt="Card image cap" />
           <CardBody>
@@ -19,7 +19,7 @@ export default class AttractionCard extends Component {
             <Button outline ><Link to={'/attractions/' + a.id}>Check it out!</Link></Button>
           </CardBody>
         </Card>
-        </BrowserRouter>
+        /*</BrowserRouter>*/
       </div>
   )};
 }
