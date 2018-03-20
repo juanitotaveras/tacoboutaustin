@@ -21,7 +21,13 @@ def fix_hotels():
     hotel = Hotel.query.filter_by(name = "Austin Folk House").first()
     hotel.image1 = "https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg"
     
-    hotel = Hotel.query.filter_by(id = '41').first()
+    hotel = Hotel.query.filter_by(name = "Studio 6 Austin").first()
+    db.session.delete(hotel)
+
+    hotel = Hotel.query.filter_by(name = "Archer Hotel Austin").first()
+    db.session.delete(hotel)
+
+    hotel = Hotel.query.filter_by(name = "Omni Austin Hotel Downtown").first()
     db.session.delete(hotel)
    
     db.session.commit()
