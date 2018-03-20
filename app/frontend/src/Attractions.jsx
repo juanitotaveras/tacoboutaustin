@@ -19,7 +19,7 @@ export class Attraction {
 export default class Attractions extends Component {
   constructor(props) {
     super(props);
-    this.state = attractions;
+    this.setState(attractions);
   }
 
   componentWillMount() {

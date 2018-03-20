@@ -9,7 +9,7 @@ import Attractions from '../src/Attractions';
 const wrapper = render(<Attractions />);
 
 describe('Attractions Component', () => {
-  it('renders h3', () => {
+  it('renders h1', () => {
     expect(wrapper.find('h1').text()).toEqual('Attractions')
   })
 })

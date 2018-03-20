@@ -7,14 +7,14 @@ import { api_url } from './config';
 var hotels = [];
 
 export class Hotel {
-  constructor(address, id, image, name) {
+  constructor(address, id, image, name, rating) {
     this.address = address;
     this.id = id;
     this.image = image;
     this.name = name;
     //this.amenities
     // this.reviews
-    // this.rating
+    this.rating = rating;
   }
 }
 
@@ -28,7 +28,7 @@ export default class Hotels extends Component {
     function fillInHotels(responseText) {
       let hotels_parsed = JSON.parse(responseText)["list"];
       for (let h of hotels_parsed) {
-        hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"]));
+        hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"]));
       } 
     }
 
