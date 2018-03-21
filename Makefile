@@ -1,5 +1,8 @@
+build_front:
+	docker build --tag t_frontend -f Dockerfile.frontend .
+
 create_env:
-	docker run --name taco_front -d -p 3000:3000 -v `pwd`/app/frontend/src:/app/frontend/src juanitotaveras/tacoboutaustin:front
+	docker run --name taco_front -d -p 3000:3000 -v `pwd`/app:/app juanitotaveras/tacoboutaustin:front
 	docker run -d --name taco_back -p 80:80 -t -v `pwd`/app:/app juanitotaveras/tacoboutaustin:back
 
 start_env:
@@ -23,6 +26,7 @@ gui_testing:
 
 travis:
 	cd tests/ui_tests; make travis
+	cd tests/api_tests; make travis
 	@echo
 
 production_back:

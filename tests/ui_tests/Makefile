@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
 
 PFILES :=                   \
-    test_home_page 			\
+    test_splash_page 			\
     test_hotels
 
 %.jsx: %.js
@@ -15,7 +15,7 @@ PFILES :=                   \
 	-mypy     $<
 	-pylint   $<
 	-coverage run    --branch $<
-	-coverage report -m
+	-coverage report -m --omit="*/lib/*"
 
 all:
 
@@ -34,5 +34,6 @@ run: $(PFILES:=.pyx)
 travis:
 	make clean
 	ls -al
+	chmod +x ../chromedriver
 	make run
 	ls -al

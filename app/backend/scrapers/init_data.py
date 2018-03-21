@@ -19,6 +19,7 @@ def init_db():
     print("Attractions: done. Start fixing data")
     fix_sixth_street()
     fix_zip_code()
+    fix_hotels()
     db.session.commit()
     print("everything done.")
 

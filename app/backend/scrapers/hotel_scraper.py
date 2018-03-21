@@ -33,7 +33,7 @@ def scrap_hotels():
 				address[1] = detail['location']['display_address'][1]
 
 
-			new_hotel = Hotel(id, hotel['name'], hotel['location']['lng'],hotel['location']['lat'], rating, number)
+			new_hotel = Hotel(id, detail['name'], hotel['location']['lng'],hotel['location']['lat'], rating, number)
 			new_hotel.addImage(image)
 			#print(detail)
 			new_hotel.addAddress(address, int(detail['location']['zip_code']))

@@ -61,7 +61,7 @@ def convert_hour(hours):
     for i in range(7):
         open_hours += days[i] + ": "
         if not end_hours is "":
-            open_hours += start_hours[i] + end_hours[i] + "\n"
+            open_hours += start_hours[i] + end_hours[i] + "<br>"
     return open_hours
 
 def convert_military(time):

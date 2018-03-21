@@ -18,7 +18,7 @@ def scrap_attractions():
 		image = ['', '', '']
 		address = ['', '']
 
-		if not detail is None:
+		if not detail is None and len(detail['location']['display_address']) > 1:
 			rating = detail['rating']
 			number = detail['display_phone']
 			for x in range(0, len(detail['photos'])):
@@ -27,6 +27,7 @@ def scrap_attractions():
 				address[0]  =  detail['location']['display_address'][0] + ", " + detail['location']['display_address'][1]
 				address[1] = detail['location']['display_address'][2]
 			else:
+				#print(detail['location']['display_address'])
 				address[0] = detail['location']['display_address'][0]
 				address[1] = detail['location']['display_address'][1]
 			

@@ -31,7 +31,7 @@ def close_places(place_type, number, zip_code):
 
 @app.route('/')
 def hello_user():
-    return 'hello world'
+    return render_template('hello.html')
 
 
 @app.route('/restaurants')

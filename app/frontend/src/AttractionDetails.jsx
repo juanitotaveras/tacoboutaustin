@@ -58,7 +58,7 @@ export default class AttractionsDetails extends Component {
   }
 
   buildMapSrc() {
-    var address = a_details.name + " " + a_details.address[0] + " " + a_details.address[1];
+    var address = a_details.address[0] + " " + a_details.address[1];
     var s = "https://www.google.com/maps/embed/v1/place?q=" + encodeURI(address) + "&key=AIzaSyD7QCCYdGEGvI3J74sDAwqJbaWieKC6V2k";
     return s;
   }
