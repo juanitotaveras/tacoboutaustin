@@ -22,6 +22,7 @@ class HotelsTest(TestCase):
 		self.base_url = 'http://localhost:3000'
 		self.verificationErrors = []
 		self.driver.get(self.base_url)
+		self.driver.implicitly_wait(10)
         # self.accept_next_alert = True
 
 	def test_click_on_hotel_details(self):
