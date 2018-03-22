@@ -2,9 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Jumbotron, Button, Row, Col } from 'reactstrap';
 
+var parsed_opening_hours;
+
 export default class RestaurantJumbotron extends Component {
+
+  parseBR() {
+    var splitted_array = this.props.hours.split("<br>");
+    this.parsed_opening_hours = splitted_array.map(function(hours){
+      return <div><p>{hours}</p></div>
+    })
+  };
+
+  componentWillMount() {
+    this.parseBR();
+  }
+
   render(props) {
-    var reviewss = this.props.reviews.map(function(review){
+    var reviews = this.props.reviews.map(function(review){
       return <p>{review.text}<a href={review.link}>read more!</a></p>
     })
 
@@ -22,9 +36,9 @@ export default class RestaurantJumbotron extends Component {
         <p></p>
         <hr className="my-2" />
         <p><b>Opening hours</b><br/>
-        {this.props.hours}</p>
+        {this.parsed_opening_hours}</p>
         <p><b>Reviews</b><br/>
-        <blockquote><q>{reviewss}</q></blockquote></p>
+        <blockquote><q>{reviews}</q></blockquote></p>
         <p><b>More pictures</b></p>
         <Row>
           <Col>
@@ -47,9 +61,9 @@ export default class RestaurantJumbotron extends Component {
           </Col>
         </Row>
         <br/>
-        <p className="lead">
+        {/*<p className="lead">
           <Button color="primary">Learn More</Button>
-        </p>
+        </p>*/}
       </Jumbotron>
     </div>
   )};

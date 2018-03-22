@@ -76,10 +76,8 @@ export default class HotelDetails extends Component {
 					<Col>
                 		<HotelJumbotron
                 		name={h_details.name}
-		        		activitytype="poop activitytype"
 		        		images={h_details.images}
 		        		map_src={map}
-		        		hours="No hours"
 		        		rating={h_details.rating}
 		        		reviews={h_details.reviews}
                 		/>

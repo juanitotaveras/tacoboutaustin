@@ -23,10 +23,11 @@ gui_testing:
 	sudo apt-get install xserver-xephyr
 	sudo apt-get install xvfb
 	pip install pyvirtualdisplay selenium
+	chmod +x app/frontend/guitests/chromedriver
 
 travis:
-	cd tests/ui_tests; make travis
-	cd tests/api_tests; make travis
+	cd app/frontend/guitests; make travis
+	cd app/backend/tests; make travis
 	@echo
 
 production_back:

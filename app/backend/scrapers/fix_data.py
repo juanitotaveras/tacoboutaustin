@@ -9,26 +9,32 @@ def fix_sixth_street():
 
 def fix_hotels():
     hotel = Hotel.query.filter_by(name ="Pecan Grove Rv Park").first()
-    hotel.image1 = "http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveEntrance.jpg"
-    hotel.image2 = "http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveDrive.jpg"
+    hotel.images.image1 = "http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveEntrance.jpg"
+    hotel.cover_image = "http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveEntrance.jpg"
+    hotel.images.image2 = "http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveDrive.jpg"
     
     hotel = Hotel.query.filter_by(address1 = "109 E 7th St").first()
     hotel.name = "Aloft Austin Downtown"
     
     hotel = Hotel.query.filter_by(name = "Mehl's Motel").first()
-    hotel.image1 = "http://2.bp.blogspot.com/_YUD_TKP5xJk/TE3qHiCAGQI/AAAAAAAAADE/XNsebuQEf_Y/s1600/DSC08018.JPG"
-    
+    hotel.images.image1 = "http://2.bp.blogspot.com/_YUD_TKP5xJk/TE3qHiCAGQI/AAAAAAAAADE/XNsebuQEf_Y/s1600/DSC08018.JPG"
+    hotel.cover_image = "http://2.bp.blogspot.com/_YUD_TKP5xJk/TE3qHiCAGQI/AAAAAAAAADE/XNsebuQEf_Y/s1600/DSC08018.JPG"
+
     hotel = Hotel.query.filter_by(name = "Austin Folk House").first()
-    hotel.image1 = "https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg"
-    
+    hotel.images.image1 = "https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg"
+    hotel.cover_image = "https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg"
+
     hotel = Hotel.query.filter_by(name = "Studio 6 Austin").first()
-    db.session.delete(hotel)
+    if hotel is not None:
+        db.session.delete(hotel)
 
     hotel = Hotel.query.filter_by(name = "Archer Hotel Austin").first()
-    db.session.delete(hotel)
+    if hotel is not None:
+        db.session.delete(hotel)
 
     hotel = Hotel.query.filter_by(name = "Omni Austin Hotel Downtown").first()
-    db.session.delete(hotel)
+    if hotel is not None:
+        db.session.delete(hotel)
    
     db.session.commit()
 

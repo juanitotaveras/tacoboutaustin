@@ -40,7 +40,7 @@ def scrap_hotels():
 
 			if not review is None:
 				for x in range(0, min(3, review['total'])):
-					new_hotel.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)
+					new_hotel.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
 			db.session.add(new_hotel)
 			id+=1
 		

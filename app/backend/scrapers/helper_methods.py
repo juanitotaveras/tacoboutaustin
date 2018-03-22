@@ -3,8 +3,7 @@ import sys, os
 FILE_ABSOLUTE_PATH = os.path.abspath(__file__)  # get absolute filepath
 CURRENT_DIR = os.path.dirname(FILE_ABSOLUTE_PATH)  # get directory path of file
 PARENT_DIR = os.path.dirname(CURRENT_DIR)  # get parent directory path
-BASE_DIR = os.path.dirname(PARENT_DIR)  # get grand parent directory path
-sys.path.append(BASE_DIR)
+sys.path.append(PARENT_DIR)
 from models import *
 #from sqlalchemy import func
 import pprint

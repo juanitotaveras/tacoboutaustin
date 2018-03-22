@@ -36,7 +36,7 @@ def scrap_restaurants():
 				address[0] = detail['location']['display_address'][0]
 				address[1] = detail['location']['display_address'][1]
 
-			new_restaurant = Restaurant(id, restaurant['name'], restaurant['location']['lng'], restaurant['location']['lat'], rating, convert_hour(detail['hours'][0]['open']), number)
+			new_restaurant = Restaurant(id, detail['name'], restaurant['location']['lng'], restaurant['location']['lat'], rating, convert_hour(detail['hours'][0]['open']), number)
 			new_restaurant.addImage(image)
 			new_restaurant.addAddress(address, int(detail['location']['zip_code']))
 			#print(detail['name'])
@@ -44,7 +44,7 @@ def scrap_restaurants():
 
 			if not review is None:
 				for x in range(0, min(3, review['total'])):
-					new_restaurant.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)
+					new_restaurant.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
 			db.session.add(new_restaurant)
 			id+=1
 	db.session.commit()
