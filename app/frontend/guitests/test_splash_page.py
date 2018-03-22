@@ -20,7 +20,7 @@ class HomePageTest(TestCase):
         self.display = Display(visible=0, size=(1920, 1080))
         self.display.start()
         self.driver = webdriver.Chrome("./chromedriver")
-        self.driver.get('http://localhost:3000')
+        self.driver.get('http://tacoboutaustin.me')
         self.verification_errors = []
         self.driver.implicitly_wait(10)
 
