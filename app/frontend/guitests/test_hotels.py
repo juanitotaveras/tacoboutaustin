@@ -3,6 +3,7 @@
 # pip install pyvirtualdisplay selenium  
 # apt-get install xvfb xserver-xephyr 
 from unittest import main, TestCase
+import unittest, time, re
 from selenium import webdriver
 from pyvirtualdisplay import Display
 from selenium.webdriver.common.by import By
@@ -10,7 +11,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
-import unittest, time, re
 
 NOT_VISIBLE = 0
 VISIBLE = 1
@@ -21,14 +21,16 @@ class HotelsTest(TestCase):
 		self.driver = webdriver.Chrome("./chromedriver")
 		self.base_url = 'http://localhost:3000'
 		self.verificationErrors = []
-		self.driver.get(self.base_url)
 		self.driver.implicitly_wait(10)
         # self.accept_next_alert = True
 
 	def test_click_on_hotel_details(self):
 		# self.driver.find_element_by_xpath("//div[@id='root']/div/div/nav/div/ul/li[3]/a/h3").click()
-		self.driver.find_element_by_link_text("Hotels").click()
-		self.driver.find_element_by_link_text("Check it out!").click()
+		driver = self.driver
+		driver.get(self.base_url)
+		driver.find_element_by_id("root").click()
+		driver.find_element_by_link_text("Hotels").click()
+		driver.find_element_by_link_text("Check it out!").click()
     
 	def is_element_present(self, how, what):
 		try: self.driver.find_element(by=how, value=what)
