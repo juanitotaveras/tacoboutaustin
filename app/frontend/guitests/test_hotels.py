@@ -22,8 +22,9 @@ from unittest import main, TestCase
 #from selenium.webdriver.support.ui import Select
 #from selenium.common.exceptions import NoAlertPresentException
 from selenium import webdriver
-from pyvirtualdisplay import Display
 from selenium.common.exceptions import NoSuchElementException
+from pyvirtualdisplay import Display
+
 
 
 NOT_VISIBLE = 0
