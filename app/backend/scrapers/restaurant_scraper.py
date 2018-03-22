@@ -44,7 +44,7 @@ def scrap_restaurants():
 
 			if not review is None:
 				for x in range(0, min(3, review['total'])):
-					new_restaurant.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)
+					new_restaurant.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
 			db.session.add(new_restaurant)
 			id+=1
 	db.session.commit()

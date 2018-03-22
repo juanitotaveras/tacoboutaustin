@@ -37,7 +37,7 @@ def scrap_attractions():
 
 			if not review is None:
 				for x in range(0, min(3, review['total'])):
-					new_attraction.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'], x)
+					new_attraction.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
 			db.session.add(new_attraction)
 			id+=1
 	db.session.commit()
