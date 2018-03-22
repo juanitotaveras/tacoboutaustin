@@ -7,7 +7,7 @@ PFILES :=               \
 	pylint --disable=locally-disabled --reports=no --generate-rcfile > $@
 
 run:
-	-mypy     tests.py
+	-mypy     tests.py --ignore-missing-imports
 	-pylint   tests.py
 	-coverage run    --branch tests.py
 	-coverage report -m --omit="*/lib/*"
