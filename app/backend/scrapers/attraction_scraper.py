@@ -31,7 +31,7 @@ def scrap_attractions():
 				address[0] = detail['location']['display_address'][0]
 				address[1] = detail['location']['display_address'][1]
 			
-			new_attraction = Attraction(id, attraction['name'], attraction['location']['lng'], attraction['location']['lat'], rating, number)
+			new_attraction = Attraction(id, detail['name'], attraction['location']['lng'], attraction['location']['lat'], rating, number)
 			new_attraction.addImage(image)
 			new_attraction.addAddress(address, int(detail['location']['zip_code']))
 
