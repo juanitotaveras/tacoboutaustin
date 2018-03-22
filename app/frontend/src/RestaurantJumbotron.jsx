@@ -47,9 +47,9 @@ export default class RestaurantJumbotron extends Component {
           </Col>
         </Row>
         <br/>
-        <p className="lead">
+        {/*<p className="lead">
           <Button color="primary">Learn More</Button>
-        </p>
+        </p>*/}
       </Jumbotron>
     </div>
   )};

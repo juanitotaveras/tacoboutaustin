@@ -19,6 +19,7 @@ export class Attraction {
 export default class Attractions extends Component {
   constructor(props) {
     super(props);
+    // TODO: This is no-op
     this.setState(attractions);
   }
 

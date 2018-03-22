@@ -7,6 +7,7 @@ export default class AttractionJumbotron extends Component {
     var all_reviews = this.props.reviews.map(function(review) {
       return <p>{review.text}<a href={review.link}>read more!</a></p>
     })
+
     return (
     <div>
       <Jumbotron>
@@ -44,9 +45,9 @@ export default class AttractionJumbotron extends Component {
           </Col>
         </Row>
         <br/>
-        <p className="lead">
-          <Button color="primary">Learn More</Button>
-        </p>
+        {/*<p className="lead">*/}
+          {/*<Button color="primary">Learn More</Button>*/}
+        {/*</p>*/}
       </Jumbotron>
     </div>
   )};
@@ -59,5 +60,5 @@ AttractionJumbotron.propTypes = {
   map_src: PropTypes.string,
   hours: PropTypes.string,
   rating: PropTypes.number,
-  reviews: PropTypes.object
+  reviews: PropTypes.array
 };
