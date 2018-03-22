@@ -1,10 +1,8 @@
 .DEFAULT_GOAL := all
 
-PFILES :=                   \
-    test_splash_page 			\
-    test_hotels                 \
-    test_restaurant_details     \
-    test_about                  \
+JSFILES :=                   	\
+    AttractionJumbotron.spec 	\
+    NavigationBar.spec          \
 
 %.jsx: %.js
 	-jshint $<
@@ -29,7 +27,7 @@ clean:
 #docker:
 #	docker run -it -v $(PWD):/usr/cs373 -w /usr/cs373 gpdowning/gcc
 
-run: $(JSFILES:=.js)
+run: $(JSFILES:=.jsx)
 
 travis:
 	make clean
