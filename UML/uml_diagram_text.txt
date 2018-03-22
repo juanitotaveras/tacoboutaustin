@@ -1,0 +1,72 @@
+@startuml
+class Hotel {
+  {field}id : Integer
+  {field}name : String(80)
+  {field}cover_image : String(200)
+  {field}longitude : Float
+  {field}latitude : Float
+  {field}rating : Float
+  {field}address1 : String(100) 
+  {field}address2 : String(100) 
+  {field}phone : String(20)
+  {field}zipcode : Integer
+
+  addReview(text: String, link: String, index: Integer)
+  addImage(images: [Image])
+  addAddress(address: [Address], zipcode: Integer)
+}
+
+class Restaurant {
+  {field}id : Integer
+  {field}name : String(80)
+  {field}cover_image : String(200)
+  {field}longitude : Float
+  {field}latitude : Float
+  {field}rating : Float
+  {field}address1 : String(100) 
+  {field}address2 : String(100) 
+  {field}open_hour : String(200)
+  {field}phone : String(20)
+  {field}zipcode : Integer
+
+  addReview(text: String, link: String, index: Integer)
+  addImage(images: [Image])
+  addAddress(address: [Address], zipcode: Integer)
+}
+
+class Attraction {
+  {field}id : Integer
+  {field}name : String(80)
+  {field}cover_image : String(200)
+  {field}longitude : Float
+  {field}latitude : Float
+  {field}rating : Float
+  {field}address1 : String(100) 
+  {field}address2 : String(100) 
+  {field}phone : String(20)
+  {field}zipcode : Integer
+
+  addReview(text: String, link: String, index: Integer)
+  addImage(images: [Image])
+  addAddress(address: [Address], zipcode: Integer)
+}
+
+class Images {
+  {field}id : Integer
+  {field}image1 : String(200)
+  {field}image2 : String(200)
+  {field}image3 : String(200)
+  {field}hotel_id : Integer
+  {field}restaurant_id : Integer
+  {field}attraction_id : Integer  
+}
+
+class Review {
+  {field}id : Integer
+  {field}text : String(200)
+  {field}link : String(200)
+  {field}hotel_id : Integer
+  {field}restaurant_id : Integer
+  {field}attraction_id : Integer
+}
+@enduml

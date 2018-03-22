@@ -1,0 +1,7 @@
+#!/bin/bash
+
+npm run build
+cd ..
+rm -rf static
+mkdir static
+cp -a frontend/build/static/* static
