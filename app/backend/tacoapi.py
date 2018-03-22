@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+
+# pylint: disable = bad-whitespace
+# pylint: disable = invalid-name
+# pylint: disable = missing-docstring
+
+# --------------------------------------
+# app/backend/tacoapi.py
+# --------------------------------------
+
 from flask import render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func

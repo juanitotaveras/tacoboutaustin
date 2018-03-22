@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+
+# pylint: disable = bad-whitespace
+# pylint: disable = invalid-name
+# pylint: disable = missing-docstring
+
+# --------------------------------------
+# app/backend/models.py
+# --------------------------------------
+
 from flask_sqlalchemy import SQLAlchemy 
 from flask import jsonify
 from main import app

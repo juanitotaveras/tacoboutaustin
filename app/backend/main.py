@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+
+# pylint: disable = bad-whitespace
+# pylint: disable = invalid-name
+# pylint: disable = missing-docstring
+
+# --------------------------------------
+# app/backend/main.py
+# --------------------------------------
+
+
 import os
 import sys
 from flask import Flask, send_from_directory

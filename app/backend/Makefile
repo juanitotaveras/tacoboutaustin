@@ -1,15 +1,15 @@
 .DEFAULT_GOAL := all
 
 PFILES :=               \
-    api_tests			\
+    tests				\
 
 .pylintrc:
 	pylint --disable=locally-disabled --reports=no --generate-rcfile > $@
 
 run:
-	-mypy     unit_tests.py
-	-pylint   unit_tests.py
-	-coverage run    --branch unit_tests.py
+	-mypy     tests.py
+	-pylint   tests.py
+	-coverage run    --branch tests.py
 	-coverage report -m --omit="*/lib/*"
 
 all:
@@ -17,7 +17,7 @@ all:
 check: $(FILES)
 
 format:
-	autopep8 -i unit_tests.py
+	autopep8 -i tests.py
 
 clean:
 	rm -f  .coverage
