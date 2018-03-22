@@ -4,6 +4,8 @@
 # pylint: disable = invalid-name
 # pylint: disable = missing-docstring
 # pylint: disable = import-error
+# pylint: disable = access-member-before-definition
+# pylint: disable = attribute-defined-outside-init
 
 # --------------------------------------
 # app/frontend/guitests/test_about.py
@@ -18,11 +20,12 @@
 import unittest
 #import unittest, time, re
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
 from pyvirtualdisplay import Display
 #from selenium.webdriver.common.by import By
 #from selenium.webdriver.common.keys import Keys
 #from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
+
 
 NOT_VISIBLE = 0
 VISIBLE = 1
