@@ -29,7 +29,7 @@ clean:
 #docker:
 #	docker run -it -v $(PWD):/usr/cs373 -w /usr/cs373 gpdowning/gcc
 
-run: $(JSFILES:=.jsx)
+run: $(JSFILES:=.js)
 
 travis:
 	make clean

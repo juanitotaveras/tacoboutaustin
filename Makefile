@@ -26,9 +26,9 @@ gui_testing:
 	chmod +x app/frontend/guitests/chromedriver
 
 travis:
+	cd app/frontend/tests/; make travis
 	cd app/frontend/guitests; make travis
 	cd app/backend/; make travis
-	cd app/frontend/tests/; make travis
 	@echo
 
 production_back:
