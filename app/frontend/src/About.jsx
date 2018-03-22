@@ -86,7 +86,7 @@ class About extends Component {
         responsibilities: "Backend, Server Admin",
         commits: 0,
         issues: 0,
-        unitTests: 0
+        unitTests: 12
       },
     ]
 
