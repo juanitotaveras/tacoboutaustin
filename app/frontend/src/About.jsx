@@ -60,11 +60,11 @@ class About extends Component {
         gitLogin: "tienlatien252",
         imageSrc: An,
         imageAlt: "About An",
-        bio: "An is a cool dude",
-        responsibilities: "Front end",
+        bio: "An studies Computer Science at UT. He hopes that he can graduate in Spring 2019.",
+        responsibilities: "Back end, API",
         commits: 0,
         issues: 0,
-        unitTests: 0
+        unitTests: 15
       },
       {
         name: "Caroline Shi",
