@@ -91,7 +91,7 @@ class About extends Component {
     ]
 
     var urlCommits="https://api.github.com/repos/juanitotaveras/tacoboutaustin/stats/contributors";
-    var urlIssues="https://api.github.com/repos/juanitotaveras/tacoboutaustin/issues?state=all&per_page=100";
+    var urlIssues="https://api.github.com/repos/juanitotaveras/tacoboutaustin/issues?state=all";
 
     var tempTotalCommits = 0;
     var tempTotalIssues = 0;
