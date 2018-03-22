@@ -26,7 +26,8 @@ class HotelsTest(TestCase):
         # self.accept_next_alert = True
 
 	def test_click_on_hotel_details(self):
-		self.driver.find_element_by_xpath("//div[@id='root']/div/div/nav/div/ul/li[3]/a/h3").click()
+		# self.driver.find_element_by_xpath("//div[@id='root']/div/div/nav/div/ul/li[3]/a/h3").click()
+		self.driver.find_element_by_link_text("Hotels").click()
 		self.driver.find_element_by_link_text("Check it out!").click()
     
 	def is_element_present(self, how, what):

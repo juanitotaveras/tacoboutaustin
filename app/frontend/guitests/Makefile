@@ -34,6 +34,5 @@ run: $(PFILES:=.pyx)
 travis:
 	make clean
 	ls -al
-	chmod +x ./chromedriver
 	make run
 	ls -al
