@@ -14,7 +14,7 @@ PFILES :=                   \
 	pylint --disable=locally-disabled --reports=no --generate-rcfile > $@
 
 %.pyx: %.py .pylintrc
-	-mypy     $<
+	-mypy     $< --ignore-missing-imports
 	-pylint   $<
 	-coverage run    --branch $<
 	-coverage report -m --omit="*/lib/*"
