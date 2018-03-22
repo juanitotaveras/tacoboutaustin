@@ -7,9 +7,9 @@ PFILES :=               \
 	pylint --disable=locally-disabled --reports=no --generate-rcfile > $@
 
 run:
-	-mypy     api_tests.py
-	-pylint   api_tests.py
-	-coverage run    --branch api_tests.py
+	-mypy     unit_tests.py
+	-pylint   unit_tests.py
+	-coverage run    --branch unit_tests.py
 	-coverage report -m --omit="*/lib/*"
 
 all:
@@ -17,7 +17,7 @@ all:
 check: $(FILES)
 
 format:
-	autopep8 -i api_tests.py
+	autopep8 -i unit_tests.py
 
 clean:
 	rm -f  .coverage
