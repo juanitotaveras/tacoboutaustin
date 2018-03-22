@@ -30,6 +30,7 @@ def init_db():
     fix_sixth_street()
     fix_zip_code()
     fix_hotels()
+    fix_attractions()
     db.session.commit()
     print("everything done.")
 

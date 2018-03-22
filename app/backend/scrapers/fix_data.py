@@ -48,6 +48,16 @@ def fix_hotels():
    
     db.session.commit()
 
+def fix_attractions():
+    attraction = Attraction.query.filter_by(name = "HandleBar").first()
+    if attraction is not None:
+        db.session.delete(attraction)
+    
+    attraction = Attraction.query.filter_by(name = "Backbeat").first()
+    if attraction is not None:
+        db.session.delete(attraction)
+    db.session.commit()
+
 def fix_zip_code():
     restaurants = Restaurant.query.all()
     hotels = Hotel.query.all()
@@ -102,4 +112,5 @@ if __name__ == "__main__":
     #fix_sixth_street()
     fix_zip_code()
     fix_hotels()
+    fix_attractions()
     db.session.commit()
