@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy 
 from flask import jsonify
-from routes import app
+from main import app
 
 db = SQLAlchemy(app)
 
