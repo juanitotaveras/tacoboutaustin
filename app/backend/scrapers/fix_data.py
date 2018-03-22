@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+
+# pylint: disable = bad-whitespace
+# pylint: disable = invalid-name
+# pylint: disable = missing-docstring
+
+# --------------------------------------
+# app/backend/scraper/fix_data.py
+# --------------------------------------
+
 from helper_methods import *
 
 def fix_sixth_street():

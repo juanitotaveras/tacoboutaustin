@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+
+# pylint: disable = bad-whitespace
+# pylint: disable = invalid-name
+# pylint: disable = missing-docstring
+
+# --------------------------------------
+# app/frontend/guitests/test_hotels.py
+# --------------------------------------
+
 # -*- coding: utf-8 -*-
 # dependencies required: 
 # pip install pyvirtualdisplay selenium  

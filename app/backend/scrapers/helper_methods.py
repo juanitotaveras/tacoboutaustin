@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+
+# pylint: disable = bad-whitespace
+# pylint: disable = invalid-name
+# pylint: disable = missing-docstring
+
+# --------------------------------------
+# app/backend/scraper/Helper_methods.py
+# --------------------------------------
+
 import requests
 import sys, os
 FILE_ABSOLUTE_PATH = os.path.abspath(__file__)  # get absolute filepath

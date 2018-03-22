@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+
+# pylint: disable = bad-whitespace
+# pylint: disable = invalid-name
+# pylint: disable = missing-docstring
+
+# --------------------------------------
+# app/frontend/guitests/test_splash_page.py
+# --------------------------------------
+
 # dependencies required:
 # pip install pyvirtualdisplay selenium
 # apt-get install xvfb xserver-xephyr

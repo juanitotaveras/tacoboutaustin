@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+
+# pylint: disable = bad-whitespace
+# pylint: disable = invalid-name
+# pylint: disable = missing-docstring
+
+# --------------------------------------
+# app/backend/scraper/init_data.py
+# --------------------------------------
+
 from helper_methods import *
 from hotel_scraper import *
 from restaurant_scraper import *

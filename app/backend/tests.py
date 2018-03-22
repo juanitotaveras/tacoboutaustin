@@ -8,8 +8,6 @@
 # app/backend/tests.py
 # --------------------------------------
 
-import sys
-import os
 from unittest import main, TestCase
 import requests
 from tacoapi import close_places
