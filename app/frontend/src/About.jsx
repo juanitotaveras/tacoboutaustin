@@ -29,7 +29,7 @@ class About extends Component {
     this.state = {
       totalCommits: 0,
       totalIssues: 0,
-      totalUnitTests: 0
+      totalUnitTests: 38
       //methods
     }
     var members = [
@@ -53,7 +53,7 @@ class About extends Component {
         responsibilities: "Front end",
         commits: 0,
         issues: 0,
-        unitTests: 0
+        unitTests: 5
       },
       {
         name: "An Vo",
@@ -75,7 +75,7 @@ class About extends Component {
         responsibilities: "Front end",
         commits: 0,
         issues: 0,
-        unitTests: 0
+        unitTests: 6
       },
       {
         name: "James Crabtree",
