@@ -1,8 +1,8 @@
 from flask import render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
-from routes import app
 from models import *
+from main import app
 
 
 def close_places(place_type, number, zip_code):

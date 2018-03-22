@@ -9,9 +9,10 @@ class HomePageTest(TestCase):
 	def setUp(self):
 		self.display = Display(visible=0, size=(1920, 1080))
 		self.display.start()
-		self.driver = webdriver.Chrome("../chromedriver")
+		self.driver = webdriver.Chrome("./chromedriver")
 		self.driver.get('http://localhost:3000')
 		self.verificationErrors = []
+		self.driver.implicitly_wait(10)
 
 	def test_home_page_browser_tab_title(self):
 		# self.navigate_to_site()

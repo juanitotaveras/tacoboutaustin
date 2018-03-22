@@ -19,7 +19,7 @@ export class Restaurant {
 export default class Restaurants extends Component {
   constructor(props) {
     super(props);
-    this.state = restaurants;
+    this.setState(restaurants);
   }
 
   componentWillMount() {

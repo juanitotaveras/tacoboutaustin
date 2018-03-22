@@ -2,7 +2,9 @@
 
 PFILES :=                   \
     test_splash_page 			\
-    test_hotels
+    test_hotels                 \
+    test_restaurant_details     \
+    test_about                  \
 
 %.jsx: %.js
 	-jshint $<
@@ -34,6 +36,5 @@ run: $(PFILES:=.pyx)
 travis:
 	make clean
 	ls -al
-	chmod +x ../chromedriver
 	make run
 	ls -al

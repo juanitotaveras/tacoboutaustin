@@ -14,24 +14,28 @@ import unittest, time, re
 
 NOT_VISIBLE = 0
 VISIBLE = 1
-class HotelsTest(TestCase):
-	def setUp(self):
-		self.display = Display(visible=NOT_VISIBLE, size=(1920, 1080))
-		self.display.start()
-		self.driver = webdriver.Chrome("../chromedriver")
-		self.base_url = 'http://localhost:3000'
-		self.verificationErrors = []
-		self.driver.get(self.base_url)
+class TestRestaurantDetails(TestCase):
+    def setUp(self):
+        self.display = Display(visible=NOT_VISIBLE, size=(1920, 1080))
+        self.display.start()
+        self.driver = webdriver.Chrome("./chromedriver")
+        self.base_url = 'http://localhost:3000'
+        self.verificationErrors = []
+        self.driver.get(self.base_url)
+        self.driver.implicitly_wait(20)
         # self.accept_next_alert = True
-
-	def test_click_on_hotel_details(self):
-		self.driver.find_element_by_xpath("//div[@id='root']/div/div/nav/div/ul/li[3]/a/h3").click()
-		self.driver.find_element_by_link_text("Check it out!").click()
     
-	def is_element_present(self, how, what):
-		try: self.driver.find_element(by=how, value=what)
-		except NoSuchElementException as e: return False
-		return True
+    def test_restaurant_details(self):
+        driver = self.driver
+        driver.find_element_by_id("root").click()
+        driver.find_element_by_xpath("//div[@id='root']/div/div/nav/div/ul/li/a/h3").click()
+        driver.find_element_by_xpath("(//a[contains(text(),'Check it out!')])[3]").click()
+        # driver.find_element_by_link_text("read more!").click()
+    
+    def is_element_present(self, how, what):
+        try: self.driver.find_element(by=how, value=what)
+        except NoSuchElementException as e: return False
+        return True
     
     # def is_alert_present(self):
     #     try: self.driver.switch_to_alert()
@@ -49,9 +53,9 @@ class HotelsTest(TestCase):
     #         return alert_text
     #     finally: self.accept_next_alert = True
     
-	def tearDown(self):
-		self.driver.quit()
-		self.assertEqual([], self.verificationErrors)
+    def tearDown(self):
+        self.driver.quit()
+        self.assertEqual([], self.verificationErrors)
 
 if __name__ == "__main__":
-	main()
+    main()
