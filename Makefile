@@ -25,7 +25,7 @@ gui_testing:
 	pip install pyvirtualdisplay selenium
 
 travis:
-	cd tests/ui_tests; make travis
+	cd app/frontend/guitests; make travis
 	cd tests/api_tests; make travis
 	@echo
 

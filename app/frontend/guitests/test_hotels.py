@@ -18,7 +18,7 @@ class HotelsTest(TestCase):
 	def setUp(self):
 		self.display = Display(visible=NOT_VISIBLE, size=(1920, 1080))
 		self.display.start()
-		self.driver = webdriver.Chrome("../chromedriver")
+		self.driver = webdriver.Chrome("./chromedriver")
 		self.base_url = 'http://localhost:3000'
 		self.verificationErrors = []
 		self.driver.get(self.base_url)
