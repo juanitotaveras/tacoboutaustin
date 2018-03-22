@@ -71,7 +71,8 @@ class About extends Component {
         gitLogin: "carorineee",
         imageSrc: Caroline,
         imageAlt: "About Caroline",
-        bio: "Caroline is a cool dude",
+        bio: "Caroline is a third year CS major who likes to play music and travel
+        when she has time and is not broke.",
         responsibilities: "Front end",
         commits: 0,
         issues: 0,
