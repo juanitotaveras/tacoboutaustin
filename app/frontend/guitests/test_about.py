@@ -27,6 +27,7 @@ class TestAbout(unittest.TestCase):
     
     def test_about(self):
         driver = self.driver
+        driver.find_element_by_id("root").click()
         driver.find_element_by_xpath("//div[@id='root']/div/div/nav/div/ul/li[4]/a/h3").click()
     
     def is_element_present(self, how, what):

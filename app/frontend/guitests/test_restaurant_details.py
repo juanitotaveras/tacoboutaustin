@@ -27,6 +27,7 @@ class TestRestaurantDetails(TestCase):
     
     def test_restaurant_details(self):
         driver = self.driver
+        driver.find_element_by_id("root").click()
         driver.find_element_by_xpath("//div[@id='root']/div/div/nav/div/ul/li/a/h3").click()
         driver.find_element_by_xpath("(//a[contains(text(),'Check it out!')])[3]").click()
         # driver.find_element_by_link_text("read more!").click()
