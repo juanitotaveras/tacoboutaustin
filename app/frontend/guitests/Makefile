@@ -2,8 +2,9 @@
 
 PFILES :=                   \
     test_splash_page 			\
-    test_hotels
-    test_restaurant_details
+    test_hotels                 \
+    test_restaurant_details     \
+    test_about                  \
 
 %.jsx: %.js
 	-jshint $<
