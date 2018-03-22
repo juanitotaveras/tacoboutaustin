@@ -21,7 +21,7 @@ export class Hotel {
 export default class Hotels extends Component {
   constructor(props) {
     super(props);
-    this.state = hotels;
+    this.setState(hotels);
   }
 
   componentWillMount() {
