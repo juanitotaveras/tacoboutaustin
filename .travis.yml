@@ -29,6 +29,9 @@ install:
     - pip install numpy
     - pip install pylint
     - pip install requests
+    - pip install Flask
+    - pip install flask_cors
+    - pip install flask_sqlalchemy
     - pip list
 
 before_script:
