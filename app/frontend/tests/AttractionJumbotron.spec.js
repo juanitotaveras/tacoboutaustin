@@ -28,7 +28,11 @@ var reviews = [
       }
     ];
 
-const wrapper = shallow(<AttractionJumbotron name={"Attraction Name"} rating={4} images= {images} reviews={reviews} />);
+const wrapper = shallow(<AttractionJumbotron 
+	name={"Attraction Name"} 
+	rating={4}
+	images= {images}
+	reviews={reviews} />);
 
 describe('AttractionJumbotron Component', () => {
   it('renders the name', () => {
@@ -36,13 +40,17 @@ describe('AttractionJumbotron Component', () => {
   }),
 
   it('renders the rating', () => {
-    expect(wrapper.contains(<p className="lead">Rating: 4/5<br/></p>)).to.equal(true)
+    expect(wrapper.contains(<p className="lead">Rating: 4/5<br/>
+        </p>)).to.equal(true)
   }),
 
   it('renders the reviews', () => {
-    expect(wrapper.contains(<p>{reviews[0]["text"]}<a href={reviews[0]["link"]}>read more!</a></p>)).to.equal(true)
-    expect(wrapper.contains(<p>{reviews[1]["text"]}<a href={reviews[1]["link"]}>read more!</a></p>)).to.equal(true)
-    expect(wrapper.contains(<p>{reviews[2]["text"]}<a href={reviews[2]["link"]}>read more!</a></p>)).to.equal(true)
+    expect(wrapper.contains(<p>{reviews[0]["text"]}<a href={reviews[0]["link"]}>read more!</a></p>))
+    	.to.equal(true)
+    expect(wrapper.contains(<p>{reviews[1]["text"]}<a href={reviews[1]["link"]}>read more!</a></p>))
+    	.to.equal(true)
+    expect(wrapper.contains(<p>{reviews[2]["text"]}<a href={reviews[2]["link"]}>read more!</a></p>))
+    	.to.equal(true)
   })
 
 })
