@@ -11,10 +11,14 @@ Tacoboutaustin award-winning website
 
 `cd tacoboutaustin`
 
-3. Run docker images for api and frontend
+3. Run docker images for api and frontend:
 
-'make create_env'
+`make create_env`
 
-This will run the api on localhost and the frontend on localhost:5000
+This will run the api on localhost:80 and the frontend on localhost:3000
 
+4. To close images:
+`make clear_env`
 
+# Testing
+Check out our travis ci at https://travis-ci.org/juanitotaveras/tacoboutaustin
