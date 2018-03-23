@@ -17,6 +17,7 @@ before_install:
     - make create_env
     - docker ps
     - make gui_testing
+    - sudo groupadd --gid 1000 dockerbuild && sudo usermod -a -G 1000 $USER && sudo chown -R :dockerbuild .
 
 install:
     - npm install -g istanbul
