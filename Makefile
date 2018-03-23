@@ -26,7 +26,6 @@ gui_testing:
 	chmod +x app/frontend/guitests/chromedriver
 
 travis:
-	cd app/frontend; npm install; npm test
 	cd app/frontend/guitests; make travis
 	cd app/backend/; make travis
 	@echo
