@@ -8,11 +8,12 @@
 # app/backend/tacoapi.py
 # --------------------------------------
 
-from flask import render_template, jsonify
+from flask import render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from models import *
 from main import app
+import re
 
 
 def close_places(place_type, number, zip_code):
@@ -38,15 +39,30 @@ def close_places(place_type, number, zip_code):
             places_data.append(place_data)
     return places_data
 
+def containsSimilar(search, comp):
+    comp = str(comp)
+    print(comp)
+    s = re.compile(comp)
+    if re.search(s, search):
+        return True
+    return False
+    
+
 
 @app.route('/')
 def hello_user():
     return render_template('hello.html')
 
-
 @app.route('/restaurants')
 def get_restaurants():
-    restaurants = Restaurant.query.all()
+    search = request.args.get('search', default=None, type=str)
+    page = request.args.get('page', default=None, type=int)
+    restaurantQuery = Restaurant.query   
+    if search is not None:
+        restaurantQuery = restaurantQuery.filter_by(zipcode=int(search)) #trivial
+    if page is not None:
+        restaurantQuery = restaurantQuery.limit(10).offset(10*(page-1))
+    restaurants = restaurantQuery.all()
     output = []
     for restaurant in restaurants:
         restaurant_data = {}
@@ -56,7 +72,7 @@ def get_restaurants():
         restaurant_data['rating'] = restaurant.rating
         restaurant_data['address'] = [restaurant.address1, restaurant.address2]
         output.append(restaurant_data)
-    return jsonify({'status': "OK", 'list': output})
+    return jsonify({'status': "OK", 'list': output, 'total': len(restaurants)})
 
 
 @app.route('/restaurants/<id>')
