@@ -8,6 +8,7 @@ import { Container, Row, Col, Input, InputGroup,
 import { api_url } from './config';
 
 var restaurants = [];
+var restaurants_display = [];
 var res_count = 0;
 var per_page = 20;
 
@@ -28,6 +29,13 @@ export class Restaurant {
 export default class Restaurants extends Component {
   constructor(props) {
     super(props);
+    this.state = {onPage: 1};
+  }
+
+  getInitialState() {
+    return {
+      onPage: 1
+    }
   }
 
   componentWillMount() {
@@ -60,17 +68,26 @@ export default class Restaurants extends Component {
     restaurants = [];
   }
 
+  handleClick(pageNum) {
+    this.setState({
+      onPage: pageNum
+    });
+  }
+
   render() {
     const page_numbers = [];
     for(var i = 1; i <= (res_count/per_page) + 1; i++)
       page_numbers.push(i);
 
-    var cards = restaurants.map(function(restaurant){
+    var s = this.state.onPage;
+    // TODO: request the stuff?
+
+    var cards = restaurants.map(function(restaurant) {
             return <Col xs="12" sm="6" md="6" lg="3"><RestaurantCard restaurant={restaurant} /></Col>;
           })
 
-    var pages = page_numbers.map(function(page) {
-      return <PaginationItem> <PaginationLink href="#">{page}</PaginationLink></PaginationItem>;
+    var pages = page_numbers.map((pageNum) => {
+      return <li onClick={() => this.handleClick(pageNum)}><PaginationItem><PaginationLink>{pageNum}</PaginationLink></PaginationItem></li>;
     })
 
     return (
