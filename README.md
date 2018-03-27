@@ -1,5 +1,5 @@
 # tacoboutaustin
-Tacoboutaustin award-winning website
+Tacoboutaustin award-winning website, check it out: http://tacoboutaustin.me/
 
 ## Setting up:
 
@@ -22,3 +22,9 @@ This will run the api on localhost:80 and the frontend on localhost:3000
 
 # Testing
 Check out our travis ci at https://travis-ci.org/juanitotaveras/tacoboutaustin
+
+# API Documentation
+https://tienlatien252.gitbooks.io/tacoboutaustin/content/
+
+# Technical Report
+https://carorineee.gitbooks.io/report-and-critiques/content/

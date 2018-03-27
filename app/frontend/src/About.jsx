@@ -38,7 +38,7 @@ class About extends Component {
         gitLogin: "educampos96",
         imageSrc: Eduardo,
         imageAlt: "About Eduardo",
-        bio: "Eduardo is a cool dude",
+        bio: "Eduardo is a third year CS major. Born and raised in Mexico. Loves tacos al pastor.",
         responsibilities: "Front end",
         commits: 0,
         issues: 0,
