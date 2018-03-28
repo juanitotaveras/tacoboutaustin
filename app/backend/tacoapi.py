@@ -61,7 +61,7 @@ def get_restaurants():
     if search is not None:
         query = query.filter_by(zipcode=int(search)) #trivial
     if page is not None:
-        query = query.limit(10).offset(10*(page-1))
+        query = query.limit(12).offset(12*(page-1))
     restaurants = query.all()
     output = []
     for restaurant in restaurants:
@@ -112,7 +112,7 @@ def get_hotels():
     if search is not None:
         query = query.filter_by(zipcode=int(search))  # trivial
     if page is not None:
-        query = query.limit(10).offset(10*(page-1))
+        query = query.limit(12).offset(12*(page-1))
     hotels = query.all()
     output = []
     for hotel in hotels:
@@ -160,7 +160,7 @@ def get_attractions():
     if search is not None:
         query = query.filter_by(zipcode=int(search))  # trivial
     if page is not None:
-        query = query.limit(10).offset(10*(page-1))
+        query = query.limit(12).offset(12*(page-1))
     attractions = query.all()
     output = []
     for attraction in attractions:
