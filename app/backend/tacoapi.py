@@ -11,8 +11,8 @@
 from flask import render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
-from models import *
 from main import app
+from models import Restaurant, Hotel, Images, Review, Attraction
 import re
 
 

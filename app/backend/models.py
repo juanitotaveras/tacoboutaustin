@@ -3,16 +3,13 @@
 # pylint: disable = bad-whitespace
 # pylint: disable = invalid-name
 # pylint: disable = missing-docstring
-
 # --------------------------------------
 # app/backend/models.py
 # --------------------------------------
 
 from flask_sqlalchemy import SQLAlchemy 
 from flask import jsonify
-from main import app
-
-db = SQLAlchemy(app)
+from main import app, db
 
 imageID = 0
 class Images(db.Model):
