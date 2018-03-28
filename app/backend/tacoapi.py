@@ -10,7 +10,7 @@
 
 from flask import render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from main import app
 from models import Restaurant, Hotel, Images, Review, Attraction
 import re
@@ -57,9 +57,11 @@ def hello_user():
 def get_restaurants():
     search = request.args.get('search', default=None, type=str)
     page = request.args.get('page', default=None, type=int)
-    query = Restaurant.query   
+    order_by = request.args.get('order_by', default=None, type=str)
+    order = request.args.get('order', default=None, type=str)
+    query = Restaurant.query
     if search is not None:
-        query = query.filter_by(zipcode=int(search)) #trivial
+        query = query.filter(or_(Restaurant.zipcode.like(search), Restaurant.name.like("%"+search+"%")))
     if page is not None:
         query = query.limit(12).offset(12*(page-1))
     restaurants = query.all()
@@ -110,7 +112,7 @@ def get_hotels():
     page = request.args.get('page', default=None, type=int)
     query = Hotel.query
     if search is not None:
-        query = query.filter_by(zipcode=int(search))  # trivial
+        query = query.filter(or_(Hotel.zipcode.like(search), Hotel.name.like("%"+search+"%")))
     if page is not None:
         query = query.limit(12).offset(12*(page-1))
     hotels = query.all()
@@ -158,7 +160,7 @@ def get_attractions():
     page = request.args.get('page', default=None, type=int)
     query = Attraction.query
     if search is not None:
-        query = query.filter_by(zipcode=int(search))  # trivial
+        query = query.filter(or_(Attraction.zipcode.like(search), Attraction.name.like("%"+search+"%")))
     if page is not None:
         query = query.limit(12).offset(12*(page-1))
     attractions = query.all()
