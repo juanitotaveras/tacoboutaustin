@@ -123,7 +123,7 @@ def get_hotels():
         hotel_data['rating'] = hotel.rating
         hotel_data['address'] = [hotel.address1, hotel.address2]
         output.append(hotel_data)
-    return jsonify({'status': "OK", 'list': output})
+    return jsonify({'status': "OK", 'list': output, 'total': len(hotels)})
 
 
 @app.route('/hotels/<id>')
@@ -171,7 +171,7 @@ def get_attractions():
         attraction_data['rating'] = attraction.rating
         attraction_data['address'] = [attraction.address1, attraction.address2]
         output.append(attraction_data)
-    return jsonify({'status': "OK", 'list': output})
+    return jsonify({'status': "OK", 'list': output, 'total': len(attractions)})
 
 
 @app.route('/attractions/<id>')
