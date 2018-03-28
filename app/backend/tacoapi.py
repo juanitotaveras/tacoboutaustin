@@ -57,12 +57,12 @@ def hello_user():
 def get_restaurants():
     search = request.args.get('search', default=None, type=str)
     page = request.args.get('page', default=None, type=int)
-    restaurantQuery = Restaurant.query   
+    query = Restaurant.query   
     if search is not None:
-        restaurantQuery = restaurantQuery.filter_by(zipcode=int(search)) #trivial
+        query = query.filter_by(zipcode=int(search)) #trivial
     if page is not None:
-        restaurantQuery = restaurantQuery.limit(10).offset(10*(page-1))
-    restaurants = restaurantQuery.all()
+        query = query.limit(10).offset(10*(page-1))
+    restaurants = query.all()
     output = []
     for restaurant in restaurants:
         restaurant_data = {}
@@ -106,7 +106,14 @@ def get_restaurant(id):
 
 @app.route('/hotels')
 def get_hotels():
-    hotels = Hotel.query.all()
+    search = request.args.get('search', default=None, type=str)
+    page = request.args.get('page', default=None, type=int)
+    query = Hotel.query
+    if search is not None:
+        query = query.filter_by(zipcode=int(search))  # trivial
+    if page is not None:
+        query = query.limit(10).offset(10*(page-1))
+    hotels = query.all()
     output = []
     for hotel in hotels:
         hotel_data = {}
@@ -147,7 +154,14 @@ def get_hotel(id):
 
 @app.route('/attractions')
 def get_attractions():
-    attractions = Attraction.query.all()
+    search = request.args.get('search', default=None, type=str)
+    page = request.args.get('page', default=None, type=int)
+    query = Attraction.query
+    if search is not None:
+        query = query.filter_by(zipcode=int(search))  # trivial
+    if page is not None:
+        query = query.limit(10).offset(10*(page-1))
+    attractions = query.all()
     output = []
     for attraction in attractions:
         attraction_data = {}
