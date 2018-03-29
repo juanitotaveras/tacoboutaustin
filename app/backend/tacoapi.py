@@ -66,7 +66,9 @@ def get_restaurants():
     order = request.args.get('order', default=None, type=str)
     query = Restaurant.query
     if search is not None:
-        query = query.filter(or_(Restaurant.zipcode.like(search), Restaurant.name.like("%"+search+"%")))
+        searchTokens = search.split(',')
+        for token in searchTokens:
+            query = query.filter(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%")))
     if order_by is None:
         order_by = 'name'
     if order is not None:
@@ -126,7 +128,9 @@ def get_hotels():
     order = request.args.get('order', default=None, type=str)
     query = Hotel.query
     if search is not None:
-        query = query.filter(or_(Hotel.zipcode.like(search), Hotel.name.like("%"+search+"%")))
+        searchTokens = search.split(',')
+        for token in searchTokens:
+            query = query.filter(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%")))
     if order_by is None:
         order_by = 'name'
     if order is not None:
@@ -183,7 +187,9 @@ def get_attractions():
     order = request.args.get('order', default=None, type=str)
     query = Attraction.query
     if search is not None:
-        query = query.filter(or_(Attraction.zipcode.like(search), Attraction.name.like("%"+search+"%")))
+        searchTokens = search.split(',')
+        for token in searchTokens:
+            query = query.filter(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%")))
     if order_by is None:
         order_by = 'name'
     if order is not None:
