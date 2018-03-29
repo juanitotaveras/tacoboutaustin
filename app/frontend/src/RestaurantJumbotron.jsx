@@ -14,32 +14,6 @@ import {
 
 var parsed_opening_hours;
 
-const styles = {
-  color:'red',
-  backgroundColor:'black',
-  fontWeight:'bold',
-  height: '400em'
-  };
-
-// temporary: delete
-const items = [
-  {
-    src: 'https://odis.homeaway.com/odis/destination/5f483ac3-763b-4506-9e15-3fff2e1e8291.hw1.jpg',
-    altText: 'Austin, Texas',
-    caption: 'Explore Austin!'
-  },
-  {
-    src: 'https://2u0yuyu2fs02fa819ut739hy-wpengine.netdna-ssl.com/wp-content/uploads/2017/05/crescent39.jpg',
-    altText: 'Postcard',
-    caption: 'Every tourist ever'
-  },
-  {
-    src: 'https://cdn.vox-cdn.com/uploads/chorus_image/image/54444777/austin_taco_project_tacos.0.0.jpg',
-    altText: 'TACOZ',
-    caption: 'Our bread and butter'
-  }
-];
-
 export default class RestaurantJumbotron extends Component {
 
   constructor(props) {
@@ -62,13 +36,13 @@ export default class RestaurantJumbotron extends Component {
 
   next() {
       if (this.animating) return;
-      const nextIndex = this.state.activeIndex === items.length - 1 ? 0 : this.state.activeIndex + 1;
+      const nextIndex = this.state.activeIndex === this.props.images.length - 1 ? 0 : this.state.activeIndex + 1;
       this.setState({ activeIndex: nextIndex });
     }
 
   previous() {
       if (this.animating) return;
-      const nextIndex = this.state.activeIndex === 0 ? items.length - 1 : this.state.activeIndex - 1;
+      const nextIndex = this.state.activeIndex === 0 ? this.props.images.length - 1 : this.state.activeIndex - 1;
       this.setState({ activeIndex: nextIndex });
   }
 
@@ -108,7 +82,7 @@ export default class RestaurantJumbotron extends Component {
     })
 
     var more_images = this.props.images.map(function(image){
-                return <Col><img top width="100%" height="100em" src={image} alt="Card image cap" /></Col>;
+                return <Col xs='3'><img top width="100%" src={image} alt="Card image cap" /></Col>;
               })
 
     return (
@@ -119,13 +93,21 @@ export default class RestaurantJumbotron extends Component {
         </p>
           <Row>
           <Col xs="6">
-          <div styles={styles}>
+          <div>
+            <style>
+              {
+              `.custom-tag {
+                  max-width: 100%;
+                  height: 100px;
+                  background: black;
+                }`
+              }
+            </style>
             <Carousel
               activeIndex={activeIndex}
               next={this.next}
               previous={this.previous}
               >
-              {/*<CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={this.goToIndex} />*/}
               {slides}
               <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
               <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
