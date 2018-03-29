@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import search from './assets/search.png'
+import search from './assets/search.png';
 import './App.css';
 import RestaurantCard from './RestaurantCard';
 import Filter from './Filter';

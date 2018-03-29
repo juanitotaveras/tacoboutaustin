@@ -49,7 +49,7 @@ class About extends Component {
         gitLogin: "juanitotaveras",
         imageSrc: Juanito,
         imageAlt: "About Juanito",
-        bio: "Juanito graduated with a Radio-Television-Film degree in 2017 and will graduate with a Computer Science degree this May.",
+        bio: "Juanito graduated with a Radio-Television-Film degree in 2017 and will graduate with a Computer Science degree this May. I really dig barbacoa.",
         responsibilities: "Front end",
         commits: 0,
         issues: 0,

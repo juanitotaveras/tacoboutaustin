@@ -14,11 +14,14 @@ import {
   DropdownMenu,
   DropdownItem,
   Container,
+  Input, 
+  InputGroup,
   Row,
   Col } from 'reactstrap';
 
 
 export default class NavigationBar extends React.Component {
+
   constructor(props) {
     super(props);
 
