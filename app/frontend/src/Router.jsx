@@ -10,6 +10,7 @@ import Splash from './Splash';
 import RestaurantDetails from './RestaurantDetails';
 import AttractionDetails from './AttractionDetails';
 import HotelDetails from './HotelDetails';
+import Search from './Search';
 
 export default class Router extends Component {
   render() {
@@ -23,6 +24,7 @@ export default class Router extends Component {
 	  	<Route exact path='/hotels' component={Hotels}/>
 	  		<Route path='/hotels/:hot_id' component={HotelDetails} />
 	  	<Route exact path='/about' component={About}/>
+	  	<Route exact path='/search' component={Search}/>
 	  </Switch>
     );
   }

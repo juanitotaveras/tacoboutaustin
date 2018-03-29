@@ -97,13 +97,6 @@ export default class Restaurants extends Component {
               <Col>
 	      			  <h1>Restaurants </h1>
               </Col>
-              <Col>
-              <InputGroup>
-               {/* <i class="fas fa-search" style={styles}></i>*/}
-                <Input placeholder="Search for a restaurant!" />
-                <Button color="secondary">Search!</Button>
-              </InputGroup>
-              </Col>
       			</Row>
             <Row>
                 {cards}

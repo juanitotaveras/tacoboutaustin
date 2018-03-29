@@ -53,6 +53,9 @@ export default class NavigationBar extends React.Component {
                  <NavItem>
                    <NavLink href="/about"><h3 className="text-white">About</h3></NavLink>
                  </NavItem>
+                 <NavItem>
+                   <NavLink href="/search"><h3 className="text-white">Search</h3></NavLink>
+                 </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
