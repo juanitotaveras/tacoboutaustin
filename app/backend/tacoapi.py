@@ -52,6 +52,8 @@ def getQueryCol(model, s):
         return model.name
     if s == 'zipcode':
         return model.zipcode
+    if s == 'rating':
+        return model.rating
     return None
 
 @app.route('/')
