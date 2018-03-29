@@ -47,7 +47,12 @@ def containsSimilar(search, comp):
         return True
     return False
     
-
+def getQueryCol(model, s):
+    if s == 'name':
+        return model.name
+    if s == 'zipcode':
+        return model.zipcode
+    return None
 
 @app.route('/')
 def hello_user():
@@ -62,6 +67,13 @@ def get_restaurants():
     query = Restaurant.query
     if search is not None:
         query = query.filter(or_(Restaurant.zipcode.like(search), Restaurant.name.like("%"+search+"%")))
+    if order_by is None:
+        order_by = 'name'
+    if order is not None:
+        if order == 'asc':
+            query = query.order_by(getQueryCol(Restaurant, order_by).asc())
+        else:
+            query = query.order_by(getQueryCol(Restaurant, order_by).desc())
     if page is not None:
         query = query.limit(12).offset(12*(page-1))
     restaurants = query.all()
@@ -110,9 +122,18 @@ def get_restaurant(id):
 def get_hotels():
     search = request.args.get('search', default=None, type=str)
     page = request.args.get('page', default=None, type=int)
+    order_by = request.args.get('order_by', default=None, type=str)
+    order = request.args.get('order', default=None, type=str)
     query = Hotel.query
     if search is not None:
         query = query.filter(or_(Hotel.zipcode.like(search), Hotel.name.like("%"+search+"%")))
+    if order_by is None:
+        order_by = 'name'
+    if order is not None:
+        if order == 'asc':
+            query = query.order_by(getQueryCol(Hotel, order_by).asc())
+        else:
+            query = query.order_by(getQueryCol(Hotel, order_by).desc())
     if page is not None:
         query = query.limit(12).offset(12*(page-1))
     hotels = query.all()
@@ -158,9 +179,18 @@ def get_hotel(id):
 def get_attractions():
     search = request.args.get('search', default=None, type=str)
     page = request.args.get('page', default=None, type=int)
+    order_by = request.args.get('order_by', default=None, type=str)
+    order = request.args.get('order', default=None, type=str)
     query = Attraction.query
     if search is not None:
         query = query.filter(or_(Attraction.zipcode.like(search), Attraction.name.like("%"+search+"%")))
+    if order_by is None:
+        order_by = 'name'
+    if order is not None:
+        if order == 'asc':
+            query = query.order_by(getQueryCol(Attraction, order_by).asc())
+        else:
+            query = query.order_by(getQueryCol(Attraction, order_by).desc())
     if page is not None:
         query = query.limit(12).offset(12*(page-1))
     attractions = query.all()
