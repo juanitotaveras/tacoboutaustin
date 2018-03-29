@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import search from './assets/search.png'
+import search from './assets/search.png';
 import './App.css';
-import RestaurantCard from './RestaurantCard'
+import RestaurantCard from './RestaurantCard';
 import { Container, Row, Col, Input, InputGroup, 
   InputGroupAddon, Button, Pagination, PaginationItem, 
   PaginationLink } from 'reactstrap';
