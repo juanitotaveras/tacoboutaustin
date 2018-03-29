@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import search from './assets/search.png'
 import './App.css';
-import RestaurantCard from './RestaurantCard'
-import { Container, Row, Col, Input, InputGroup, 
-  InputGroupAddon, Button, Pagination, PaginationItem, 
-  PaginationLink } from 'reactstrap';
+import RestaurantCard from './RestaurantCard';
+import Filter from './Filter';
+import Sort from './Sort';
+import { Container, Row, Col, Button, Pagination, PaginationItem, 
+  PaginationLink, Form, FormGroup } from 'reactstrap';
 import { api_url } from './config';
 
 var restaurants = [];
@@ -68,6 +69,10 @@ export default class Restaurants extends Component {
     restaurants = [];
   }
 
+  getPage() {
+    var s = this.state.onPage;
+  }
+
   handleClick(pageNum) {
     this.setState({
       onPage: pageNum
@@ -79,11 +84,10 @@ export default class Restaurants extends Component {
     for(var i = 1; i <= (res_count/per_page) + 1; i++)
       page_numbers.push(i);
 
-    var s = this.state.onPage;
-    // TODO: request the stuff?
+    this.getPage();
 
     var cards = restaurants.map(function(restaurant) {
-            return <Col xs="12" sm="6" md="6" lg="3"><RestaurantCard restaurant={restaurant} /></Col>;
+            return <Col xs="6" sm="4"><RestaurantCard restaurant={restaurant} /></Col>;
           })
 
     var pages = page_numbers.map((pageNum) => {
@@ -94,23 +98,31 @@ export default class Restaurants extends Component {
     	<div>
     		<Container>
             <Row>
-              <Col>
-	      			  <h1>Restaurants </h1>
-              </Col>
+                <Col>
+  	      			  <h1>Restaurants</h1>
+                </Col>
       			</Row>
             <Row>
-                {cards}
-      			</Row>
+                <Col xs="2">
+                  <Filter />
+                  <Sort />
+                </Col>
+                <Col>
+                  <Container>
+                      {cards}
+            			</Container>
+                </Col>
+            </Row>
             <Row>
-              <Col sm="5"></Col>
-              <Col>
-                <Pagination size="lg">
+                <Col sm="5"></Col>
+                <Col>
+                  <Pagination size="lg">
                   <PaginationItem disabled>
                     <PaginationLink previous href="#" />
                   </PaginationItem>
-                    {pages}
-                </Pagination>
-              </Col>
+                      {pages}
+                  </Pagination>
+                </Col>
             </Row>
       		</Container>
       	</div>
