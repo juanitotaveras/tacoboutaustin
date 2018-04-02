@@ -40,7 +40,7 @@ export default class NavigationBar extends React.Component {
     return (
       <div>
         <Navbar color="dark" light expand="md">
-          <NavbarBrand href="/"><img src={tacoLogo} height="60em" width="60em" /></NavbarBrand>
+          <NavbarBrand href="/"><img src={tacoLogo} height="90em" width="90em" /></NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="navbar text-white container-fluid" navbar>
