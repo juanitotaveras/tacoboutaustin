@@ -128,6 +128,10 @@ export default class Search extends Component {
 
 	}
 
+	noResultsFound() {
+		return restaurants.length == 0 && hotels.length == 0 && attractions.length == 0;
+	}
+
 
 	render() {
 		const searchBox = 
@@ -139,6 +143,13 @@ export default class Search extends Component {
 			<Button color="secondary" onClick={this.onSearch}>Search!</Button>
 			</InputGroup>
 			</Row>;
+		const noResultsComponent = 
+			<div>
+			<br/>
+			<Row>
+				<h1> No results found. </h1>
+			</Row>
+			</div>;
 
 	const page_numbers = [];
 	let largestArrayLength = Math.max(restaurants.length, attractions.length, hotels.length);
@@ -212,7 +223,8 @@ export default class Search extends Component {
 			<h1>Search</h1>
 			</Row>
 			{searchBox}
-			{restaurants.length > 0 &&
+			{
+				restaurants.length > 0 &&
 				restaurantComponent
 			}
 			{
@@ -222,6 +234,10 @@ export default class Search extends Component {
 			{
 				attractions.length > 0 &&
 				attractionComponent
+			}
+			{
+				this.noResultsFound() &&
+				noResultsComponent
 			}
 			{
 				page_numbers.length > 1 &&
