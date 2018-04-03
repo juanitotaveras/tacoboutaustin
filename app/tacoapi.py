@@ -66,11 +66,18 @@ def get_restaurants():
     page = request.args.get('page', default=None, type=int)
     order_by = request.args.get('order_by', default=None, type=str)
     order = request.args.get('order', default=None, type=str)
-    query = Restaurant.query
+    search_type = request.args.get('search_type', default=None, type=str)
+    if(search_type == 'or'):
+        query = Restaurant.query.filter_by(id=-1)
+    else:
+        query = Restaurant.query
     if search is not None:
         searchTokens = search.split(',')
         for token in searchTokens:
-            query = query.filter(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%")))
+            if(search_type == 'or'):
+                query = Restaurant.query.filter(or_(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%"), Restaurant.id.in_(restaurant.id for restaurant in query.all()))))
+            else:
+                query = query.filter(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%")))             
     if order_by is None:
         order_by = 'name'
     if order is not None:
@@ -128,11 +135,18 @@ def get_hotels():
     page = request.args.get('page', default=None, type=int)
     order_by = request.args.get('order_by', default=None, type=str)
     order = request.args.get('order', default=None, type=str)
-    query = Hotel.query
+    search_type = request.args.get('search_type', default=None, type=str)
+    if(search_type == 'or'):
+        query = Hotel.query.filter_by(id=-1)
+    else:
+        query = Hotel.query
     if search is not None:
         searchTokens = search.split(',')
         for token in searchTokens:
-            query = query.filter(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%")))
+            if(search_type == 'or'):
+                query = Hotel.query.filter(or_(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%"), Hotel.id.in_(hotel.id for hotel in query.all()))))
+            else:
+                query = query.filter(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%")))
     if order_by is None:
         order_by = 'name'
     if order is not None:
@@ -187,11 +201,18 @@ def get_attractions():
     page = request.args.get('page', default=None, type=int)
     order_by = request.args.get('order_by', default=None, type=str)
     order = request.args.get('order', default=None, type=str)
-    query = Attraction.query
+    search_type = request.args.get('search_type', default=None, type=str)
+    if(search_type == 'or'):
+        query = Attraction.query.filter_by(id=-1)
+    else:
+        query = Attraction.query
     if search is not None:
         searchTokens = search.split(',')
         for token in searchTokens:
-            query = query.filter(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%")))
+            if(search_type == 'or'):
+                query = Attraction.query.filter(or_(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%"), Attraction.id.in_(attraction.id for attraction in query.all()))))
+            else:
+                query = query.filter(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%")))
     if order_by is None:
         order_by = 'name'
     if order is not None:
