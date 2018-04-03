@@ -7,9 +7,15 @@
 # app/backend/models.py
 # --------------------------------------
 
-from flask_sqlalchemy import SQLAlchemy 
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Table, Column, Integer, ForeignKey, String
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 from flask import jsonify
 from main import app, db
+
+
+Base = declarative_base()
 
 imageID = 0
 class Images(db.Model):
@@ -56,6 +62,31 @@ class Review(db.Model):
         self.text = ReviewText
         self.link = ReviewLink
 
+class Association(db.Model):
+    __tablename__ = 'association'
+    category_id = db.Column(db.String(100), ForeignKey('category.id'), primary_key=True)
+    restaurant_id = db.Column(db.Integer, ForeignKey('restaurant.id'), primary_key=True)
+    category = relationship("Category", back_populates="restaurants")
+    restaurant = relationship("Restaurant", back_populates="categories")
+
+class Category(db.Model):
+    __tablename__ = "category"
+    id = db.Column(db.String(100), primary_key=True)
+    name = db.Column(db.String(200))
+    restaurants = relationship("Association", back_populates="category", cascade="all, delete-orphan")
+
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+
+    @classmethod
+    def get_or_create(self, id, name):
+        exists = db.session.query(Category.id).filter_by(id = id).scalar() is not None
+        if exists:
+            return db.session.query(Category).filter_by(id=id).first()
+        return self(id, name)
+        
+
 class Hotel (db.Model):
     __tablename__ = "hotel"
 
@@ -92,8 +123,6 @@ class Hotel (db.Model):
         self.address1 = address[0]
         self.address2 = address[1]
         self.zipcode = zipcode
-    
-
 
 class Restaurant (db.Model):
     __tablename__ = "restaurant"
@@ -111,6 +140,7 @@ class Restaurant (db.Model):
     open_hour = db.Column(db.String(200))
     phone = db.Column(db.String(20))
     zipcode = db.Column(db.Integer)
+    categories = relationship("Association", back_populates="restaurant")
 
     def __init__(self, id, name, longtitude, latitude, rating, open_hour, phone):
         self.id = id
@@ -120,6 +150,7 @@ class Restaurant (db.Model):
         self.rating = rating
         self.open_hour = open_hour
         self.phone = phone
+
 
     def addReview(self, text, link):
         new_review = Review(text, link)
@@ -134,6 +165,8 @@ class Restaurant (db.Model):
         self.address1 = address[0]
         self.address2 = address[1]
         self.zipcode = zipcode
+
+
 
 class Attraction (db.Model):
     __tablename__ = "attraction"

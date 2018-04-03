@@ -129,6 +129,13 @@ def get_restaurant(id):
     restaurant_data['reviews'] = [{'text': restaurant.reviews[0].text, 'link': restaurant.reviews[0].link}, {
         'text': restaurant.reviews[1].text, 'link': restaurant.reviews[1].link}, {
         'text': restaurant.reviews[2].text, 'link': restaurant.reviews[2].link}]
+        
+    restaurant_data['categories'] = []
+    for association in restaurant.categories:
+        category_data = {}
+        category_data['id'] = association.category.id
+        category_data['name'] = association.category.name
+        restaurant_data['categories'].append(category_data)
 
     hotels = close_places("hotel", 2, restaurant.zipcode)
     attractions = close_places("attraction", 2, restaurant.zipcode)

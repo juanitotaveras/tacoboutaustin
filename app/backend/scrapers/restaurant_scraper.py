@@ -52,15 +52,25 @@ def scrap_restaurants():
 			#print(detail['name'])
 			#print(detail['hours'][0]['open'])
 
+			for category in detail['categories']:
+				a = Association()
+				a.category = Category.get_or_create(category['alias'], category['title'])
+				new_restaurant.categories.append(a)
 			if not review is None:
 				for x in range(0, min(3, review['total'])):
 					new_restaurant.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
 			db.session.add(new_restaurant)
+			db.session.commit()
 			id+=1
 	db.session.commit()
 
 if __name__ == '__main__':
 	db.drop_all()
 	db.create_all()
+	print("start")
 	db.session.commit()
 	scrap_restaurants()
+	"""restaurants = Restaurant.query.all()
+	for restaurant in restaurants:
+		for assoc in restaurant.categories:
+			print(assoc.category)"""
