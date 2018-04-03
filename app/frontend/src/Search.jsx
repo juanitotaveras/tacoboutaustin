@@ -15,8 +15,8 @@ import { api_url } from './config';
 var restaurants = [];
 var hotels = [];
 var attractions = [];
-let per_page = 21;
-let per_category = 7;
+let per_page = 24;
+let per_category = per_page/3;
 
 
 export default class Search extends Component {
