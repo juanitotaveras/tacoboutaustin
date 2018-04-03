@@ -116,10 +116,6 @@ def get_restaurants():
 
     output = []
     for restaurant in restaurants:
-        if filter_by == 'open_hour' and filter_param is not None:
-            time = filter_param.split(",")
-            if not isOpen(restaurant.open_hour, time):
-                continue
         restaurant_data = {}
         restaurant_data['id'] = restaurant.id
         restaurant_data['name'] = restaurant.name
