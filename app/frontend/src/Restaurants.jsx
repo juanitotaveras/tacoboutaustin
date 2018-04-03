@@ -8,14 +8,8 @@ import { Container, Row, Col, Button, Pagination, PaginationItem,
   PaginationLink, Form, FormGroup } from 'reactstrap';
 import { api_url } from './config';
 
-var restaurants = [];
-var restaurants_display = [];
 var res_count = 0;
-var per_page = 20;
-
-const styles = {
-    fontSize: "24px"
-  }; 
+var per_page = 12;
 
 export class Restaurant {
   constructor(address, id, image, name, rating) {
@@ -30,55 +24,37 @@ export class Restaurant {
 export default class Restaurants extends Component {
   constructor(props) {
     super(props);
-    // this.getPage.fillInRestaurants = this.getPage.fillInRestaurants.bind(this);
-    this.state = {onPage: 1 };
-  }
-
-  getInitialState() {
-    return {
+    this.sortPage = this.sortPage.bind(this)
+    this.fillInRestaurants = this.fillInRestaurants.bind(this)
+    this.state = {
       onPage: 1,
-    }
+      restaurants_display: [],
+      sorted: null
+    };
   }
 
   componentWillMount() {
     function getCount(responseText) {
-      let restaurants_parsed = JSON.parse(responseText)["list"];
-      res_count = restaurants_parsed.length;  
+      res_count = JSON.parse(responseText)["total"];
     }
     
     const url = api_url + "/restaurants";
-
-    function request(url, parseResponse) {
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-          parseResponse(xmlHttp.responseText);
-      }
-      xmlHttp.open("GET", url, false) // true for asynchronous
-      xmlHttp.send(null);
-    }
-
-    request(url, getCount);
+    this.request(url, getCount);
+    this.getPage(1);
   }
 
-  componentWillUnmount() {
-    restaurants = [];
-  }
-
-  getPage() {
-    restaurants_display = [];
-    function fillInRestaurants(responseText) {
+  fillInRestaurants(responseText) {
+      var temp_restaurants = [];
       let restaurants_parsed = JSON.parse(responseText)["list"];
       for (let r of restaurants_parsed) {
-        restaurants_display.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
+        temp_restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
       }
-    }
+      this.setState({
+        restaurants_display: temp_restaurants
+      });
+  }
 
-    var s = this.state.onPage;
-
-    const page_url = "http://localhost/restaurants?page=" + s;
-
-    function request(url, parseResponse) {
+  request(url, parseResponse) {
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
@@ -86,16 +62,37 @@ export default class Restaurants extends Component {
       }
       xmlHttp.open("GET", url, false) // true for asynchronous
       xmlHttp.send(null);
+  }
+
+  getPage(pageNum, sortParam, changedCategory) {
+    var page_url = api_url + "/restaurants?page=";
+
+    if(changedCategory)
+      page_url += 1;
+    else 
+      page_url += pageNum;
+
+    if(sortParam != null)
+    {
+      if (sortParam == "name") 
+        page_url += "&order_by=name&order=asc";
+      else
+        page_url += "&order_by=rating&order=desc";
     }
 
-    request(page_url, fillInRestaurants);
+    this.request(page_url, this.fillInRestaurants);
+    this.setState({
+      onPage: pageNum,
+      sorted: sortParam
+    });
+  }
+
+  sortPage(category) {
+    this.getPage(this.state.pageNum, category, true)
   }
 
   handleClick(pageNum) {
-    this.setState({
-      onPage: pageNum,
-      done_loading: false
-    });
+    this.getPage(pageNum, this.state.sorted, false);
   }
 
   render() {
@@ -103,9 +100,7 @@ export default class Restaurants extends Component {
     for(var i = 1; i <= (res_count/per_page) + 1; i++)
       page_numbers.push(i);
 
-    this.getPage();
-
-    var cards = restaurants_display.map(function(restaurant) {
+    var cards = this.state.restaurants_display.map(function(restaurant) {
             return <Col xs="6" sm="4"><RestaurantCard restaurant={restaurant} /></Col>;
           })
 
@@ -124,7 +119,7 @@ export default class Restaurants extends Component {
             <Row>
                 <Col xs="2">
                   <Filter />
-                  <Sort />
+                  <Sort handler={this.sortPage}/>
                 </Col>
                 <Col>
                   <Container>
@@ -136,9 +131,6 @@ export default class Restaurants extends Component {
                 <Col sm="5"></Col>
                 <Col>
                   <Pagination size="lg">
-                  <PaginationItem disabled>
-                    {/*<PaginationLink previous href="#" />*/}
-                  </PaginationItem>
                       {pages}
                   </Pagination>
                 </Col>
