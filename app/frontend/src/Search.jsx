@@ -23,6 +23,7 @@ export default class Search extends Component {
 		this.state = {value: ''};
 
 		this.onChange = this.onChange.bind(this);
+		this.onSearch = this.onSearch.bind(this);
 
 	}
 	fillInRestaurants(responseText) {
@@ -68,17 +69,21 @@ export default class Search extends Component {
     }
 
 	onChange(event) {
-		console.log(event.target.value);
 		this.setState({value: event.target.value});
+	}
 
-		// TODO: CALL API AND GET RESULTS
+	onSearch(event) {
+		console.log(this.state.value);
+		event.preventDefault();
+
+				// TODO: CALL API AND GET RESULTS
 		const urls = ["/restaurants", "/hotels", "/attractions"].map((elem) => api_url + elem);
 
     	this.request(urls[0], this.fillInRestaurants);
-    	// this.request(urls[1], this.fillInHotels);
-    	// this.request(urls[2], this.fillInAttractions);
-
-
+    	this.request(urls[1], this.fillInHotels);
+    	this.request(urls[2], this.fillInAttractions);
+    	// this.setState({value: this.state.value});
+    	this.forceUpdate();
 
 
 	}
@@ -94,10 +99,10 @@ export default class Search extends Component {
             return <Col xs="12" sm="6" md="6" lg="3"><RestaurantCard restaurant={restaurant} /></Col>;
           });
           var hotelCards = hotels.map(function(hotel) {
-            return <Col xs="12" sm="6" md="6" lg="3"><HotelCard restaurant={hotel} /></Col>;
+            return <Col xs="12" sm="6" md="6" lg="3"><HotelCard hotel={hotel} /></Col>;
           });
           var attractionCards = attractions.map(function(attraction) {
-            return <Col xs="12" sm="6" md="6" lg="3"><HotelCard restaurant={attraction} /></Col>;
+            return <Col xs="12" sm="6" md="6" lg="3"><AttractionCard attraction={attraction} /></Col>;
           });
 		return(
 			<div>
@@ -109,7 +114,7 @@ export default class Search extends Component {
 						<InputGroup>
 			               {/* <i class="fas fa-search" style={styles}></i>*/}
 			                <Input type="text" onChange={this.onChange} value={this.state.value} placeholder="Search something..." />
-			                <Button color="secondary">Search!</Button>
+			                <Button color="secondary" onClick={this.onSearch}>Search!</Button>
 			              </InputGroup>
 		            </Row>
 		            <br/>
