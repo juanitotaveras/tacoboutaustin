@@ -12,9 +12,12 @@ from flask import render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, or_
 from main import app
+from copy import copy
 from models import Restaurant, Hotel, Images, Review, Attraction
 import re
 
+dayDict = {"Sunday": 0, "Monday": 0, "Tuesday": 0,
+           "Wednesday": 0, "Thursday": 0, "Friday": 0, "Saturday": 0}
 
 def close_places(place_type, number, zip_code):
     places = None
@@ -39,13 +42,21 @@ def close_places(place_type, number, zip_code):
             places_data.append(place_data)
     return places_data
 
-def containsSimilar(search, comp):
-    comp = str(comp)
-    print(comp)
-    s = re.compile(comp)
-    if re.search(s, search):
-        return True
+#time is a tuple w/ day, hour, AM/PM
+def isOpen(hours, time):
+    days = hours.split("<br>")
+    day = days[dayDict[time[0]]]
+    hour = day.split(": ")
+    hourList = hour[1].split(" - ")
+    if(hourList[0] == 'closed'):
+        return False
+    timeComp = time[1].split(":")
+    hourComp = list(tok.split(":") for tok in (comp[:-2] for comp in hourList))
+    if((int(timeComp[0]) > int(hourComp[0][0]) or (int(timeComp[0]) == int(hourComp[0][0]) and int(timeComp[1]) >= int(hourComp[0][1]))) or time[2] > hourList[0][-2:]):
+        if((int(timeComp[0]) < int(hourComp[1][0]) or (int(timeComp[0]) == int(hourComp[1][0]) and int(timeComp[1]) <= int(hourComp[1][1]))) or time[2] < hourList[1][-2:]):
+             return True
     return False
+    
     
 def getQueryCol(model, s):
     if s == 'name':
@@ -83,7 +94,15 @@ def get_restaurants():
                 query = query.filter(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%")))
     if filter_by is not None:
         if filter_by == 'rating' and filter_param is not None:
-            query = query.filter(Restaurant.rating >= float(filter_param))      
+            query = query.filter(Restaurant.rating >= float(filter_param))
+        if filter_by == 'open_hour' and filter_param is not None:
+            restaraunts = query.all()
+            open_restaurants = []
+            for restaurant in restaraunts:
+                time = filter_param.split(",")
+                if isOpen(restaurant.open_hour, time):
+                    open_restaurants.append(restaurant)
+            query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
     if order_by is None:
         order_by = 'name'
     if order is not None:
@@ -97,6 +116,10 @@ def get_restaurants():
 
     output = []
     for restaurant in restaurants:
+        if filter_by == 'open_hour' and filter_param is not None:
+            time = filter_param.split(",")
+            if not isOpen(restaurant.open_hour, time):
+                continue
         restaurant_data = {}
         restaurant_data['id'] = restaurant.id
         restaurant_data['name'] = restaurant.name
