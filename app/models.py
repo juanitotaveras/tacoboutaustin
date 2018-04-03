@@ -8,14 +8,10 @@
 # --------------------------------------
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Table, Column, Integer, ForeignKey, String
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from flask import jsonify
 from main import app, db
-
-
-Base = declarative_base()
 
 imageID = 0
 class Images(db.Model):
@@ -151,7 +147,6 @@ class Restaurant (db.Model):
         self.open_hour = open_hour
         self.phone = phone
 
-
     def addReview(self, text, link):
         new_review = Review(text, link)
         self.reviews.append(new_review)
@@ -165,8 +160,6 @@ class Restaurant (db.Model):
         self.address1 = address[0]
         self.address2 = address[1]
         self.zipcode = zipcode
-
-
 
 class Attraction (db.Model):
     __tablename__ = "attraction"

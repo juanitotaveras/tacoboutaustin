@@ -17,9 +17,6 @@ BASE_DIR = os.path.dirname(PARENT_DIR)  # get grand parent directory path
 sys.path.append(BASE_DIR)
 from main import app, db
 from models import Restaurant, Hotel, Images, Review, Attraction, Category, Association
-from sqlalchemy import Table, Column, Integer, ForeignKey, String
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 #from sqlalchemy import func
 import pprint
 
