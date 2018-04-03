@@ -6,33 +6,33 @@ export default class Filter extends Component {
 	render() {
 		return(
 			<Container>
-              <Form>
-                  <Row><legend>Select by:</legend></Row>
-                  <Row>
-                   <FormGroup check inline>
-                      <Label check>
-                        <Input type="checkbox" />High rating!
-                      </Label>
-                    </FormGroup>
-                  </Row>
-                  <Row>
-                    <FormGroup check inline>
-                      <Label check>
-                        <Input type="checkbox" />Open now!
-                      </Label>
-                    </FormGroup>
-                  </Row>
+          <Form>
+              <Row><legend>Select by:</legend></Row>
+              <Row>
+               <FormGroup check inline>
+                  <Label check>
+                    <Input type="checkbox" />High rating!
+                  </Label>
+                </FormGroup>
+              </Row>
+              <Row>
+                <FormGroup check inline>
+                  <Label check>
+                    <Input type="checkbox" />Open now!
+                  </Label>
+                </FormGroup>
+              </Row>
 
-                  <br />
+              <br />
 
-                  <Row>
-                    <FormGroup>
-                      <Label for="searchZipcode">Search by zipcode!</Label>
-                      <Input type="number" id="searchZipcode" placeholder="Enter a zipcode..."/>
-                    </FormGroup>
-                  </Row>
-              </Form>
-            </Container>
+              <Row>
+                <FormGroup>
+                  <Label for="searchZipcode">Search by zipcode!</Label>
+                  <Input type="number" id="searchZipcode" placeholder="Enter a zipcode..."/>
+                </FormGroup>
+              </Row>
+          </Form>
+        </Container>
 		);
 	}
 
