@@ -9,7 +9,7 @@ import { Container, Row, Col, Button, Pagination, PaginationItem,
 import { api_url } from './config';
 
 var res_count = 0;
-var per_page = 20;
+var per_page = 12;
 
 export class Restaurant {
   constructor(address, id, image, name, rating) {
@@ -28,14 +28,14 @@ export default class Restaurants extends Component {
     this.fillInRestaurants = this.fillInRestaurants.bind(this)
     this.state = {
       onPage: 1,
-      restaurants_display: [] 
+      restaurants_display: [],
+      sorted: null
     };
   }
 
   componentWillMount() {
     function getCount(responseText) {
-      let restaurants_parsed = JSON.parse(responseText)["list"];
-      res_count = restaurants_parsed.length;  
+      res_count = JSON.parse(responseText)["total"];
     }
     
     const url = api_url + "/restaurants";
@@ -43,14 +43,7 @@ export default class Restaurants extends Component {
     this.getPage(1);
   }
 
-  componentWillUnmount() {
-    this.setState({
-      restaurants_display: []
-    });
-  }
-
   fillInRestaurants(responseText) {
-      console.log("FILL");
       var temp_restaurants = [];
       let restaurants_parsed = JSON.parse(responseText)["list"];
       for (let r of restaurants_parsed) {
@@ -71,23 +64,35 @@ export default class Restaurants extends Component {
       xmlHttp.send(null);
   }
 
-  getPage(pageNum) {
-    var s = pageNum;
-    const page_url = "http://localhost/restaurants?page=" + s;
+  getPage(pageNum, sortParam, changedCategory) {
+    var page_url = api_url + "/restaurants?page=";
+
+    if(changedCategory)
+      page_url += 1;
+    else 
+      page_url += pageNum;
+
+    if(sortParam != null)
+    {
+      if (sortParam == "name") 
+        page_url += "&order_by=name&order=asc";
+      else
+        page_url += "&order_by=rating&order=desc";
+    }
+
     this.request(page_url, this.fillInRestaurants);
     this.setState({
-      onPage: pageNum
+      onPage: pageNum,
+      sorted: sortParam
     });
   }
 
   sortPage(category) {
-    var s = this.state.onPage;
-    const page_url = "http://localhost/restaurants?page=" + s + "&order_by=" + category + "&order=asc";
-    this.request(page_url, this.fillInRestaurants);
+    this.getPage(this.state.pageNum, category, true)
   }
 
   handleClick(pageNum) {
-    this.getPage(pageNum);
+    this.getPage(pageNum, this.state.sorted, false);
   }
 
   render() {

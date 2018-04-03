@@ -10,9 +10,12 @@ export default class Sort extends Component {
 		 <Container>
           <Form>
               <Row><legend>Sort by:</legend></Row>
-              <Row><Button outline color="primary">Highest Rating</Button>{' '}</Row>
+              <Row><Button outline color="primary"
+              onClick= {() => this.props.handler("rating")}>Highest Rating</Button>{' '}</Row>
               <Row><Button outline color="primary"
               onClick = {() => this.props.handler("name")}>Alphabetical</Button>{' '}</Row>
+              <Row><Button outline color="primary"
+              onClick = {() => this.props.handler(null)}>Unsort</Button>{' '}</Row>
           </Form>
         </Container>
 		);
@@ -21,5 +24,5 @@ export default class Sort extends Component {
 }
 
 Sort.propTypes = {
-    handler: PropTypes.object
+    handler: PropTypes.function
   }
