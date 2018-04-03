@@ -30,23 +30,19 @@ export class Restaurant {
 export default class Restaurants extends Component {
   constructor(props) {
     super(props);
-    this.state = {onPage: 1};
+    // this.getPage.fillInRestaurants = this.getPage.fillInRestaurants.bind(this);
+    this.state = {onPage: 1 };
   }
 
   getInitialState() {
     return {
-      onPage: 1
+      onPage: 1,
     }
   }
 
   componentWillMount() {
-    function fillInRestaurants(responseText) {
-      console.log(responseText);
+    function getCount(responseText) {
       let restaurants_parsed = JSON.parse(responseText)["list"];
-      for (let r of restaurants_parsed) {
-        restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
-      }
-
       res_count = restaurants_parsed.length;  
     }
     
@@ -62,7 +58,7 @@ export default class Restaurants extends Component {
       xmlHttp.send(null);
     }
 
-    request(url, fillInRestaurants);
+    request(url, getCount);
   }
 
   componentWillUnmount() {
@@ -70,12 +66,35 @@ export default class Restaurants extends Component {
   }
 
   getPage() {
+    restaurants_display = [];
+    function fillInRestaurants(responseText) {
+      let restaurants_parsed = JSON.parse(responseText)["list"];
+      for (let r of restaurants_parsed) {
+        restaurants_display.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
+      }
+    }
+
     var s = this.state.onPage;
+
+    const page_url = "http://localhost/restaurants?page=" + s;
+
+    function request(url, parseResponse) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          parseResponse(xmlHttp.responseText);
+      }
+      xmlHttp.open("GET", url, false) // true for asynchronous
+      xmlHttp.send(null);
+    }
+
+    request(page_url, fillInRestaurants);
   }
 
   handleClick(pageNum) {
     this.setState({
-      onPage: pageNum
+      onPage: pageNum,
+      done_loading: false
     });
   }
 
@@ -86,7 +105,7 @@ export default class Restaurants extends Component {
 
     this.getPage();
 
-    var cards = restaurants.map(function(restaurant) {
+    var cards = restaurants_display.map(function(restaurant) {
             return <Col xs="6" sm="4"><RestaurantCard restaurant={restaurant} /></Col>;
           })
 
@@ -118,7 +137,7 @@ export default class Restaurants extends Component {
                 <Col>
                   <Pagination size="lg">
                   <PaginationItem disabled>
-                    <PaginationLink previous href="#" />
+                    {/*<PaginationLink previous href="#" />*/}
                   </PaginationItem>
                       {pages}
                   </Pagination>
