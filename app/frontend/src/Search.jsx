@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Input, InputGroup, Button, Container, Row, Jumbotron, Col } from 'reactstrap';
-import {Restaurant} from './Restaurants';
+import { Input, InputGroup, Button, Container, Row, Jumbotron, Col, Pagination, PaginationItem, 
+	PaginationLink  } from 'reactstrap';
+	import {Restaurant} from './Restaurants';
 // import Restaurants from './Restaurants';
 import RestaurantCard from './RestaurantCard';
 import {Hotel} from './Hotels';
@@ -14,78 +15,111 @@ import { api_url } from './config';
 var restaurants = [];
 var hotels = [];
 var attractions = [];
-var res_count = 0;
+let per_page = 21;
+let per_category = 7;
+
+
 export default class Search extends Component {
 
 
 	constructor(props) {
 		super(props);
-		this.state = {value: ''};
+		this.state = {
+			value: '', 
+			onPage: 0,
+			displayedRestaurants: [],
+			displayedHotels: [],
+			displayedAttractions: [],
+			hasSearched: false};
 
-		this.onChange = this.onChange.bind(this);
-		this.onSearch = this.onSearch.bind(this);
+			this.onChange = this.onChange.bind(this);
+			this.onSearch = this.onSearch.bind(this);
 
+		}
+
+		handlePageClick(pageNum) {
+			this.setState({
+				onPage: pageNum,
+				done_loading: false
+			});
+
+			this.showSearchItems(pageNum);
+		}
+		fillInRestaurants(responseText) {
+		// console.log("RESPONSE: " + responseText);
+		let restaurants_parsed = JSON.parse(responseText)["list"];
+		for (let r of restaurants_parsed) {
+			restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
+		}
 	}
-	fillInRestaurants(responseText) {
-      let restaurants_parsed = JSON.parse(responseText)["list"];
-      let i = 0;
-      for (let r of restaurants_parsed) {
-      	if (i < 4)
-        	restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
-        ++i;
-      }
-      res_count += restaurants_parsed.length;  
-    }
 
-    fillInHotels(responseText) {
-      let hotels_parsed = JSON.parse(responseText)["list"];
-      let i = 0;
-      for (let h of hotels_parsed) {
-      	if (i < 4)
-        	hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"]));
-        ++i;
-      } 
-    }
+	fillInHotels(responseText) {
+		let hotels_parsed = JSON.parse(responseText)["list"];
+		for (let h of hotels_parsed) 
+			hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"]));
+	}
 
-    fillInAttractions(responseText) {
-      let attractions_parsed = JSON.parse(responseText)["list"];
-      let i = 0;
-      for (let a of attractions_parsed) {
-      	if (i < 4)
-       		attractions.push(new Attraction(a["address"], a["id"], a["image"], a["name"], a["rating"]));
-       	++i;
-      }
-    } 
-    
+	fillInAttractions(responseText) {
+		let attractions_parsed = JSON.parse(responseText)["list"];
+		for (let a of attractions_parsed) 
+			attractions.push(new Attraction(a["address"], a["id"], a["image"], a["name"], a["rating"]));
+	} 
 
-    request(url, parseResponse) {
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-          parseResponse(xmlHttp.responseText);
-      }
+
+	request(url, parseResponse) {
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.onreadystatechange = function() {
+			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+				parseResponse(xmlHttp.responseText);
+		}
       xmlHttp.open("GET", url, false) // true for asynchronous
       xmlHttp.send(null);
-    }
+  }
 
-	onChange(event) {
-		this.setState({value: event.target.value});
+  onChange(event) {
+  	this.setState({value: event.target.value});
+  }
+
+  showSearchItems(pageNum) {
+  	// TODO: Try to display equal number of results for each
+  	// maybe like 7 for each
+
+  	let idx = pageNum * per_category;
+  	this.setState({
+  		displayedRestaurants: restaurants.slice(idx, idx+per_category),
+  		displayedHotels: hotels.slice(idx, idx+per_category),
+  		displayedAttractions: attractions.slice(idx, idx+per_category),
+  		hasSearched: true
+  	});
+  }
+
+  enterPressed(event) {
+  	var code = event.keyCode || event.which;
+	    if(code === 13) { //13 is the enter keycode
+	        //Do stuff in here
+	        this.onSearch(event);
+	    } 
 	}
 
 	onSearch(event) {
-		console.log(this.state.value);
+		// ?search=TERM1,TERM2,TERM3   TERM4A+TERM4B
 		event.preventDefault();
 
-				// TODO: CALL API AND GET RESULTS
-		const urls = ["/restaurants", "/hotels", "/attractions"].map((elem) => api_url + elem);
+		if (this.state.hasSearched) {
+			// clear current results
+			restaurants = [];
+			hotels = [];
+			attractions = [];
+		}
 
-    	this.request(urls[0], this.fillInRestaurants);
-    	this.request(urls[1], this.fillInHotels);
-    	this.request(urls[2], this.fillInAttractions);
-    	// this.setState({value: this.state.value});
-    	this.forceUpdate();
+		let searchText = "?search=" + this.state.value.replace(" ", ",");
 
+		const urls = ["/restaurants", "/hotels", "/attractions"].map((elem) => api_url + elem + searchText);
+		this.request(urls[0], this.fillInRestaurants);
+		this.request(urls[1], this.fillInHotels);
+		this.request(urls[2], this.fillInAttractions);
 
+		this.showSearchItems(0);
 	}
 
 	componentDidMount() {
@@ -94,62 +128,120 @@ export default class Search extends Component {
 
 	}
 
+
 	render() {
-		  var restaurantCards = restaurants.map(function(restaurant) {
-            return <Col xs="12" sm="6" md="6" lg="3"><RestaurantCard restaurant={restaurant} /></Col>;
-          });
-          var hotelCards = hotels.map(function(hotel) {
-            return <Col xs="12" sm="6" md="6" lg="3"><HotelCard hotel={hotel} /></Col>;
-          });
-          var attractionCards = attractions.map(function(attraction) {
-            return <Col xs="12" sm="6" md="6" lg="3"><AttractionCard attraction={attraction} /></Col>;
-          });
+		const searchBox = 
+			<Row>
+			<InputGroup>
+			{/* <i class="fas fa-search" style={styles}></i>*/}
+			<Input type="text" onChange={this.onChange} value={this.state.value} onKeyPress={this.enterPressed.bind(this)}
+			placeholder="Search something..." />
+			<Button color="secondary" onClick={this.onSearch}>Search!</Button>
+			</InputGroup>
+			</Row>;
+
+	const page_numbers = [];
+	let largestArrayLength = Math.max(restaurants.length, attractions.length, hotels.length);
+	for(var i = 0; i <= (largestArrayLength/per_page) ; i++)
+		page_numbers.push(i);
+
+	console.log("PAGE COUNT: " + page_numbers.length + " RESPONSES: " + largestArrayLength);
+	var restaurantCards = this.state.displayedRestaurants.map(function(restaurant) {
+		return <Col xs="12" sm="6" md="6" lg="3"><RestaurantCard restaurant={restaurant} /></Col>;
+	});
+
+	const restaurantComponent = 
+		<div><br/><Row>
+		<div className="searchDiv">
+		<h1> Restaurants</h1>
+		<Row>
+		{restaurantCards}
+		</Row>
+		</div>
+		</Row>
+		</div>;
+	const hotelCards = this.state.displayedHotels.map(function(hotel) {
+		return <Col xs="12" sm="6" md="6" lg="3"><HotelCard hotel={hotel} /></Col>;
+	});
+
+	const hotelComponent = 
+		<div><br/><Row>
+		<div className="searchDiv">
+		<h1> Hotels</h1>
+		<Row>
+		{hotelCards}
+		</Row>
+		</div>
+		</Row>
+		</div>;
+	const attractionCards = this.state.displayedAttractions.map(function(attraction) {
+		return <Col xs="12" sm="6" md="6" lg="3"><AttractionCard attraction={attraction} /></Col>;
+	});
+
+	const attractionComponent = 
+		<div><br/><Row>
+		<div className="searchDiv">
+		<h1> Attractions</h1>
+		<Row>
+		{attractionCards}
+		</Row>
+		</div>
+		</Row></div>;
+	var pages = page_numbers.map((pageNum) => {
+		return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum+1}</PaginationLink></PaginationItem></li>;
+	});
+
+	const paginationComponent = 
+		<Row>
+		<Col sm="5"></Col>
+		<Col>
+		<Pagination size="lg">
+		<PaginationItem disabled>
+		{/*<PaginationLink previous href="#" />*/}
+		</PaginationItem>
+		{pages}
+		</Pagination>
+		</Col>
+		</Row>;
+
+	if (this.state.hasSearched) {
 		return(
 			<div>
-				<Container>
-					<Row>	
-						<h1>Search</h1>
-					</Row>
-					<Row>
-						<InputGroup>
-			               {/* <i class="fas fa-search" style={styles}></i>*/}
-			                <Input type="text" onChange={this.onChange} value={this.state.value} placeholder="Search something..." />
-			                <Button color="secondary" onClick={this.onSearch}>Search!</Button>
-			              </InputGroup>
-		            </Row>
-		            <br/>
-		            <Row>
-			            <div className="searchDiv">
-			            	<h1> Restaurants</h1>
-							        <Row>
-							        	{restaurantCards}
-							        </Row>
-			            </div>
+			<Container>
+			<Row>	
+			<h1>Search</h1>
+			</Row>
+			{searchBox}
+			{restaurants.length > 0 &&
+				restaurantComponent
+			}
+			{
+				hotels.length > 0 &&
+				hotelComponent
+			}
+			{
+				attractions.length > 0 &&
+				attractionComponent
+			}
+			{
+				page_numbers.length > 1 &&
+				paginationComponent
+			}
+			</Container>
+			</div>
+			);
+	} else {
+		return(							<div>
+			<Container>
+			<Row>	
+			<h1>Search</h1>
+			</Row>
+			{searchBox}
+			</Container>
+			</div>
+			);
+	}
 
-		            </Row>
-		            <br/>
-		            <Row>
-			            <div className="searchDiv">
-			            	<h1> Hotels</h1>
-							        <Row>
-							        	{hotelCards}
-							        </Row>
-			            </div>
-
-		            </Row>
-		            <br/>
-		           	<Row>
-			            <div className="searchDiv">
-			            	<h1> Attractions</h1>
-							        <Row>
-							        	{attractionCards}
-							        </Row>
-			            </div>
-
-		            </Row>
-	         	</Container>
-	        </div>
-		);
 	}
 
 }
