@@ -133,6 +133,13 @@ def get_restaurants():
         restaurant_data['image'] = restaurant.cover_image
         restaurant_data['rating'] = restaurant.rating
         restaurant_data['address'] = [restaurant.address1, restaurant.address2]
+        restaurant_data['categories'] = []
+        restaurant_data['zip_code'] = restaurant.zipcode
+        for association in restaurant.categories:
+            category_data = {}
+            category_data['id'] = association.category.id
+            category_data['name'] = association.category.name
+            restaurant_data['categories'].append(category_data)
         output.append(restaurant_data)
     return jsonify({'status': "OK", 'list': output, 'total': len(restaurants)})
 
@@ -223,6 +230,7 @@ def get_hotels():
         hotel_data['image'] = hotel.cover_image
         hotel_data['rating'] = hotel.rating
         hotel_data['address'] = [hotel.address1, hotel.address2]
+        hotel_data['zip_code'] = hotel.zipcode
         output.append(hotel_data)
     return jsonify({'status': "OK", 'list': output, 'total': len(hotels)})
 
@@ -303,6 +311,7 @@ def get_attractions():
         attraction_data['image'] = attraction.cover_image
         attraction_data['rating'] = attraction.rating
         attraction_data['address'] = [attraction.address1, attraction.address2]
+        attraction_data['zip_code'] = attraction.zipcode
         output.append(attraction_data)
     return jsonify({'status': "OK", 'list': output, 'total': len(attractions)})
 
