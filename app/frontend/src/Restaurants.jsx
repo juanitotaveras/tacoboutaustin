@@ -13,12 +13,13 @@ var per_page = 12;
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export class Restaurant {
-  constructor(address, id, image, name, rating) {
+  constructor(address, id, image, name, rating, zip_code) {
     this.address = address;
     this.id = id;
     this.image = image;
     this.name = name;
     this.rating = rating;
+    this.zip_code = zip_code;
   }
 }
 
@@ -50,7 +51,7 @@ export default class Restaurants extends Component {
       var temp_restaurants = [];
       let restaurants_parsed = JSON.parse(responseText)["list"];
       for (let r of restaurants_parsed) {
-        temp_restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
+        temp_restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"], r["zip_code"]));
       }
       this.setState({
         restaurants_display: temp_restaurants

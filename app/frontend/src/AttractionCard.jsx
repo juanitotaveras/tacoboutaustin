@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Text } from 'react';
 import { Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
@@ -14,7 +14,7 @@ export default class AttractionCard extends Component {
           <CardBody>
             <CardTitle>{a.name}</CardTitle>
             <CardSubtitle>{a.type}</CardSubtitle>
-            <CardText>Rating: {a.rating}/5</CardText>
+            <CardText ><span>Rating: {a.rating}/5</span> <span style={{float: 'right'}}>Zip code: {a.zip_code}</span></CardText>
             <Link to={'/attractions/' + a.id}><Button outline >Check it out!</Button></Link>
           </CardBody>
         </Card>

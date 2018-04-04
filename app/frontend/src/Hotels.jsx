@@ -7,7 +7,7 @@ import { api_url } from './config';
 var hotels = [];
 
 export class Hotel {
-  constructor(address, id, image, name, rating) {
+  constructor(address, id, image, name, rating, zip_code) {
     this.address = address;
     this.id = id;
     this.image = image;
@@ -15,6 +15,7 @@ export class Hotel {
     //this.amenities
     // this.reviews
     this.rating = rating;
+    this.zip_code = zip_code;
   }
 }
 
@@ -28,7 +29,7 @@ export default class Hotels extends Component {
     function fillInHotels(responseText) {
       let hotels_parsed = JSON.parse(responseText)["list"];
       for (let h of hotels_parsed) {
-        hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"]));
+        hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"], h["zip_code"]));
       } 
     }
 
