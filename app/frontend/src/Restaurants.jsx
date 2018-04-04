@@ -185,7 +185,16 @@ export default class Restaurants extends Component {
                   <br />
                   <Sort handler={this.sortPage}/>
                 </Col>
-                <Col><Container>{cards}</Container></Col>
+                <Col><Container>
+                {
+                  res_count > 0 &&
+                  cards
+                }
+                {
+                  res_count == 0 &&
+                  <h1>No results found. </h1>
+                }
+                </Container></Col>
             </Row>
             <Row>
                 <Col sm="5"></Col>

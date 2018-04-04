@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import {Container, Form, Row, FormGroup, Label, Input, Button} from 'reactstrap';
 import PropTypes from "prop-types";
 
@@ -20,6 +21,10 @@ export default class Filter extends Component {
   }
 
   unapplyFilters() {
+    ReactDOM.findDOMNode(this.refs.ratFilter).value = "";
+    ReactDOM.findDOMNode(this.refs.zipFilter).value = "";
+    ReactDOM.findDOMNode(this.refs.openFilter).checked = false;
+
     this.props.handler({
       rating: 0,
       zipcode: 0,
@@ -63,13 +68,16 @@ export default class Filter extends Component {
 
                <FormGroup check inline>
                   <Label for="ratingFilter">Rating of at least:</Label>
-                  <Input type="number" id="ratingFilter" placeholder="Scale of 1-5" onChange={e => this.handleRatingChange(e)}/>
+                  <Input type="number" min="0" max="5" ref="ratFilter" id="ratingFilter" placeholder="1-5" onChange={e => this.handleRatingChange(e)}/>
                 </FormGroup>
               </Row>
+
+              <br />
+
               <Row>
                 <FormGroup check inline>
                   <Label check>
-                    <Input type="checkbox" onChange={e => this.handleHourChange(e)}/>Open now!
+                    <Input type="checkbox" ref="openFilter" onChange={e => this.handleHourChange(e)}/>Show what's open right now
                   </Label>
                 </FormGroup>
               </Row>
@@ -78,8 +86,8 @@ export default class Filter extends Component {
 
               <Row>
                 <FormGroup>
-                  <Label for="zipcodeFilter">Filter by zipcode!</Label>
-                  <Input type="number" id="zipcodeFilter" placeholder="Enter a zipcode" onChange={e => this.handleZipChange(e)}/>
+                  <Label for="zipcodeFilter">Filter by zipcode</Label>
+                  <Input type="number" ref="zipFilter" id="zipcodeFilter" placeholder="Enter a zipcode" onChange={e => this.handleZipChange(e)}/>
                 </FormGroup>
               </Row>
 
@@ -87,7 +95,7 @@ export default class Filter extends Component {
                 <Button outline color="primary" onClick={this.gatherFilters}>Apply filters</Button>
               </Row>
               <Row>
-                <Button outline color="primary" onClick={this.unapplyFilters}>Unapply all filters</Button>
+                <Button outline color="primary" onClick={this.unapplyFilters}>Clear all filters</Button>
               </Row>
           </Form>
         </Container>

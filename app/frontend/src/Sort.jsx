@@ -15,7 +15,7 @@ export default class Sort extends Component {
               <Row><Button outline color="primary"
               onClick = {() => this.props.handler("name")}>Alphabetical (ascending)</Button>{' '}</Row>
               <Row><Button outline color="primary"
-              onClick = {() => this.props.handler(null)}>Unapply sort</Button>{' '}</Row>
+              onClick = {() => this.props.handler(null)}>Clear sort</Button>{' '}</Row>
           </Form>
         </Container>
 		);
