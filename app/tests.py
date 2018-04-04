@@ -10,7 +10,7 @@
 
 from unittest import main, TestCase
 import requests
-from tacoapi import close_places
+from tacoapi import close_places, isOpen
 from models import Hotel, Restaurant, Attraction
 
 API_URL = "http://api.tacoboutaustin.me/"
@@ -108,6 +108,31 @@ class TestApi(TestCase):
     def test_close_by_6(self):
         places_data = close_places("attraction", 2, 79107)
         self.assertEqual(len(places_data), 0)
+
+    def test_is_open_1(self):
+        hour = "Sunday: 11:00AM - 10:00PM<br>Monday: 11:00AM - 10:00PM<br>Tuesday: 11:00AM - 10:00PM<br>Wednesday: 11:00AM - 10:00PM<br>Thursday: 11:00AM - 11:00PM<br>Friday: 11:00AM - 11:00PM<br>Saturday: 11:00AM - 10:00PM<br>"
+        open_now = isOpen(hour, ("Monday", "2:00", "PM"))
+        self.assertEqual(open_now, True)
+
+    def test_is_open_2(self):
+        hour = "Sunday: 11:00AM - 10:00PM<br>Monday: 11:00AM - 10:00PM<br>Tuesday: 11:00AM - 10:00PM<br>Wednesday: 11:00AM - 10:00PM<br>Thursday: 11:00AM - 11:00PM<br>Friday: 11:00AM - 11:00PM<br>Saturday: 11:00AM - 10:00PM<br>"
+        open_now = isOpen(hour, ("Wednesday", "11:00", "AM"))
+        self.assertEqual(open_now, True)
+
+    def test_is_open_3(self):
+        hour = "Sunday: 11:00AM - 10:00PM<br>Monday: 11:00AM - 10:00PM<br>Tuesday: 11:00AM - 10:00PM<br>Wednesday: 11:00AM - 10:00PM<br>Thursday: 11:00AM - 11:00PM<br>Friday: 11:00AM - 11:00PM<br>Saturday: 11:00AM - 10:00PM<br>"
+        open_now = isOpen(hour, ("Wednesday", "11:00", "PM"))
+        self.assertEqual(open_now, False)
+
+    def test_is_open_4(self):
+        hour = "Sunday: 11:00AM - 10:00PM<br>Monday: 11:00AM - 10:00PM<br>Tuesday: 11:00AM - 10:00PM<br>Wednesday: 11:00AM - 10:00PM<br>Thursday: 11:00AM - 11:00PM<br>Friday: 11:00AM - 11:00PM<br>Saturday: 11:00AM - 10:00PM<br>"
+        open_now = isOpen(hour, ("Wednesday", "11:00", "PM"))
+        self.assertEqual(open_now, False)
+
+    def test_is_open_5(self):
+        hour = "Sunday: closed<br>Monday: 11:00AM - 10:00PM<br>Tuesday: 11:00AM - 10:00PM<br>Wednesday: 11:00AM - 10:00PM<br>Thursday: 11:00AM - 11:00PM<br>Friday: 11:00AM - 11:00PM<br>Saturday: 11:00AM - 10:00PM<br>"
+        open_now = isOpen(hour, ("Sunday", "2:00", "PM"))
+        self.assertEqual(open_now, False)
 
 
 if __name__ == "__main__":
