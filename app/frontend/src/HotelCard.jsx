@@ -14,9 +14,8 @@ export default class HotelCard extends Component {
           <CardImg top width="100%" height="200em" src={h.image} alt="Card image cap" />
           <CardBody>
             <CardTitle>{h.name}</CardTitle>
-{/*            <CardSubtitle>{h.address[0]} {h.address[1]}</CardSubtitle>*/}       
             <CardSubtitle></CardSubtitle>     
-            <CardText>Rating: {h.rating}/5</CardText>
+            <CardText><span>Rating: {h.rating}/5</span> <span style={{float: 'right'}}>Zip code: {h.zip_code}</span></CardText>
             <Link to={'/hotels/' + h.id}><Button outline >Check it out!</Button></Link>
           </CardBody>
         </Card>

@@ -13,12 +13,13 @@ var per_page = 12;
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export class Restaurant {
-  constructor(address, id, image, name, rating) {
+  constructor(address, id, image, name, rating, zip_code) {
     this.address = address;
     this.id = id;
     this.image = image;
     this.name = name;
     this.rating = rating;
+    this.zip_code = zip_code;
   }
 }
 
@@ -50,7 +51,7 @@ export default class Restaurants extends Component {
       var temp_restaurants = [];
       let restaurants_parsed = JSON.parse(responseText)["list"];
       for (let r of restaurants_parsed) {
-        temp_restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
+        temp_restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"], r["zip_code"]));
       }
       this.setState({
         restaurants_display: temp_restaurants
@@ -100,21 +101,32 @@ export default class Restaurants extends Component {
         page_url += "&order_by=rating&order=desc";
     }
 
+    var count_url = "";
+
     // Must recalculate page numbers
     if (fil != null) {
       if(fil.rating != 0) {
         if (changedFilters == true) {
-          var count_url = api_url + "/restaurants?filter_by=rating&rating=" + fil.rating;
+          count_url += api_url + "/restaurants?filter_by=rating&rating=" + fil.rating;
           this.request(count_url, this.getCount);
         }
         page_url += "&filter_by=rating&rating=" + fil.rating;
-      } else if(fil.zipcode != 0) {
+      } 
 
-      } else if(fil.open == true) {
+      else if(fil.zipcode != 0) {
+        if (changedFilters == true) {
+          count_url += api_url + "/restaurants?filter_by=zipcode&zipcode=" + fil.zipcode;
+          this.request(count_url, this.getCount);
+        }
+        page_url += "&filter_by=zipcode&zipcode=" + fil.zipcode;
+        console.log(page_url);
+      } 
+
+      else if(fil.open == true) {
         var timeString = this.getDateString();
 
         if (changedFilters != null) {
-          var count_url = api_url + "/restaurants?filter_by=open_hour&time=" + timeString;
+          count_url += count_url == "" ? api_url + "/restaurants?filter_by=open_hour&time=" + timeString : "&filter_by=open_hour&time=" + timeString;
           this.request(count_url, this.getCount);
         }
         page_url += "&filter_by=open_hour&time=" + timeString;

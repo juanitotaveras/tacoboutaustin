@@ -7,12 +7,13 @@ import { api_url } from './config';
 var attractions = [];
 
 export class Attraction {
-  constructor(address, id, image, name, rating) {
+  constructor(address, id, image, name, rating, zip_code) {
     this.address = address;
     this.id = id;
     this.image = image;
     this.name = name;
     this.rating = rating;
+    this.zip_code = zip_code;
   }
 }
 
@@ -27,7 +28,7 @@ export default class Attractions extends Component {
     function fillInAttractions(responseText) {
       let attractions_parsed = JSON.parse(responseText)["list"];
       for (let a of attractions_parsed) {
-        attractions.push(new Attraction(a["address"], a["id"], a["image"], a["name"], a["rating"]));
+        attractions.push(new Attraction(a["address"], a["id"], a["image"], a["name"], a["rating"], a["zip_code"]));
       }
     } 
 

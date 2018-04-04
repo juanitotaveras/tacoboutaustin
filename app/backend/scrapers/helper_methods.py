@@ -77,10 +77,15 @@ def convert_hour(hours):
 
 def convert_military(time):
     hour_num = int(time[:2])
+    result =""
     if hour_num > 12:
-        return str(hour_num - 12) + ":" + time[-2:] + "PM"
+        result = str(hour_num - 12) + ":" + time[-2:] + "PM"
     else:
-        return str(hour_num) + ":" + time[-2:] +"AM"
+        result = str(hour_num) + ":" + time[-2:] +"AM"
+    if result == "0:00AM":
+        result = "12:00AM"
+    return result 
+
 
 """
 def close_places(place_type, number, zip_code):
