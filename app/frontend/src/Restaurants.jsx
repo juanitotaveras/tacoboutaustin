@@ -25,21 +25,23 @@ export default class Restaurants extends Component {
   constructor(props) {
     super(props);
     this.sortPage = this.sortPage.bind(this)
+    this.filterPage = this.filterPage.bind(this)
     this.fillInRestaurants = this.fillInRestaurants.bind(this)
     this.state = {
       onPage: 1,
       restaurants_display: [],
-      sorted: null
+      sorted: null,
+      filters: {
+        rating: 0,
+        zipcode: 0,
+        open: false
+      }
     };
   }
 
   componentWillMount() {
-    function getCount(responseText) {
-      res_count = JSON.parse(responseText)["total"];
-    }
-    
     const url = api_url + "/restaurants";
-    this.request(url, getCount);
+    this.request(url, this.getCount);
     this.getPage(1);
   }
 
@@ -54,6 +56,10 @@ export default class Restaurants extends Component {
       });
   }
 
+  getCount(responseText) {
+      res_count = JSON.parse(responseText)["total"];
+  }
+
   request(url, parseResponse) {
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.onreadystatechange = function() {
@@ -64,14 +70,12 @@ export default class Restaurants extends Component {
       xmlHttp.send(null);
   }
 
-  getPage(pageNum, sortParam, changedCategory) {
+  getPage(pageNum, sortParam, fil, changedFilters) {
     var page_url = api_url + "/restaurants?page=";
 
-    if(changedCategory)
-      page_url += 1;
-    else 
-      page_url += pageNum;
+    page_url += pageNum;
 
+    // Sorting doesn't require recalculating page numbers
     if(sortParam != null)
     {
       if (sortParam == "name") 
@@ -80,19 +84,42 @@ export default class Restaurants extends Component {
         page_url += "&order_by=rating&order=desc";
     }
 
+    // Must recalculate page numbers
+    if(fil != null) {
+      if(fil.rating != 0) {
+        if (changedFilters != null) {
+          var count_url = api_url + "/restaurants?filter_by=rating&filter_param=" + fil.rating;
+          this.request(count_url, this.getCount);
+        }
+        page_url += "&filter_by=rating&filter_param=" + fil.rating;
+      } else if(fil.zipcode != 0) {
+
+      } else if(fil.open == true) {
+        if (changedFilters != null) {
+          // var d = new Date();
+          // console.log("time: " + d.getHours());
+        }
+      }
+    }
+
     this.request(page_url, this.fillInRestaurants);
     this.setState({
       onPage: pageNum,
-      sorted: sortParam
+      sorted: sortParam,
+      filters: fil
     });
   }
 
-  sortPage(category) {
-    this.getPage(this.state.pageNum, category, true)
+  filterPage(filters) {
+    this.getPage(1, null, filters, true);
   }
 
-  handleClick(pageNum) {
-    this.getPage(pageNum, this.state.sorted, false);
+  sortPage(category) {
+    this.getPage(1, category, this.state.filters, false);
+  }
+
+  handlePageClick(pageNum) {
+    this.getPage(pageNum, this.state.sorted, this.state.filters, false);
   }
 
   render() {
@@ -105,38 +132,29 @@ export default class Restaurants extends Component {
           })
 
     var pages = page_numbers.map((pageNum) => {
-      return <li onClick={() => this.handleClick(pageNum)}><PaginationItem><PaginationLink>{pageNum}</PaginationLink></PaginationItem></li>;
+      return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum}</PaginationLink></PaginationItem></li>;
     })
 
     return (
     	<div>
     		<Container>
             <Row>
-                <Col>
-  	      			  <h1>Restaurants</h1>
-                </Col>
+                <Col><h1>Restaurants</h1></Col>
       			</Row>
             <Row>
                 <Col xs="2">
-                  <Filter />
+                  <Filter handler={this.filterPage}/>
+                  <br />
                   <Sort handler={this.sortPage}/>
                 </Col>
-                <Col>
-                  <Container>
-                      {cards}
-            			</Container>
-                </Col>
+                <Col><Container>{cards}</Container></Col>
             </Row>
             <Row>
                 <Col sm="5"></Col>
-                <Col>
-                  <Pagination size="lg">
-                      {pages}
-                  </Pagination>
-                </Col>
+                <Col><Pagination size="lg">{pages}</Pagination></Col>
             </Row>
-      		</Container>
-      	</div>
+      	</Container>
+      </div>
     );
   }
 }
