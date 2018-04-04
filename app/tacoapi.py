@@ -92,10 +92,10 @@ def get_restaurants():
     zipcode = request.args.get('zipcode', default=None, type=str)
     category = request.args.get('category', default=None, type=str)
 
-    if(search_type == 'or'):
-        query = Restaurant.query.filter_by(id=-1)
-    else:
+    if(search_type == 'and'):
         query = Restaurant.query
+    else:
+        query = Restaurant.query.filter_by(id=-1)
     if search is not None:
         searchTokens = search.split(',')
         for token in searchTokens:
@@ -198,10 +198,11 @@ def get_hotels():
     zipcode = request.args.get('zipcode', default=None, type=str)
     category = request.args.get('category', default=None, type=str)
 
-    if(search_type == 'or'):
-        query = Hotel.query.filter_by(id=-1)
-    else:
+    if(search_type == 'and'):
         query = Hotel.query
+    else:
+        query = Hotel.query.filter_by(id=-1)
+
     if search is not None:
         searchTokens = search.split(',')
         for token in searchTokens:
@@ -279,10 +280,11 @@ def get_attractions():
     zipcode = request.args.get('zipcode', default=None, type=str)
     category = request.args.get('category', default=None, type=str)
 
-    if(search_type == 'or'):
-        query = Attraction.query.filter_by(id=-1)
-    else:
+    if(search_type == 'and'):
         query = Attraction.query
+    else:
+        query = Attraction.query.filter_by(id=-1)
+
     if search is not None:
         searchTokens = search.split(',')
         for token in searchTokens:
