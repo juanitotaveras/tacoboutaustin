@@ -85,9 +85,9 @@ export default class Restaurants extends Component {
     }
 
     // Must recalculate page numbers
-    if(fil != null) {
+    if (fil != null) {
       if(fil.rating != 0) {
-        if (changedFilters != null) {
+        if (changedFilters == true) {
           var count_url = api_url + "/restaurants?filter_by=rating&filter_param=" + fil.rating;
           this.request(count_url, this.getCount);
         }
@@ -99,8 +99,14 @@ export default class Restaurants extends Component {
           // var d = new Date();
           // console.log("time: " + d.getHours());
         }
+      } else if(changedFilters == true) {
+          // Unapply all filters
+          var count_url = api_url + "/restaurants";
+          this.request(count_url, this.getCount);
       }
     }
+
+    
 
     this.request(page_url, this.fillInRestaurants);
     this.setState({
