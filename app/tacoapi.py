@@ -19,6 +19,8 @@ import re
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
            "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
 
+noonDict = {"AM": 1, "PM": 2}
+
 def close_places(place_type, number, zip_code):
     places = None
     if place_type == "restaurant":
@@ -44,6 +46,9 @@ def close_places(place_type, number, zip_code):
 
 #time is a tuple w/ day, hour, AM/PM
 def isOpen(hours, time):
+    global dayDict
+    global noonDict
+
     days = hours.split("<br>")
     day = days[dayDict[time[0]]]
     hour = day.split(": ")
@@ -51,11 +56,12 @@ def isOpen(hours, time):
     if(hourList[0] == 'closed'):
         return False
     timeComp = time[1].split(":")
+    timeComp[0] *= noonDict[time[2]]
     hourComp = list(tok.split(":") for tok in (comp[:-2] for comp in hourList))
-    if((int(timeComp[0]) > int(hourComp[0][0]) or (int(timeComp[0]) == int(hourComp[0][0]) and int(timeComp[1]) >= int(hourComp[0][1]))) or time[2] > hourList[0][-2:]):
-        if((int(timeComp[0]) < int(hourComp[1][0]) or (int(timeComp[0]) == int(hourComp[1][0]) and int(timeComp[1]) <= int(hourComp[1][1]))) or time[2] < hourList[1][-2:]):
-            print(timeComp)
-            print(hourComp)
+    hourComp[0][0] *= noonDict[hourList[0][-2:]]
+    hourComp[1][0] *= noonDict[hourList[1][-2:]]
+    if(int(timeComp[0]) > int(hourComp[0][0]) or (int(timeComp[0]) == int(hourComp[0][0]) and int(timeComp[1]) >= int(hourComp[0][1]))):
+        if(int(timeComp[0]) < int(hourComp[1][0]) or (int(timeComp[0]) == int(hourComp[1][0]) and int(timeComp[1]) <= int(hourComp[1][1]))):
             return True
     return False
     
@@ -133,6 +139,13 @@ def get_restaurants():
         restaurant_data['image'] = restaurant.cover_image
         restaurant_data['rating'] = restaurant.rating
         restaurant_data['address'] = [restaurant.address1, restaurant.address2]
+        restaurant_data['categories'] = []
+        restaurant_data['zip_code'] = restaurant.zipcode
+        for association in restaurant.categories:
+            category_data = {}
+            category_data['id'] = association.category.id
+            category_data['name'] = association.category.name
+            restaurant_data['categories'].append(category_data)
         output.append(restaurant_data)
     return jsonify({'status': "OK", 'list': output, 'total': len(restaurants)})
 
@@ -223,6 +236,7 @@ def get_hotels():
         hotel_data['image'] = hotel.cover_image
         hotel_data['rating'] = hotel.rating
         hotel_data['address'] = [hotel.address1, hotel.address2]
+        hotel_data['zip_code'] = hotel.zipcode
         output.append(hotel_data)
     return jsonify({'status': "OK", 'list': output, 'total': len(hotels)})
 
@@ -303,6 +317,7 @@ def get_attractions():
         attraction_data['image'] = attraction.cover_image
         attraction_data['rating'] = attraction.rating
         attraction_data['address'] = [attraction.address1, attraction.address2]
+        attraction_data['zip_code'] = attraction.zipcode
         output.append(attraction_data)
     return jsonify({'status': "OK", 'list': output, 'total': len(attractions)})
 
