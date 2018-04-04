@@ -83,6 +83,8 @@ def get_restaurants():
     filter_by = request.args.get('filter_by', default=None, type=str)
     rating = request.args.get('rating', default=None, type=str)
     time = request.args.get('time', default=None, type=str)
+    zipcode = request.args.get('zipcode', default=None, type=str)
+    category = request.args.get('category', default=None, type=str)
 
     if(search_type == 'or'):
         query = Restaurant.query.filter_by(id=-1)
@@ -108,6 +110,10 @@ def get_restaurants():
                     if isOpen(restaurant.open_hour, timeList):
                         open_restaurants.append(restaurant)
                 query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
+            if token == 'zipcode' and zipcode is not None:
+                query = query.filter_by(zipcode=zipcode)
+            if token == category and category is not None:
+                pass
     if order_by is None:
         order_by = 'name'
     if order is not None:
