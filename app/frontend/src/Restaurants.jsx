@@ -113,7 +113,12 @@ export default class Restaurants extends Component {
       } 
 
       else if(fil.zipcode != 0) {
-
+        if (changedFilters == true) {
+          count_url += api_url + "/restaurants?filter_by=zipcode&zipcode=" + fil.zipcode;
+          this.request(count_url, this.getCount);
+        }
+        page_url += "&filter_by=zipcode&zipcode=" + fil.zipcode;
+        console.log(page_url);
       } 
 
       else if(fil.open == true) {
