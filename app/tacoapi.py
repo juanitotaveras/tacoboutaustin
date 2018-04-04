@@ -99,10 +99,10 @@ def get_restaurants():
     if search is not None:
         searchTokens = search.split(',')
         for token in searchTokens:
-            if(search_type == 'or'):
-                query = Restaurant.query.filter(or_(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%"), Restaurant.id.in_(restaurant.id for restaurant in query.all()))))
-            else:
+            if(search_type == 'and'):
                 query = query.filter(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%")))
+            else:
+                query = Restaurant.query.filter(or_(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%"), Restaurant.id.in_(restaurant.id for restaurant in query.all()))))
     if filter_by is not None:
         filterTokens = filter_by.split(",")
         for token in filterTokens:
@@ -206,10 +206,10 @@ def get_hotels():
     if search is not None:
         searchTokens = search.split(',')
         for token in searchTokens:
-            if(search_type == 'or'):
-                query = Hotel.query.filter(or_(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%"), Hotel.id.in_(hotel.id for hotel in query.all()))))
-            else:
+            if(search_type == 'and'):
                 query = query.filter(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%")))
+            else:
+                query = Hotel.query.filter(or_(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%"), Hotel.id.in_(hotel.id for hotel in query.all()))))
     if filter_by is not None:
         filterTokens = filter_by.split(",")
         for token in filterTokens:
@@ -288,10 +288,11 @@ def get_attractions():
     if search is not None:
         searchTokens = search.split(',')
         for token in searchTokens:
-            if(search_type == 'or'):
-                query = Attraction.query.filter(or_(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%"), Attraction.id.in_(attraction.id for attraction in query.all()))))
-            else:
+            if(search_type == 'and'):
                 query = query.filter(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%")))
+            else:
+                query = Attraction.query.filter(or_(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%"), Attraction.id.in_(attraction.id for attraction in query.all()))))
+
     if filter_by is not None:
         filterTokens = filter_by.split(",")
         for token in filterTokens:
