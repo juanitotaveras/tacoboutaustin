@@ -19,6 +19,8 @@ import re
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
            "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
 
+noonDict = {"AM": 1, "PM": 2}
+
 def close_places(place_type, number, zip_code):
     places = None
     if place_type == "restaurant":
@@ -44,6 +46,9 @@ def close_places(place_type, number, zip_code):
 
 #time is a tuple w/ day, hour, AM/PM
 def isOpen(hours, time):
+    global dayDict
+    global noonDict
+
     days = hours.split("<br>")
     day = days[dayDict[time[0]]]
     hour = day.split(": ")
@@ -51,11 +56,12 @@ def isOpen(hours, time):
     if(hourList[0] == 'closed'):
         return False
     timeComp = time[1].split(":")
+    timeComp[0] *= noonDict[time[2]]
     hourComp = list(tok.split(":") for tok in (comp[:-2] for comp in hourList))
-    if((int(timeComp[0]) > int(hourComp[0][0]) or (int(timeComp[0]) == int(hourComp[0][0]) and int(timeComp[1]) >= int(hourComp[0][1]))) or time[2] > hourList[0][-2:]):
-        if((int(timeComp[0]) < int(hourComp[1][0]) or (int(timeComp[0]) == int(hourComp[1][0]) and int(timeComp[1]) <= int(hourComp[1][1]))) or time[2] < hourList[1][-2:]):
-            print(timeComp)
-            print(hourComp)
+    hourComp[0][0] *= noonDict[hourList[0][-2:]]
+    hourComp[1][0] *= noonDict[hourList[1][-2:]]
+    if(int(timeComp[0]) > int(hourComp[0][0]) or (int(timeComp[0]) == int(hourComp[0][0]) and int(timeComp[1]) >= int(hourComp[0][1]))):
+        if(int(timeComp[0]) < int(hourComp[1][0]) or (int(timeComp[0]) == int(hourComp[1][0]) and int(timeComp[1]) <= int(hourComp[1][1]))):
             return True
     return False
     
