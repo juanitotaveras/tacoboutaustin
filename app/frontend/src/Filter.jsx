@@ -25,6 +25,12 @@ export default class Filter extends Component {
     ReactDOM.findDOMNode(this.refs.zipFilter).value = "";
     ReactDOM.findDOMNode(this.refs.openFilter).checked = false;
 
+    this.setState({
+      rating: 0,
+      zipcode: 0,
+      open: false
+    });
+
     this.props.handler({
       rating: 0,
       zipcode: 0,
