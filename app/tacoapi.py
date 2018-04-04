@@ -197,12 +197,14 @@ def get_hotels():
             else:
                 query = query.filter(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%")))
     if filter_by is not None:
-        if filter_by == 'rating' and rating is not None:
-            query = query.filter(Hotel.rating >= float(rating))
-        if token == 'zipcode' and zipcode is not None:
-            query = query.filter_by(zipcode=zipcode)
-        if token == category and category is not None:
-            pass
+        filterTokens = filter_by.split(",")
+        for token in filterTokens:
+            if token == 'rating' and rating is not None:
+                query = query.filter(Hotel.rating >= float(rating))
+            if token == 'zipcode' and zipcode is not None:
+                query = query.filter_by(zipcode=zipcode)
+            if token == category and category is not None:
+                pass
     if order_by is None:
         order_by = 'name'
     if order is not None:
@@ -258,6 +260,7 @@ def get_attractions():
     order_by = request.args.get('order_by', default=None, type=str)
     order = request.args.get('order', default=None, type=str)
     search_type = request.args.get('search_type', default=None, type=str)
+    filter_by = request.args.get('filter_by', default=None, type=str)
     rating = request.args.get('rating', default=None, type=str)
     zipcode = request.args.get('zipcode', default=None, type=str)
     category = request.args.get('category', default=None, type=str)
@@ -274,12 +277,14 @@ def get_attractions():
             else:
                 query = query.filter(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%")))
     if filter_by is not None:
-        if filter_by == 'rating' and rating is not None:
-            query = query.filter(Restaurant.rating >= float(rating))
-        if token == 'zipcode' and zipcode is not None:
-            query = query.filter_by(zipcode=zipcode)
-        if token == category and category is not None:
-            pass
+        filterTokens = filter_by.split(",")
+        for token in filterTokens:
+            if token == 'rating' and rating is not None:
+                query = query.filter(Restaurant.rating >= float(rating))
+            if token == 'zipcode' and zipcode is not None:
+                query = query.filter_by(zipcode=zipcode)
+            if token == category and category is not None:
+                pass
     if order_by is None:
         order_by = 'name'
     if order is not None:
