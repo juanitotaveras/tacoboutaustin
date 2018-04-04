@@ -16,8 +16,8 @@ from copy import copy
 from models import Restaurant, Hotel, Images, Review, Attraction
 import re
 
-dayDict = {"Sunday": 0, "Monday": 0, "Tuesday": 0,
-           "Wednesday": 0, "Thursday": 0, "Friday": 0, "Saturday": 0}
+dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
+           "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
 
 def close_places(place_type, number, zip_code):
     places = None
@@ -54,7 +54,9 @@ def isOpen(hours, time):
     hourComp = list(tok.split(":") for tok in (comp[:-2] for comp in hourList))
     if((int(timeComp[0]) > int(hourComp[0][0]) or (int(timeComp[0]) == int(hourComp[0][0]) and int(timeComp[1]) >= int(hourComp[0][1]))) or time[2] > hourList[0][-2:]):
         if((int(timeComp[0]) < int(hourComp[1][0]) or (int(timeComp[0]) == int(hourComp[1][0]) and int(timeComp[1]) <= int(hourComp[1][1]))) or time[2] < hourList[1][-2:]):
-             return True
+            print(timeComp)
+            print(hourComp)
+            return True
     return False
     
     
@@ -79,7 +81,8 @@ def get_restaurants():
     order = request.args.get('order', default=None, type=str)
     search_type = request.args.get('search_type', default=None, type=str)
     filter_by = request.args.get('filter_by', default=None, type=str)
-    filter_param = request.args.get('filter_param', default=None, type=str)
+    rating = request.args.get('rating', default=None, type=str)
+    time = request.args.get('time', default=None, type=str)
 
     if(search_type == 'or'):
         query = Restaurant.query.filter_by(id=-1)
@@ -93,16 +96,18 @@ def get_restaurants():
             else:
                 query = query.filter(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%")))
     if filter_by is not None:
-        if filter_by == 'rating' and filter_param is not None:
-            query = query.filter(Restaurant.rating >= float(filter_param))
-        if filter_by == 'open_hour' and filter_param is not None:
-            restaraunts = query.all()
-            open_restaurants = []
-            for restaurant in restaraunts:
-                time = filter_param.split(",")
-                if isOpen(restaurant.open_hour, time):
-                    open_restaurants.append(restaurant)
-            query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
+        filterTokens = filter_by.split(",")
+        for token in filterTokens:
+            if token == 'rating' and rating is not None:
+                query = query.filter(Restaurant.rating >= float(rating))
+            if token == 'open_hour' and time is not None:
+                restaraunts = query.all()
+                open_restaurants = []
+                for restaurant in restaraunts:
+                    timeList = time.split(",")
+                    if isOpen(restaurant.open_hour, timeList):
+                        open_restaurants.append(restaurant)
+                query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
     if order_by is None:
         order_by = 'name'
     if order is not None:
