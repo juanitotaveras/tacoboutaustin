@@ -7,6 +7,7 @@ export default class Filter extends Component {
   constructor(props) {
     super(props);
     this.gatherFilters = this.gatherFilters.bind(this);
+    this.unapplyFilters = this.unapplyFilters.bind(this);
     this.state = {
       rating: 0,
       zipcode: 0,
@@ -16,6 +17,14 @@ export default class Filter extends Component {
 
   gatherFilters() {
     this.props.handler(this.state);
+  }
+
+  unapplyFilters() {
+    this.props.handler({
+      rating: 0,
+      zipcode: 0,
+      open: false
+    });
   }
 
   handleRatingChange(e) {
@@ -75,7 +84,10 @@ export default class Filter extends Component {
               </Row>
 
               <Row>
-                <Button outline color="primary" onClick={this.gatherFilters}>Apply/Unapply filters</Button>
+                <Button outline color="primary" onClick={this.gatherFilters}>Apply filters</Button>
+              </Row>
+              <Row>
+                <Button outline color="primary" onClick={this.unapplyFilters}>Unapply all filters</Button>
               </Row>
           </Form>
         </Container>
