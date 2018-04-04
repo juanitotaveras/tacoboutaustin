@@ -104,20 +104,20 @@ export default class Restaurants extends Component {
     if (fil != null) {
       if(fil.rating != 0) {
         if (changedFilters == true) {
-          var count_url = api_url + "/restaurants?filter_by=rating&filter_param=" + fil.rating;
+          var count_url = api_url + "/restaurants?filter_by=rating&rating=" + fil.rating;
           this.request(count_url, this.getCount);
         }
-        page_url += "&filter_by=rating&filter_param=" + fil.rating;
+        page_url += "&filter_by=rating&rating=" + fil.rating;
       } else if(fil.zipcode != 0) {
 
       } else if(fil.open == true) {
         var timeString = this.getDateString();
 
         if (changedFilters != null) {
-          var count_url = api_url + "/restaurants?filter_by=open_hour&filter_param=" + timeString;
+          var count_url = api_url + "/restaurants?filter_by=open_hour&time=" + timeString;
           this.request(count_url, this.getCount);
         }
-        page_url += "&filter_by=open_hour&filter_param=" + timeString;
+        page_url += "&filter_by=open_hour&time=" + timeString;
       } 
 
       else if(changedFilters == true) {
