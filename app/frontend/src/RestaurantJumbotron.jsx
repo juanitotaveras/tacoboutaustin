@@ -125,10 +125,6 @@ export default class RestaurantJumbotron extends Component {
         {this.parsed_opening_hours}</p>
         <p><b>Reviews</b><br/>
         <blockquote><q>{reviews}</q></blockquote></p>
-        <p><b>More pictures</b></p>
-        <Row>
-          {more_images}
-        </Row>
         <br/>
         {/*<p className="lead">
           <Button color="primary">Learn More</Button>

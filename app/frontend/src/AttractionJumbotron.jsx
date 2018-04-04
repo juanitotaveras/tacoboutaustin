@@ -109,10 +109,6 @@ export default class AttractionJumbotron extends Component {
         <hr className="my-2" />
         <p><b>Reviews</b><br/>
         <blockquote><q>{all_reviews}</q></blockquote></p>
-        <p><b>More pictures</b></p>
-        <Row>
-          {more_images}
-        </Row>
         <br/>
         {/*<p className="lead">*/}
           {/*<Button color="primary">Learn More</Button>*/}
