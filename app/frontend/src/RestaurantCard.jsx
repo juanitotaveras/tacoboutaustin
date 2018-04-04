@@ -15,7 +15,7 @@ export default class RestaurantCard extends Component {
             <CardTitle>{r.name}</CardTitle>
             <CardSubtitle>{r.food}</CardSubtitle>
             <CardText>Rating: {r.rating}/5</CardText>
-            <Button outline ><Link to={'/restaurants/' + r.id}>Check it out!</Link></Button>
+            <Link to={'/restaurants/' + r.id}><Button outline >Check it out!</Button></Link>
           </CardBody>
         </Card>
       </div>

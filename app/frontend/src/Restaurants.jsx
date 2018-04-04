@@ -149,7 +149,8 @@ export default class Restaurants extends Component {
 
   render() {
     const page_numbers = [];
-    for(var i = 1; i <= (res_count/per_page) + 1; i++)
+    const pages_count = (res_count%per_page) == 0 ? res_count/per_page : res_count/per_page + 1;
+    for(var i = 1; i <= pages_count; i++)
       page_numbers.push(i);
 
     var cards = this.state.restaurants_display.map(function(restaurant) {
