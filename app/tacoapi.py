@@ -19,7 +19,7 @@ import re
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
            "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
 
-noonDict = {"AM": 1, "PM": 2}
+noonDict = {"AM": 0, "PM": 12}
 
 def close_places(place_type, number, zip_code):
     places = None
@@ -41,13 +41,21 @@ def close_places(place_type, number, zip_code):
             place_data['image'] = place.cover_image
             place_data['rating'] = place.rating
             place_data['address'] = [place.address1, place.address2]
+            place_data['zip_code'] = place.zipcode
             places_data.append(place_data)
     return places_data
+
+def toMilitaryTime(n, p):
+    global noonDict
+    if(n != 12):
+        return n + noonDict[p]
+    elif(p == "PM"):
+        return 12
+    return 0
 
 #time is a tuple w/ day, hour, AM/PM
 def isOpen(hours, time):
     global dayDict
-    global noonDict
 
     days = hours.split("<br>")
     day = days[dayDict[time[0]]]
@@ -56,10 +64,10 @@ def isOpen(hours, time):
     if(hourList[0] == 'closed'):
         return False
     timeComp = time[1].split(":")
-    timeComp[0] *= noonDict[time[2]]
+    timeComp[0] = str(toMilitaryTime(int(timeComp[0]), time[2]))
     hourComp = list(tok.split(":") for tok in (comp[:-2] for comp in hourList))
-    hourComp[0][0] *= noonDict[hourList[0][-2:]]
-    hourComp[1][0] *= noonDict[hourList[1][-2:]]
+    hourComp[0][0] = str(toMilitaryTime(int(hourComp[0][0]), hourList[0][-2:]))
+    hourComp[1][0] = str(toMilitaryTime(int(hourComp[1][0]), hourList[1][-2: ]))
     if(int(timeComp[0]) > int(hourComp[0][0]) or (int(timeComp[0]) == int(hourComp[0][0]) and int(timeComp[1]) >= int(hourComp[0][1]))):
         if(int(timeComp[0]) < int(hourComp[1][0]) or (int(timeComp[0]) == int(hourComp[1][0]) and int(timeComp[1]) <= int(hourComp[1][1]))):
             return True
@@ -86,13 +94,12 @@ def get_restaurants():
     order_by = request.args.get('order_by', default=None, type=str)
     order = request.args.get('order', default=None, type=str)
     search_type = request.args.get('search_type', default=None, type=str)
-    filter_by = request.args.get('filter_by', default=None, type=str)
     rating = request.args.get('rating', default=None, type=str)
     time = request.args.get('time', default=None, type=str)
     zipcode = request.args.get('zipcode', default=None, type=str)
     category = request.args.get('category', default=None, type=str)
 
-    if(search_type == 'and'):
+    if(search_type == 'and' or search is None):
         query = Restaurant.query
     else:
         query = Restaurant.query.filter_by(id=-1)
@@ -103,23 +110,20 @@ def get_restaurants():
                 query = query.filter(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%")))
             else:
                 query = Restaurant.query.filter(or_(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%"), Restaurant.id.in_(restaurant.id for restaurant in query.all()))))
-    if filter_by is not None:
-        filterTokens = filter_by.split(",")
-        for token in filterTokens:
-            if token == 'rating' and rating is not None:
-                query = query.filter(Restaurant.rating >= float(rating))
-            if token == 'open_hour' and time is not None:
-                restaraunts = query.all()
-                open_restaurants = []
-                for restaurant in restaraunts:
-                    timeList = time.split(",")
-                    if isOpen(restaurant.open_hour, timeList):
-                        open_restaurants.append(restaurant)
-                query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
-            if token == 'zipcode' and zipcode is not None:
-                query = query.filter_by(zipcode=zipcode)
-            if token == category and category is not None:
-                pass
+    if rating is not None:
+        query = query.filter(Restaurant.rating >= float(rating))
+    if time is not None:
+        restaraunts = query.all()
+        open_restaurants = []
+        for restaurant in restaraunts:
+            timeList = time.split(",")
+            if isOpen(restaurant.open_hour, timeList):
+                open_restaurants.append(restaurant)
+        query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
+    if zipcode is not None:
+        query = query.filter_by(zipcode=zipcode)
+    if category is not None:
+        pass
     if order_by is None:
         order_by = 'name'
     if order is not None:
@@ -193,12 +197,10 @@ def get_hotels():
     order_by = request.args.get('order_by', default=None, type=str)
     order = request.args.get('order', default=None, type=str)
     search_type = request.args.get('search_type', default=None, type=str)
-    filter_by = request.args.get('filter_by', default=None, type=str)
     rating = request.args.get('rating', default=None, type=str)
     zipcode = request.args.get('zipcode', default=None, type=str)
-    category = request.args.get('category', default=None, type=str)
 
-    if(search_type == 'and'):
+    if(search_type == 'and' or search is None):
         query = Hotel.query
     else:
         query = Hotel.query.filter_by(id=-1)
@@ -210,15 +212,10 @@ def get_hotels():
                 query = query.filter(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%")))
             else:
                 query = Hotel.query.filter(or_(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%"), Hotel.id.in_(hotel.id for hotel in query.all()))))
-    if filter_by is not None:
-        filterTokens = filter_by.split(",")
-        for token in filterTokens:
-            if token == 'rating' and rating is not None:
-                query = query.filter(Hotel.rating >= float(rating))
-            if token == 'zipcode' and zipcode is not None:
-                query = query.filter_by(zipcode=zipcode)
-            if token == category and category is not None:
-                pass
+    if rating is not None:
+        query = query.filter(Hotel.rating >= float(rating))
+    if zipcode is not None:
+        query = query.filter_by(zipcode=zipcode)
     if order_by is None:
         order_by = 'name'
     if order is not None:
@@ -275,12 +272,10 @@ def get_attractions():
     order_by = request.args.get('order_by', default=None, type=str)
     order = request.args.get('order', default=None, type=str)
     search_type = request.args.get('search_type', default=None, type=str)
-    filter_by = request.args.get('filter_by', default=None, type=str)
     rating = request.args.get('rating', default=None, type=str)
     zipcode = request.args.get('zipcode', default=None, type=str)
-    category = request.args.get('category', default=None, type=str)
 
-    if(search_type == 'and'):
+    if(search_type == 'and' or search is None):
         query = Attraction.query
     else:
         query = Attraction.query.filter_by(id=-1)
@@ -293,15 +288,10 @@ def get_attractions():
             else:
                 query = Attraction.query.filter(or_(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%"), Attraction.id.in_(attraction.id for attraction in query.all()))))
 
-    if filter_by is not None:
-        filterTokens = filter_by.split(",")
-        for token in filterTokens:
-            if token == 'rating' and rating is not None:
-                query = query.filter(Restaurant.rating >= float(rating))
-            if token == 'zipcode' and zipcode is not None:
-                query = query.filter_by(zipcode=zipcode)
-            if token == category and category is not None:
-                pass
+    if rating is not None:
+        query = query.filter(Restaurant.rating >= float(rating))
+    if zipcode is not None:
+        query = query.filter_by(zipcode=zipcode)
     if order_by is None:
         order_by = 'name'
     if order is not None:
