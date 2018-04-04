@@ -8,22 +8,22 @@
 # app/backend/scraper/init_data.py
 # --------------------------------------
 
-from helper_methods import *
-from hotel_scraper import *
-from restaurant_scraper import *
-from attraction_scraper import *
-from fix_data import *
+from hotel_scraper import scrap_hotels
+from restaurant_scraper import scrap_restaurants
+from attraction_scraper import scrap_attractions
+from fix_data import fix_sixth_street, fix_zip_code, fix_hotels, fix_attractions
+from helper_methods import db
 
 def init_db():
     db.drop_all()
     db.create_all()
-    print("Getting hotels data.")
-    scrap_hotels()
-    db.session.commit()
-    print("Hotels: done. Getting restaurants data.")
+    print("Getting restaurants data.")
     scrap_restaurants()
     db.session.commit()
-    print("Restaurants: done. Getting attractions data.")
+    print("Restaurants: done. Getting hotels data.")
+    scrap_hotels()
+    db.session.commit()
+    print("Hotels: done. Getting attractions data.")
     scrap_attractions()
     db.session.commit()
     print("Attractions: done. Start fixing data")
