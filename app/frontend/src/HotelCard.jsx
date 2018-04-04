@@ -17,7 +17,7 @@ export default class HotelCard extends Component {
 {/*            <CardSubtitle>{h.address[0]} {h.address[1]}</CardSubtitle>*/}       
             <CardSubtitle></CardSubtitle>     
             <CardText>Rating: {h.rating}/5</CardText>
-            <Button outline ><Link to={'/hotels/' + h.id}>Check it out!</Link></Button>
+            <Link to={'/hotels/' + h.id}><Button outline >Check it out!</Button></Link>
           </CardBody>
         </Card>
       </div>
