@@ -10,6 +10,7 @@ import { api_url } from './config';
 
 var res_count = 0;
 var per_page = 12;
+var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export class Restaurant {
   constructor(address, id, image, name, rating) {
@@ -70,6 +71,21 @@ export default class Restaurants extends Component {
       xmlHttp.send(null);
   }
 
+  getDateString() {
+    var d = new Date();
+    var hour = d.getHours();
+    var day = d.getDay(); 
+    var timeString = days[day] + ",";
+    if(hour / 12 >= 1) {
+      timeString += hour == 12 ? 12 : hour % 12;
+      timeString += ":00,PM";
+    } else {
+      timeString += hour + ":00,AM";
+    }
+
+    return timeString;
+  }
+
   getPage(pageNum, sortParam, fil, changedFilters) {
     var page_url = api_url + "/restaurants?page=";
 
@@ -95,18 +111,21 @@ export default class Restaurants extends Component {
       } else if(fil.zipcode != 0) {
 
       } else if(fil.open == true) {
+        var timeString = this.getDateString();
+
         if (changedFilters != null) {
-          // var d = new Date();
-          // console.log("time: " + d.getHours());
+          var count_url = api_url + "/restaurants?filter_by=open_hour&filter_param=" + timeString;
+          this.request(count_url, this.getCount);
         }
-      } else if(changedFilters == true) {
+        page_url += "&filter_by=open_hour&filter_param=" + timeString;
+      } 
+
+      else if(changedFilters == true) {
           // Unapply all filters
           var count_url = api_url + "/restaurants";
           this.request(count_url, this.getCount);
       }
     }
-
-    
 
     this.request(page_url, this.fillInRestaurants);
     this.setState({
