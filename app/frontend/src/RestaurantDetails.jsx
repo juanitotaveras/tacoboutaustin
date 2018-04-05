@@ -86,9 +86,6 @@ export default class RestaurantDetails extends Component {
 				{
 					redirect == false &&
 					<div><Row>
-						<Col sm="12">
-						<h1>Restaurant Details</h1>
-						</Col>
 						<Col>
 	                		<RestaurantJumbotron
 	                		name={r_details.name}
