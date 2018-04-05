@@ -289,7 +289,7 @@ def get_attractions():
                 query = Attraction.query.filter(or_(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%"), Attraction.id.in_(attraction.id for attraction in query.all()))))
 
     if rating is not None:
-        query = query.filter(Restaurant.rating >= float(rating))
+        query = query.filter(Attraction.rating >= float(rating))
     if zipcode is not None:
         query = query.filter_by(zipcode=zipcode)
     if order_by is None:
