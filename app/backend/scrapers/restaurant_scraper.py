@@ -23,7 +23,6 @@ def scrap_restaurants():
 	response = requests.get(AUSTIN_EATING, headers = sygic_headers)
 	restaurants = response.json()['data']['places']
 
-	id = 0
 	default_image_api = "http://images.huffingtonpost.com/2013-06-18-untitled48.jpg"
 	for restaurant in filter(is_restaurant, restaurants):
 		name = restaurant['name']
@@ -31,14 +30,11 @@ def scrap_restaurants():
 		detail, review = scrap_yelp_data(name, lon, lat)
 		rating = 0.0
 		number = ""
-		image = ['', '', '']
 		address = ['', '']
 
 		if not detail is None and 'hours' in detail:
 			rating = detail['rating']
 			number = detail['display_phone']
-			for x in range(0, len(detail['photos'])):
-				image[x] = detail['photos'][x]
 			if len(detail['location']['display_address']) == 3:
 				address[0]  =  detail['location']['display_address'][0] + ", " + detail['location']['display_address'][1]
 				address[1] = detail['location']['display_address'][2]
@@ -46,11 +42,13 @@ def scrap_restaurants():
 				address[0] = detail['location']['display_address'][0]
 				address[1] = detail['location']['display_address'][1]
 
-			new_restaurant = Restaurant(id, detail['name'], restaurant['location']['lng'], restaurant['location']['lat'], rating, convert_hour(detail['hours'][0]['open']), number)
-			new_restaurant.addImage(image)
+			new_restaurant = Restaurant(detail['name'], restaurant['location']['lng'], restaurant['location']['lat'], rating, number)
+			for x in range(0, len(detail['photos'])):
+				new_restaurant.addImage(detail['photos'][x])
+			new_restaurant.addCover(detail['photos'][0])
+			
+			new_restaurant.addHour(convert_hour(detail['hours'][0]['open']))
 			new_restaurant.addAddress(address, int(detail['location']['zip_code']))
-			#print(detail['name'])
-			#print(detail['hours'][0]['open'])
 
 			for category in detail['categories']:
 				a = Association()
@@ -61,7 +59,6 @@ def scrap_restaurants():
 					new_restaurant.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
 			db.session.add(new_restaurant)
 			db.session.commit()
-			id+=1
 	db.session.commit()
 
 if __name__ == '__main__':
@@ -70,7 +67,3 @@ if __name__ == '__main__':
 	print("start")
 	db.session.commit()
 	scrap_restaurants()
-	"""restaurants = Restaurant.query.all()
-	for restaurant in restaurants:
-		for assoc in restaurant.categories:
-			print(assoc.category)"""

@@ -13,7 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, or_
 from main import app
 from copy import copy
-from models import Restaurant, Hotel, Images, Review, Attraction, Category
+from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category
 import re
 
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
@@ -36,7 +36,12 @@ def close_places(place_type, number, zip_code):
     if places is not None:
         for place in places:
             place_data = {}
-            place_data['id'] = place.id
+            if place_type == "restaurant":
+                place_data['id'] = place.restaurant_id
+            if place_type == "hotel":
+                place_data['id'] = place.hotel_id
+            if place_type == "attraction":
+                place_data['id'] = place.attraction_id
             place_data['name'] = place.name
             place_data['image'] = place.cover_image
             place_data['rating'] = place.rating
@@ -140,7 +145,7 @@ def get_restaurants():
     output = []
     for restaurant in restaurants:
         restaurant_data = {}
-        restaurant_data['id'] = restaurant.id
+        restaurant_data['id'] = restaurant.restaurant_id
         restaurant_data['name'] = restaurant.name
         restaurant_data['image'] = restaurant.cover_image
         restaurant_data['rating'] = restaurant.rating
@@ -158,17 +163,15 @@ def get_restaurants():
 
 @app.route('/restaurants/<id>')
 def get_restaurant(id):
-    restaurant = Restaurant.query.filter_by(id=id).first()
+    restaurant = Restaurant.query.filter_by(restaurant_id=id).first()
     if (restaurant == None):
         response = jsonify({'status': "INVALID_ID"})
         response.status_code = 404
         return response
 
     restaurant_data = {}
-    restaurant_data['id'] = restaurant.id
+    restaurant_data['id'] = restaurant.restaurant_id
     restaurant_data['name'] = restaurant.name
-    restaurant_data['images'] = [restaurant.images.image1,
-                                 restaurant.images.image2, restaurant.images.image3]
     restaurant_data['phone'] = restaurant.phone
     restaurant_data['hours'] = restaurant.open_hour
     restaurant_data['location'] = {
@@ -178,7 +181,12 @@ def get_restaurant(id):
     restaurant_data['reviews'] = [{'text': restaurant.reviews[0].text, 'link': restaurant.reviews[0].link}, {
         'text': restaurant.reviews[1].text, 'link': restaurant.reviews[1].link}, {
         'text': restaurant.reviews[2].text, 'link': restaurant.reviews[2].link}]
-        
+
+    image_data = []
+    for image in restaurant.images:
+        image_data += [image.image_url]
+    restaurant_data['images'] = image_data
+ 
     restaurant_data['categories'] = []
     for association in restaurant.categories:
         category_data = {}
@@ -231,7 +239,7 @@ def get_hotels():
     output = []
     for hotel in hotels:
         hotel_data = {}
-        hotel_data['id'] = hotel.id
+        hotel_data['id'] = hotel.hotel_id
         hotel_data['name'] = hotel.name
         hotel_data['image'] = hotel.cover_image
         hotel_data['rating'] = hotel.rating
@@ -243,16 +251,15 @@ def get_hotels():
 
 @app.route('/hotels/<id>')
 def get_hotel(id):
-    hotel = Hotel.query.filter_by(id=id).first()
+    hotel = Hotel.query.filter_by(hotel_id=id).first()
     if (hotel == None):
         response = jsonify({'status': "INVALID_ID"})
         response.status_code = 404
         return response
 
     hotel_data = {}
-    hotel_data['id'] = hotel.id
+    hotel_data['id'] = hotel.hotel_id
     hotel_data['name'] = hotel.name
-    hotel_data['images'] = [hotel.images.image1, hotel.images.image2, hotel.images.image3]
     hotel_data['phone'] = hotel.phone
     hotel_data['location'] = {'lat': hotel.latitude, 'long': hotel.longtitude}
     hotel_data['rating'] = hotel.rating
@@ -260,6 +267,10 @@ def get_hotel(id):
     hotel_data['reviews'] = [{'text': hotel.reviews[0].text, 'link': hotel.reviews[0].link}, {
         'text': hotel.reviews[1].text, 'link': hotel.reviews[1].link}, {
         'text': hotel.reviews[2].text, 'link': hotel.reviews[2].link}]
+    image_data = []
+    for image in hotel.images:
+        image_data += [image.image_url]
+    hotel_data['images'] = image_data
 
     restaurants = close_places("restaurant", 2, hotel.zipcode)
     attractions = close_places("attraction", 2, hotel.zipcode)
@@ -307,7 +318,7 @@ def get_attractions():
     output = []
     for attraction in attractions:
         attraction_data = {}
-        attraction_data['id'] = attraction.id
+        attraction_data['id'] = attraction.attraction_id
         attraction_data['name'] = attraction.name
         attraction_data['image'] = attraction.cover_image
         attraction_data['rating'] = attraction.rating
@@ -319,17 +330,15 @@ def get_attractions():
 
 @app.route('/attractions/<id>')
 def get_attraction(id):
-    attraction = Attraction.query.filter_by(id=id).first()
+    attraction = Attraction.query.filter_by(attraction_id=id).first()
     if (attraction == None):
         response = jsonify({'status': "INVALID_ID"})
         response.status_code = 404
         return response
 
     attraction_data = {}
-    attraction_data['id'] = attraction.id
+    attraction_data['id'] = attraction.attraction_id
     attraction_data['name'] = attraction.name
-    attraction_data['images'] = [attraction.images.image1,
-                                 attraction.images.image2, attraction.images.image3]
     attraction_data['phone'] = attraction.phone
     attraction_data['location'] = {
         'lat': attraction.latitude, 'long': attraction.longtitude}
@@ -338,6 +347,10 @@ def get_attraction(id):
     attraction_data['reviews'] = [{'text': attraction.reviews[0].text, 'link': attraction.reviews[0].link}, {
         'text': attraction.reviews[1].text, 'link': attraction.reviews[1].link}, {
         'text': attraction.reviews[2].text, 'link': attraction.reviews[2].link}]
+    image_data = []
+    for image in attraction.images:
+        image_data += [image.image_url]
+    attraction_data['images'] = image_data
 
     restaurants = close_places("restaurant", 2, attraction.zipcode)
     hotels = close_places("hotel", 2, attraction.zipcode)

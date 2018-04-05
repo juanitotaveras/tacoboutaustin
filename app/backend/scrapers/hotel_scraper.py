@@ -17,7 +17,6 @@ AUSTIN_HOTEL = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:3
 def scrap_hotels():
 	response = requests.get(AUSTIN_HOTEL, headers = sygic_headers)
 	hotels = response.json()['data']['places']
-	id = 0
 
 	default_image_url = "http://www.jetsetz.com/uploads/profiles/best-luxury-hotels-in-austin-texas-jetsetz.jpg"
 	for hotel in hotels:
@@ -26,14 +25,11 @@ def scrap_hotels():
 		detail, review = scrap_yelp_data(name, lon, lat)
 		rating = 0.0
 		number = ""
-		image = ['', '', '']
 		address = ['', '']
 
 		if not detail is None:
 			rating = detail['rating']
 			number = detail['display_phone']
-			for x in range(0, len(detail['photos'])):
-				image[x] = detail['photos'][x]
 			#print(len(detail['location']['display_address']))
 			if len(detail['location']['display_address']) == 3:
 				address[0]  =  detail['location']['display_address'][0] + ", " + detail['location']['display_address'][1]
@@ -43,18 +39,17 @@ def scrap_hotels():
 				address[1] = detail['location']['display_address'][1]
 
 
-			new_hotel = Hotel(id, detail['name'], hotel['location']['lng'],hotel['location']['lat'], rating, number)
-			new_hotel.addImage(image)
-			#print(detail)
+			new_hotel = Hotel(detail['name'], hotel['location']['lng'],hotel['location']['lat'], rating, number)
+			for x in range(0, len(detail['photos'])):
+				new_hotel.addImage(detail['photos'][x])
+			addCover(detail['photos'][0])
 			new_hotel.addAddress(address, int(detail['location']['zip_code']))
 
 			if not review is None:
 				for x in range(0, min(3, review['total'])):
 					new_hotel.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
 			db.session.add(new_hotel)
-			id+=1
-		
-		
+			db.session.commit()
 	db.session.commit()
 
 if __name__ == '__main__':

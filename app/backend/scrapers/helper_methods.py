@@ -16,7 +16,7 @@ PARENT_DIR = os.path.dirname(CURRENT_DIR)  # get parent directory path
 BASE_DIR = os.path.dirname(PARENT_DIR)  # get grand parent directory path
 sys.path.append(BASE_DIR)
 from main import app, db
-from models import Restaurant, Hotel, Images, Review, Attraction, Category, Association
+from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Association
 #from sqlalchemy import func
 import pprint
 

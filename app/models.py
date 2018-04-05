@@ -13,48 +13,29 @@ from sqlalchemy.orm import relationship
 from flask import jsonify
 from main import app, db
 
-imageID = 0
-class Images(db.Model):
+
+class Image(db.Model):
     __tablename__ = "images"
     id = db.Column(db.Integer, primary_key=True)
-    image1 = db.Column(db.String(200))
-    image2 = db.Column(db.String(200))
-    image3 = db.Column(db.String(200))
-    hotel_id = db.Column(db.Integer, db.ForeignKey('hotel.id'), nullable=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=True)
-    attraction_id = db.Column(db.Integer, db.ForeignKey('attraction.id'), nullable=True)
+    image_url = db.Column(db.String(200))
 
-    hotel = db.relationship('Hotel', backref=db.backref('images',lazy=True, uselist=False))
-    restaurant = db.relationship('Restaurant', backref=db.backref('images',lazy=True, uselist=False))
-    attraction = db.relationship('Attraction', backref=db.backref('images',lazy=True, uselist=False))
+    place_id = db.Column(db.Integer, db.ForeignKey('place.id'), nullable=True)
+    place = db.relationship('Place', backref=db.backref('images',lazy=True))
+
+    def __init__(self, image):
+        self.image_url = image
 
 
-    def __init__(self, images):
-        global imageID
-        self.id = imageID
-        imageID += 1
-        self.image1 = images[0]
-        self.image2 = images[1]
-        self.image3 = images[2]
-
-reviewID = 0
 class Review(db.Model):
     __tablename__ = "review"
     id = db.Column(db.Integer, primary_key=True)
     link = db.Column(db.String(200))
     text = db.Column(db.String(200))
-    place_id = db.Column(db.Integer, db.ForeignKey('hotel.id'), nullable=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=True)
-    attraction_id = db.Column(db.Integer, db.ForeignKey('attraction.id'), nullable=True)
 
-    hotel = db.relationship('Hotel', backref=db.backref('reviews',lazy=True))
-    restaurant = db.relationship('Restaurant', backref=db.backref('reviews',lazy=True))
-    attraction = db.relationship('Attraction', backref=db.backref('reviews',lazy=True))
+    place_id = db.Column(db.Integer, db.ForeignKey('place.id'), nullable=True)
+    place = db.relationship('Place', backref=db.backref('reviews',lazy=True))
 
     def __init__(self, ReviewText, ReviewLink):
-        global reviewID
-        self.id = reviewID
-        reviewID += 1
         self.text = ReviewText
         self.link = ReviewLink
 
@@ -82,12 +63,12 @@ class Category(db.Model):
             return db.session.query(Category).filter_by(id=id).first()
         return self(id, name)
         
-
-class Hotel (db.Model):
-    __tablename__ = "hotel"
+class Place(db.Model):
+    __tablename__ = "place"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
+    type = db.Column(db.String(20))
 
     cover_image = db.Column(db.String(200))
     longtitude = db.Column(db.Float)
@@ -96,10 +77,9 @@ class Hotel (db.Model):
     address1 = db.Column(db.String(100))
     address2 = db.Column(db.String(100))
     phone = db.Column(db.String(20))
-    zipcode = db.Column(db.Integer)
 
-    def __init__(self, id, name, longtitude, latitude, rating, phone):
-        self.id = id
+    zipcode = db.Column(db.Integer)
+    def __init__(self, name, longtitude, latitude, rating, phone):
         self.name = name
         self.longtitude = longtitude
         self.latitude = latitude
@@ -110,94 +90,50 @@ class Hotel (db.Model):
         new_review = Review(text, link)
         self.reviews.append(new_review)
     
-    def addImage(self, images):
-        self.cover_image = images[0]
-        new_images = Images(images)
-        self.images = new_images
+    def addImage(self, image):
+        new_images = Image(image)
+        self.images.append(new_images)
     
+    def addCover(self, cover):
+        self.cover_image = cover
+
     def addAddress(self, address, zipcode):
         self.address1 = address[0]
         self.address2 = address[1]
         self.zipcode = zipcode
 
-class Restaurant (db.Model):
-    __tablename__ = "restaurant"
+    __mapper_args__ = {
+        'polymorphic_identity':'place',
+        'polymorphic_on':type
+    }
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
+class Hotel (Place):
+    __tablename__ = "hotel"
+    id = db.Column(db.Integer, ForeignKey('place.id'))
+    hotel_id = db.Column(db.Integer, primary_key=True)
+    __mapper_args__ = {
+        'polymorphic_identity':'hotel',
+    }
 
-    cover_image = db.Column(db.String(200))
+class Attraction (Place):
+    __tablename__ = "attraction"
+    id = db.Column(db.Integer, ForeignKey('place.id'))
+    attraction_id = db.Column(db.Integer, primary_key=True)    
+    __mapper_args__ = {
+        'polymorphic_identity':'attraction',
+    }
 
-    latitude = db.Column(db.Float)
-    longtitude = db.Column(db.Float)
-    rating = db.Column(db.Float)
-    address1 = db.Column(db.String(100))
-    address2 = db.Column(db.String(100))
+class Restaurant (Place):
+    __tablename__ = "restaurant" 
+    id = db.Column(db.Integer, ForeignKey('place.id'))
+    restaurant_id = db.Column(db.Integer, primary_key=True)
     open_hour = db.Column(db.String(200))
-    phone = db.Column(db.String(20))
-    zipcode = db.Column(db.Integer)
     categories = relationship("Association", back_populates="restaurant")
 
-    def __init__(self, id, name, longtitude, latitude, rating, open_hour, phone):
-        self.id = id
-        self.name = name
-        self.longtitude = longtitude
-        self.latitude = latitude
-        self.rating = rating
-        self.open_hour = open_hour
-        self.phone = phone
+    def addHour(self, hour):
+        open_hour = hour
 
-    def addReview(self, text, link):
-        new_review = Review(text, link)
-        self.reviews.append(new_review)
-
-    def addImage(self, images):
-        self.cover_image = images[0]
-        new_images = Images(images)
-        self.images = new_images
-    
-    def addAddress(self, address, zipcode):
-        self.address1 = address[0]
-        self.address2 = address[1]
-        self.zipcode = zipcode
-
-class Attraction (db.Model):
-    __tablename__ = "attraction"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    
-
-    cover_image = db.Column(db.String(200))
-    longtitude = db.Column(db.Float)
-    latitude = db.Column(db.Float)
-    rating = db.Column(db.Float)
-    address1 = db.Column(db.String(100))
-    address2 = db.Column(db.String(100))
-    phone = db.Column(db.String(20))
-    zipcode = db.Column(db.Integer)
-
-    def __init__(self, id, name, longtitude, latitude, rating, phone):
-        self.id = id
-        self.name = name
-        self.longtitude = longtitude
-        self.latitude = latitude
-        self.rating = rating
-        self.phone = phone
-
-    def addReview(self, text, link):
-        new_review = Review(text, link)
-        self.reviews.append(new_review)
-
-    def addImage(self, images):
-        self.cover_image = images[0]
-        new_images = Images(images)
-        self.images = new_images
-
-    def addAddress(self, address, zipcode):
-        self.address1 = address[0]
-        self.address2 = address[1]
-        self.zipcode = zipcode
-
-
+    __mapper_args__ = {
+        'polymorphic_identity':'restaurant',
+    }
     
