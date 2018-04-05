@@ -270,9 +270,9 @@ export default class Search extends Component {
 		return(
 			<div>
 			<Container>
-			<Row>	
-			<h1>Search</h1>
-			</Row>
+				<Row>	
+					<Col xs="5"/><Col xs="2"><h1>Search Austin</h1></Col><Col xs="5"/>
+				</Row>
 			{searchBox}
 			{
 				restaurants.length > 0 &&
