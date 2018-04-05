@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, InputGroup, Button, Container, Row, Jumbotron, Col, Pagination, PaginationItem, 
-	PaginationLink  } from 'reactstrap';
+	PaginationLink, Form, FormGroup, Label  } from 'reactstrap';
 	import {Restaurant} from './Restaurants';
 // import Restaurants from './Restaurants';
 import RestaurantSearchCard from './RestaurantSearchCard';
@@ -19,6 +19,7 @@ let per_page = 24;
 let per_category = per_page/3;
 
 var searchTerms = [];
+var matchAllTerms = false;
 
 export default class Search extends Component {
 
@@ -108,13 +109,16 @@ export default class Search extends Component {
 			// add an ' to any terms that end in s
 		searchTerms = searchInput.split(" ")
 
-		var extraTerms = [];
-		for (let term of searchTerms) 
-			if (term.substr(-1) == 's' && term.length > 2) 
-				extraTerms.push(term.substring(0, term.length-1) + "'s");
+		// TODO: If user doesn't enter an apostrophe where they should,
+		// the result will not appear.
+
+		// var extraTerms = [];
+		// for (let term of searchTerms) 
+		// 	if (term.substr(-1) == 's' && term.length > 2) 
+		// 		extraTerms.push(term.substring(0, term.length-1) + "'s");
 		
-		for (let extra of extraTerms) 
-			searchTerms.push(extra);
+		// for (let extra of extraTerms) 
+		// 	searchTerms.push(extra);
 
 		var searchRequestText = ""
 		for (var i = 0; i < searchTerms.length; ++i) {
@@ -141,7 +145,10 @@ export default class Search extends Component {
 
 		let searchRequestText = this.createSearchString(this.state.value);
 
-		let searchText = "?search=" + searchRequestText;
+		var searchText = "?search=" + searchRequestText;
+
+		if (matchAllTerms) 
+			searchText += "&search_type=and"
 
 		console.log("SEARCHTEXT" + searchText);
 
@@ -151,6 +158,11 @@ export default class Search extends Component {
 		this.request(urls[2], this.fillInAttractions);
 
 		this.showSearchItems(0);
+	}
+
+	handleSeachInclusive() {
+		if (!matchAllTerms) matchAllTerms = true;
+		else matchAllTerms = false;
 	}
 
 	componentDidMount() {
@@ -169,10 +181,18 @@ export default class Search extends Component {
 			<Row>
 			<InputGroup>
 			{/* <i class="fas fa-search" style={styles}></i>*/}
-			<Input type="text" onChange={this.onChange} value={this.state.value} onKeyPress={this.enterPressed.bind(this)}
+			<Input className="biggerText" type="text" onChange={this.onChange} value={this.state.value} onKeyPress={this.enterPressed.bind(this)}
 			placeholder="Search something..." />
-			<Button color="secondary" onClick={this.onSearch}>Search!</Button>
+			<Button color="secondary" style={{fontSize: '1.5em'}}onClick={this.onSearch}>Search!</Button>
 			</InputGroup>
+			<br/>
+			 <Row>
+                <FormGroup check inline style={{marginLeft: '20px', marginTop: '10px'}}>
+                  <Label check className="mediumText">
+                    <Input type="checkbox"  onChange={e => this.handleSeachInclusive()}/>Only show results that match all search terms
+                  </Label>
+                </FormGroup>
+              </Row>
 			</Row>;
 		const noResultsComponent = 
 			<div>
@@ -187,7 +207,7 @@ export default class Search extends Component {
 	for(var i = 0; i <= (largestArrayLength/per_page) ; i++)
 		page_numbers.push(i);
 
-	console.log("PAGE COUNT: " + page_numbers.length + " RESPONSES: " + largestArrayLength);
+	// console.log("PAGE COUNT: " + page_numbers.length + " RESPONSES: " + largestArrayLength);
 	var restaurantCards = this.state.displayedRestaurants.map(function(restaurant) {
 		return <Col xs="12" sm="6" md="6" lg="3"><RestaurantSearchCard restaurant={restaurant} searchTerms={searchTerms}/></Col>;
 	});
@@ -280,10 +300,10 @@ export default class Search extends Component {
 	} else {
 		return(							<div>
 			<Container>
-			<Row>	
-			<h1>Search</h1>
-			</Row>
-			{searchBox}
+				<Row>	
+					<Col xs="5"/><Col xs="2"><h1>Search Austin</h1></Col><Col xs="5"/>
+				</Row>
+				{searchBox}
 			</Container>
 			</div>
 			);
