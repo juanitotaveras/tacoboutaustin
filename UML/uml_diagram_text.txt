@@ -1,4 +1,20 @@
 @startuml
+
+Hotel "1" -o "*" Restaurant
+Hotel "1" -o "*" Attraction
+Hotel "1" --* "1" Images : images
+Hotel "1" --* "1" Review : reviews
+
+Restaurant "1" -o "*" Hotel
+Restaurant "1" -o "*" Attraction
+Restaurant "1" --* "1" Images : images
+Restaurant "1" --* "1" Review : reviews
+
+Attraction "1" -o "*" Restaurant
+Attraction "1" -o "*" Hotel
+Attraction "1" --* "1" Images : images
+Attraction "1" --* "1" Review : reviews
+
 class Hotel {
   {field}id : Integer
   {field}name : String(80)
@@ -28,6 +44,7 @@ class Restaurant {
   {field}open_hour : String(200)
   {field}phone : String(20)
   {field}zipcode : Integer
+  {field}zipcode : Categories
 
   addReview(text: String, link: String, index: Integer)
   addImage(images: [Image])
