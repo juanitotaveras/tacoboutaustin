@@ -91,9 +91,6 @@ export default class AttractionsDetails extends Component {
         {
           redirect == false &&
           <div><Row>
-            <Col sm="12">
-            <h1>Attraction Details</h1>
-            </Col>
             <Col>
               <AttractionJumbotron
               name={a_details.name}
