@@ -101,73 +101,27 @@
 			"response": []
 		},
 		{
-			"name": "attractions",
+			"name": "restaraunt pagination & filter",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "7d97a549-1bc4-47be-8349-9d5d09fcde77",
+						"id": "04b4a178-9d0e-4ff8-923f-889244baedb1",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
 							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
 							"",
 							"var resp = JSON.parse(responseBody);",
-							"var schema = {",
-							"    \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
-							"    \"type\": \"object\",",
-							"    \"properties\": {",
-							"        \"list\": {",
-							"            \"type\": \"array\",",
-							"            \"items\" : {",
-							"                \"type\": \"object\",",
-							"                \"properties\" : {",
-							"                    \"address\": {",
-							"                        \"type\": \"array\",",
-							"                        \"properties\": {",
-							"                            \"type\": \"string\"",
-							"                        }",
-							"                    },",
-							"                    \"id\": {",
-							"                        \"type\": \"integer\"",
-							"                    },",
-							"                    \"image\": {",
-							"                        \"type\": \"string\"",
-							"                    },",
-							"                    \"name\": {",
-							"                        \"type\": \"string\"",
-							"                    },",
-							"                    \"rating\": {",
-							"                        \"type\": \"number\"",
-							"                    }",
-							"                },",
-							"                \"additionalProperties\": false,",
-							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
-							"            }",
-							"        }",
-							"    }",
-							"}",
 							"",
-							"var last_id = -1;",
-							"var uniqueID = true;",
-							"var validRatings = true;",
-							"var validImages = true;",
-							"var validAddress = true;",
-							"var validNames = true;",
+							"tests[\"return 12 items\"] = resp.total <= 12",
+							"",
+							"var matchesFilter = true;",
 							"for(let item of resp.list){",
-							"    uniqueID = item.id > last_id && uniqueID;",
-							"    last_id = item.id;",
-							"    validRatings = (item.rating > 0 && item.rating % 0.5 === 0) && validRatings;",
-							"    validImages = item.image !== \"\" && validImages;",
-							"    validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
-							"    validNames = (item.name !== \"\") && validNames;",
+							"    matchesFilter = item.rating >= 4 && item.zipcode == 78704 && matchesFilter",
 							"}",
 							"",
-							"tests[\"ID's are unique\"] = uniqueID;",
-							"tests[\"Ratings are valid\"] = validRatings;",
-							"tests[\"All instances have frontpage images\"] = validImages;",
-							"tests[\"Addresses are not NULL\"] = validAddress;",
-							"tests[\"Names are not NULL\"] = validNames;"
+							"tests[\"Response matches filter\"] = matchesFilter"
 						]
 					}
 				}
@@ -177,7 +131,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://api.tacoboutaustin.me/attractions",
+					"raw": "http://api.tacoboutaustin.me/restaurants?page=1&rating=4&zipcode=78704",
 					"protocol": "http",
 					"host": [
 						"api",
@@ -185,7 +139,131 @@
 						"me"
 					],
 					"path": [
-						"attractions"
+						"restaurants"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "rating",
+							"value": "4",
+							"equals": true
+						},
+						{
+							"key": "zipcode",
+							"value": "78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "restaraunt search or",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23a7c991-786a-42fb-8dca-42405909d167",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") || item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/restaurants?search=taco,78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"restaurants"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "taco,78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "restaraunt search and",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "69ba4ad2-056c-4196-ad82-d0c83814d9c9",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") && item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/restaurants?search=taco,78704&search_type=and",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"restaurants"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "taco,78704",
+							"equals": true
+						},
+						{
+							"key": "search_type",
+							"value": "and",
+							"equals": true
+						}
 					]
 				},
 				"description": ""
@@ -280,6 +358,438 @@
 					],
 					"path": [
 						"hotels"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "hotel pagination & filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "04b4a178-9d0e-4ff8-923f-889244baedb1",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"tests[\"return 12 items\"] = resp.total <= 12",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = item.rating >= 4 && item.zipcode == 78704 && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/hotels?page=1&rating=4&zipcode=78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"hotels"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "rating",
+							"value": "4",
+							"equals": true
+						},
+						{
+							"key": "zipcode",
+							"value": "78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "hotel search or",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23a7c991-786a-42fb-8dca-42405909d167",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") || item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/hotels?search=driskill,78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"hotels"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "driskill,78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "hotels search and",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "69ba4ad2-056c-4196-ad82-d0c83814d9c9",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") && item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/hotels?search=driskill,78704&search_type=and",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"hotels"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "driskill,78704",
+							"equals": true
+						},
+						{
+							"key": "search_type",
+							"value": "and",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attractions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7d97a549-1bc4-47be-8349-9d5d09fcde77",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"var schema = {",
+							"    \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"list\": {",
+							"            \"type\": \"array\",",
+							"            \"items\" : {",
+							"                \"type\": \"object\",",
+							"                \"properties\" : {",
+							"                    \"address\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"string\"",
+							"                        }",
+							"                    },",
+							"                    \"id\": {",
+							"                        \"type\": \"integer\"",
+							"                    },",
+							"                    \"image\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"name\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"rating\": {",
+							"                        \"type\": \"number\"",
+							"                    }",
+							"                },",
+							"                \"additionalProperties\": false,",
+							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"            }",
+							"        }",
+							"    }",
+							"}",
+							"",
+							"var last_id = -1;",
+							"var uniqueID = true;",
+							"var validRatings = true;",
+							"var validImages = true;",
+							"var validAddress = true;",
+							"var validNames = true;",
+							"for(let item of resp.list){",
+							"    uniqueID = item.id > last_id && uniqueID;",
+							"    last_id = item.id;",
+							"    validRatings = (item.rating > 0 && item.rating % 0.5 === 0) && validRatings;",
+							"    validImages = item.image !== \"\" && validImages;",
+							"    validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
+							"    validNames = (item.name !== \"\") && validNames;",
+							"}",
+							"",
+							"tests[\"ID's are unique\"] = uniqueID;",
+							"tests[\"Ratings are valid\"] = validRatings;",
+							"tests[\"All instances have frontpage images\"] = validImages;",
+							"tests[\"Addresses are not NULL\"] = validAddress;",
+							"tests[\"Names are not NULL\"] = validNames;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attraction pagination & filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "04b4a178-9d0e-4ff8-923f-889244baedb1",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"tests[\"return 12 items\"] = resp.total <= 12",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = item.rating >= 4 && item.zipcode == 78704 && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions?page=1&rating=4&zipcode=78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "rating",
+							"value": "4",
+							"equals": true
+						},
+						{
+							"key": "zipcode",
+							"value": "78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attraction search or",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23a7c991-786a-42fb-8dca-42405909d167",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") || item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions?search=alamo,78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "alamo,78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attraction search and",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "69ba4ad2-056c-4196-ad82-d0c83814d9c9",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") && item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions?search=alamo,78704&search_type=and",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "alamo,78704",
+							"equals": true
+						},
+						{
+							"key": "search_type",
+							"value": "and",
+							"equals": true
+						}
 					]
 				},
 				"description": ""
