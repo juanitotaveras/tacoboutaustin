@@ -65,16 +65,24 @@ export default class RestaurantFilter extends Component {
     });
   }
 
-	render() {
-		return(
-			<Container>
+  enterPressed(event) {
+    var code = event.keyCode || event.which;
+      if(code === 13) { //13 is the enter keycode
+          this.gatherFilters();
+      } 
+  }
+
+  render() {
+    return(
+      <Container>
           <Form>
               <Row><legend>Filter by:</legend></Row>
               <Row>
 
                <FormGroup check inline>
                   <Label for="ratingFilter">Rating of at least:</Label>
-                  <Input type="number" min="0" max="5" ref="ratFilter" id="ratingFilter" placeholder="1-5" onChange={e => this.handleRatingChange(e)}/>
+                  <Input type="number" min="0" max="5" ref="ratFilter" id="ratingFilter" placeholder="1-5" onChange={e => this.handleRatingChange(e)}
+                  onKeyPress={this.enterPressed.bind(this)}/>
                 </FormGroup>
               </Row>
 
@@ -83,7 +91,7 @@ export default class RestaurantFilter extends Component {
               <Row>
                 <FormGroup check inline>
                   <Label check>
-                    <Input type="checkbox" ref="openFilter" onChange={e => this.handleHourChange(e)}/>Show what's open right now
+                    <Input type="checkbox" ref="openFilter" onChange={e => this.handleHourChange(e)} onKeyPress={this.enterPressed.bind(this)}/>Show what's open right now
                   </Label>
                 </FormGroup>
               </Row>
@@ -93,7 +101,8 @@ export default class RestaurantFilter extends Component {
               <Row>
                 <FormGroup>
                   <Label for="zipcodeFilter">Filter by zipcode</Label>
-                  <Input type="number" ref="zipFilter" id="zipcodeFilter" placeholder="Enter a zipcode" onChange={e => this.handleZipChange(e)}/>
+                  <Input type="number" ref="zipFilter" id="zipcodeFilter" placeholder="Enter a zipcode" onChange={e => this.handleZipChange(e)}
+                    onKeyPress={this.enterPressed.bind(this)}/>
                 </FormGroup>
               </Row>
 
@@ -105,8 +114,8 @@ export default class RestaurantFilter extends Component {
               </Row>
           </Form>
         </Container>
-		);
-	}
+    );
+  }
 
 }
 
