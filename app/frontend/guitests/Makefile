@@ -5,6 +5,7 @@ PFILES :=                   \
     test_hotels                 \
     test_restaurant_details     \
     test_about                  \
+    test_search					\
 
 %.jsx: %.js
 	-jshint $<
