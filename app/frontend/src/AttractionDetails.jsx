@@ -41,6 +41,7 @@ export default class AttractionsDetails extends Component {
 
           a_details = attraction;
         }
+        window.scroll(0, 0);
       }
     
       const url = api_url + "/attractions/" + this.props.match.params.att_id;

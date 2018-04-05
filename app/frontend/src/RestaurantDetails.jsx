@@ -36,6 +36,7 @@ export default class RestaurantDetails extends Component {
 		        r_details = restaurant;
 			}
       	}
+        window.scroll(0, 0);
 
         const url = api_url + "/restaurants/" + this.props.match.params.res_id;
 

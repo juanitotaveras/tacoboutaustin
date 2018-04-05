@@ -49,6 +49,7 @@ export default class HotelDetails extends Component {
     	}
 
     	request(url, parseData);
+    	 window.scroll(0, 0);
 	}
 
 	componentWillUnmount() {
