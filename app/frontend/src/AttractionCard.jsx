@@ -10,7 +10,7 @@ export default class AttractionCard extends Component {
     return (
       <div>
         <Card>
-          <CardImg top width="100%" height="200em" src={a.image} alt="Card image cap" />
+          <Link to={'/attractions/' + a.id}><CardImg top width="100%" height="200em" src={a.image} alt="Card image cap" /></Link>
           <CardBody>
             <CardTitle>{a.name}</CardTitle>
             <CardSubtitle>{a.type}</CardSubtitle>

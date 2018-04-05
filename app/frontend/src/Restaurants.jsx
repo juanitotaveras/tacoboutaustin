@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import search from './assets/search.png';
 import './App.css';
 import RestaurantCard from './RestaurantCard';
-import Filter from './Filter';
+import RestaurantFilter from './RestaurantFilter';
 import Sort from './Sort';
 import { Container, Row, Col, Button, Pagination, PaginationItem, 
   PaginationLink, Form, FormGroup } from 'reactstrap';
 import { api_url } from './config';
 
 var res_count = 0;
-var per_page = 12;
-var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const per_page = 12;
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export class Restaurant {
   constructor(address, id, image, name, rating, zip_code) {
@@ -145,7 +145,7 @@ export default class Restaurants extends Component {
   }
 
   render() {
-    const page_numbers = [];
+    var page_numbers = [];
     const pages_count = (res_count%per_page) == 0 ? res_count/per_page : res_count/per_page + 1;
     for(var i = 1; i <= pages_count; i++)
       page_numbers.push(i);
@@ -166,7 +166,7 @@ export default class Restaurants extends Component {
       			</Row>
             <Row>
                 <Col xs="2">
-                  <Filter handler={this.filterPage}/>
+                  <RestaurantFilter handler={this.filterPage}/>
                   <br />
                   <Sort handler={this.sortPage}/>
                 </Col>

@@ -11,7 +11,7 @@ export default class HotelCard extends Component {
     return (
       <div>
         <Card>
-          <CardImg top width="100%" height="200em" src={h.image} alt="Card image cap" />
+          <Link to={'/hotels/' + h.id}><CardImg top width="100%" height="200em" src={h.image} alt="Card image cap" /></Link>
           <CardBody>
             <CardTitle>{h.name}</CardTitle>
             <CardSubtitle></CardSubtitle>     

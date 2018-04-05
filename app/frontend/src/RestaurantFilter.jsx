@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Container, Form, Row, FormGroup, Label, Input, Button } from 'reactstrap';
 import PropTypes from "prop-types";
 
-export default class Filter extends Component {
+export default class RestaurantFilter extends Component {
 
   constructor(props) {
     super(props);
@@ -12,6 +12,7 @@ export default class Filter extends Component {
     this.state = {
       rating: 0,
       zipcode: 0,
+      open: false
     };
   }
 
@@ -22,15 +23,18 @@ export default class Filter extends Component {
   unapplyFilters() {
     ReactDOM.findDOMNode(this.refs.ratFilter).value = "";
     ReactDOM.findDOMNode(this.refs.zipFilter).value = "";
+    ReactDOM.findDOMNode(this.refs.openFilter).checked = false;
 
     this.setState({
       rating: 0,
       zipcode: 0,
+      open: false
     });
 
     this.props.handler({
       rating: 0,
       zipcode: 0,
+      open: false
     });
   }
 
@@ -54,6 +58,12 @@ export default class Filter extends Component {
     });
   }
 
+  handleHourChange(e) {
+    var isChecked = e.target.checked;
+    this.setState({
+      open: isChecked
+    });
+  }
 
 	render() {
 		return(
@@ -65,6 +75,16 @@ export default class Filter extends Component {
                <FormGroup check inline>
                   <Label for="ratingFilter">Rating of at least:</Label>
                   <Input type="number" min="0" max="5" ref="ratFilter" id="ratingFilter" placeholder="1-5" onChange={e => this.handleRatingChange(e)}/>
+                </FormGroup>
+              </Row>
+
+              <br />
+
+              <Row>
+                <FormGroup check inline>
+                  <Label check>
+                    <Input type="checkbox" ref="openFilter" onChange={e => this.handleHourChange(e)}/>Show what's open right now
+                  </Label>
                 </FormGroup>
               </Row>
 
@@ -90,6 +110,6 @@ export default class Filter extends Component {
 
 }
 
-Filter.propTypes = {
+RestaurantFilter.propTypes = {
     handler: PropTypes.function
   }

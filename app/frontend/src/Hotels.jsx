@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Button, Pagination, PaginationItem, 
+  PaginationLink, Form, FormGroup } from 'reactstrap';
 import HotelCard from './HotelCard';
 import { api_url } from './config';
+import Sort from './Sort';
+import Filter from './Filter';
 
-var hotels = [];
+var hot_count = 0;
+const per_page = 12;
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export class Hotel {
   constructor(address, id, image, name, rating, zip_code) {
@@ -12,8 +17,6 @@ export class Hotel {
     this.id = id;
     this.image = image;
     this.name = name;
-    //this.amenities
-    // this.reviews
     this.rating = rating;
     this.zip_code = zip_code;
   }
@@ -22,47 +25,158 @@ export class Hotel {
 export default class Hotels extends Component {
   constructor(props) {
     super(props);
-    this.setState(hotels);
+    this.sortPage = this.sortPage.bind(this)
+    this.filterPage = this.filterPage.bind(this)
+    this.fillInHotels = this.fillInHotels.bind(this)
+    this.state = {
+      onPage: 1,
+      attractions_display: [],
+      sorted: null,
+      filters: {
+        rating: 0,
+        zipcode: 0,
+      }
+    };
   }
 
   componentWillMount() {
-    function fillInHotels(responseText) {
-      let hotels_parsed = JSON.parse(responseText)["list"];
-      for (let h of hotels_parsed) {
-        hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"], h["zip_code"]));
-      } 
-    }
-
     const url = api_url + "/hotels";
-
-    function request(url, parseResponse) {
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-          parseResponse(xmlHttp.responseText);        
-      }
-      xmlHttp.open("GET", url, false) // true for asynchronous
-      xmlHttp.send(null);
-    }
-
-    request(url, fillInHotels);
+    this.request(url, this.getCount);
+    this.getPage(1, null, null, false);
   }
 
-  componentWillUnmount() {
-    hotels = [];
+  fillInHotels(responseText) {
+    var temp_hotels = [];
+    let hotels_parsed = JSON.parse(responseText)["list"];
+    for (let h of hotels_parsed) {
+      temp_hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"], h["zip_code"]));
+    } 
+    this.setState({
+        hotels_display: temp_hotels
+      });
+  }
+
+  getCount(responseText) {
+    hot_count = JSON.parse(responseText)["total"];
+  }
+
+  request(url, parseResponse) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+        parseResponse(xmlHttp.responseText);        
+    }
+    xmlHttp.open("GET", url, false) // true for asynchronous
+    xmlHttp.send(null);
+  }
+
+  getDateString() {
+    var d = new Date();
+    var hour = d.getHours();
+    var day = d.getDay(); 
+    var timeString = days[day] + ",";
+    if(hour / 12 >= 1) {
+      timeString += hour == 12 ? 12 : hour % 12;
+      timeString += ":00,PM";
+    } else {
+      timeString += hour + ":00,AM";
+    }
+
+    return timeString;
+  }
+
+  getPage(pageNum, sortParam, fils) {
+    var apiParams = [];
+    var url = api_url + "/hotels?";
+
+    // Sorting
+    if(sortParam != null)
+    {
+      if (sortParam == "name") {
+        apiParams.push("order_by=name");
+        apiParams.push("order=asc");
+      }
+      else {
+        apiParams.push("order_by=rating");
+        apiParams.push("order=desc");
+      }
+    }
+
+    // Apply filters
+    if(fils != null) {
+      if(fils.rating != 0) {
+        apiParams.push("rating=" + fils.rating);
+      }
+      if(fils.zipcode != 0) {
+        apiParams.push("zipcode=" + fils.zipcode);
+      }
+    }
+
+    const count_url = url + apiParams.join("&");
+    const page_url = count_url + "&page=" + pageNum;
+
+    this.request(count_url, this.getCount);
+    this.request(page_url, this.fillInHotels);
+    this.setState({
+      onPage: pageNum,
+      sorted: sortParam,
+      filters: fils
+    });
+  }
+
+  filterPage(filters) {
+    this.getPage(1, this.state.sorted, filters);
+  }
+
+  sortPage(category) {
+    this.getPage(1, category, this.state.filters);
+  }
+
+  handlePageClick(pageNum) {
+    this.getPage(pageNum, this.state.sorted, this.state.filters);
   }
 
   render() {
-    var cards = hotels.map(function(hotel){
-            return <Col xs="12" sm="6" md="6" lg="3"><HotelCard hotel={hotel} /></Col>;
+    var page_numbers = [];
+    const pages_count = (hot_count%per_page) == 0 ? hot_count/per_page : hot_count/per_page + 1;
+    for(var i = 1; i <= pages_count; i++)
+      page_numbers.push(i);
+
+    var cards = this.state.hotels_display.map(function(hotel){
+            return <Col xs="6" sm="4"><HotelCard hotel={hotel} /></Col>;
           })
+
+    var pages = page_numbers.map((pageNum) => {
+      return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum}</PaginationLink></PaginationItem></li>;
+    })
+
 
     return (
       <div>
         <Container>
-              <h1>Hotels </h1>
             <Row>
-                {cards}
+                <Col><h1>Hotels</h1></Col>
+            </Row>
+            <Row>
+                <Col xs="2">
+                  <Filter handler={this.filterPage}/>
+                  <br />
+                  <Sort handler={this.sortPage}/>
+                </Col>
+                <Col><Container>
+                {
+                  hot_count > 0 &&
+                  cards
+                }
+                {
+                  hot_count == 0 &&
+                  <h1>No results found.</h1>
+                }
+                </Container></Col>
+            </Row>
+            <Row>
+                <Col sm="5"></Col>
+                <Col><Pagination size="lg">{pages}</Pagination></Col>
             </Row>
           </Container>
         </div>
