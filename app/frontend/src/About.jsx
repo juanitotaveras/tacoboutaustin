@@ -222,23 +222,17 @@ class About extends Component {
           <Col xs="12" sm="4">{this.memberCards[4]}</Col>
           <Col sm="1"></Col>
         </Row>
-        <Row>
-          <Col sm="12"> 
-            <h1> Our data </h1>
-            <p>
-              <a href="https://developers.google.com/maps/">Google maps</a><br/>
-              <a href="http://docs.sygictravelapi.com/1.0/">Sygic Travel</a><br/>
-              <a href="https://www.yelp.com/developers/documentation/v3">Yelp</a><br/>
-              <a href="https://www.instagram.com/developer/">Instagram API</a><br/>
-              (Possibly) <a href="https://www.meetup.com/meetup_api/?_cookie-check=qBSOM6LC84XYUoLi">Meetup.com API</a><br/>
-              (Possibly) <a href="https://developers.facebook.com/docs/graph-api">Facebook Graph API</a>
+        <br/>
+        <Jumbotron>
+          <h3 className="display-3">Our data</h3>
+          <p className="lead">
+              <a href="https://developers.google.com/maps/">Google maps</a>: Used to make API requests everytime the user goes to the details page.<br/>
+              <a href="http://docs.sygictravelapi.com/1.0/">Sygic Travel</a>: Searched with ID for Austin and got all restuarants, attractions and hotels in the city.<br/>
+              <a href="https://www.yelp.com/developers/documentation/v3">Yelp</a>: Used Sygic Travel results to use Yelp API and get more information about places such as reviews.<br/>
           </p>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm="12" md="6">
-            <h1> Tools </h1>
-            <ul>
+          <h3 className="display-3">Tools</h3>
+          <p className="lead">
+          <ul>
               <li>
                 <a href="">Docker</a> We used Docker to set up an identical environment on every person's computer and on the server, which
                                       made it super easy to handle any dependencies.
@@ -254,15 +248,16 @@ class About extends Component {
               <li>
                 <a href="">Flask</a> We used this Python microframework to handle our backend operations and to host our API.
               </li>
-            </ul>
-          </Col>
-          <Col sm="12" md="6" style={scoreboardStyle}>
-            <h1> <a href="https://tienlatien252.gitbooks.io/tacoboutaustin/content/">API Documentation</a> </h1>
-            <h1> <a href="https://carorineee.gitbooks.io/report-and-critiques/content/">Technical Report</a></h1>
-            <h1> <a href="https://github.com/juanitotaveras/tacoboutaustin">Github Repo</a></h1>
-          </Col>
-        </Row>
- 
+          </ul>
+          </p>
+        <h3 className="display-3">Links</h3>
+        <p className="lead">
+            <a href="https://tienlatien252.gitbooks.io/tacoboutaustin/content/">API Documentation</a><br/>
+            <a href="https://carorineee.gitbooks.io/report-and-critiques/content/">Technical Report</a><br/>
+            <a href="https://github.com/juanitotaveras/tacoboutaustin">Github Repo</a><br/>
+            <a href="https://travis-ci.org/juanitotaveras/tacoboutaustin">Travis CI</a><br/>
+        </p>
+        </Jumbotron>
       </Container>
       </div>
     );
