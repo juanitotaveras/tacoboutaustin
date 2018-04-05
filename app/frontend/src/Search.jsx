@@ -3,11 +3,11 @@ import { Input, InputGroup, Button, Container, Row, Jumbotron, Col, Pagination, 
 	PaginationLink  } from 'reactstrap';
 	import {Restaurant} from './Restaurants';
 // import Restaurants from './Restaurants';
-import RestaurantCard from './RestaurantCard';
+import RestaurantSearchCard from './RestaurantSearchCard';
 import {Hotel} from './Hotels';
-import HotelCard from './HotelCard';
+import HotelSearchCard from './HotelSearchCard';
 import {Attraction} from './Attractions';
-import AttractionCard from './AttractionCard';
+import AttractionSearchCard from './AttractionSearchCard';
 import './App.css';
 import { api_url } from './config';
 
@@ -18,6 +18,7 @@ var attractions = [];
 let per_page = 24;
 let per_category = per_page/3;
 
+var searchTerms = [];
 
 export default class Search extends Component {
 
@@ -49,14 +50,16 @@ export default class Search extends Component {
 		// console.log("RESPONSE: " + responseText);
 		let restaurants_parsed = JSON.parse(responseText)["list"];
 		for (let r of restaurants_parsed) {
-			restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"]));
+			restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"], r["zip_code"]));
 		}
 	}
 
 	fillInHotels(responseText) {
 		let hotels_parsed = JSON.parse(responseText)["list"];
-		for (let h of hotels_parsed) 
+		for (let h of hotels_parsed) {
+			// TODO: Highlight matching search terms
 			hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"]));
+		}
 	}
 
 	fillInAttractions(responseText) {
@@ -101,6 +104,30 @@ export default class Search extends Component {
 	    } 
 	}
 
+	createSearchString(searchInput) {
+			// add an ' to any terms that end in s
+		searchTerms = searchInput.split(" ")
+
+		var extraTerms = [];
+		for (let term of searchTerms) 
+			if (term.substr(-1) == 's' && term.length > 2) 
+				extraTerms.push(term.substring(0, term.length-1) + "'s");
+		
+		for (let extra of extraTerms) 
+			searchTerms.push(extra);
+
+		var searchRequestText = ""
+		for (var i = 0; i < searchTerms.length; ++i) {
+
+			if (i+1 == searchTerms.length) {
+				searchRequestText += searchTerms[i];
+			} else {
+				searchRequestText += searchTerms[i] + ',';
+			}
+		}	
+		return searchRequestText;
+	}
+
 	onSearch(event) {
 		// ?search=TERM1,TERM2,TERM3   TERM4A+TERM4B
 		event.preventDefault();
@@ -112,7 +139,11 @@ export default class Search extends Component {
 			attractions = [];
 		}
 
-		let searchText = "?search=" + this.state.value.replace(" ", ",");
+		let searchRequestText = this.createSearchString(this.state.value);
+
+		let searchText = "?search=" + searchRequestText;
+
+		console.log("SEARCHTEXT" + searchText);
 
 		const urls = ["/restaurants", "/hotels", "/attractions"].map((elem) => api_url + elem + searchText);
 		this.request(urls[0], this.fillInRestaurants);
@@ -158,7 +189,7 @@ export default class Search extends Component {
 
 	console.log("PAGE COUNT: " + page_numbers.length + " RESPONSES: " + largestArrayLength);
 	var restaurantCards = this.state.displayedRestaurants.map(function(restaurant) {
-		return <Col xs="12" sm="6" md="6" lg="3"><RestaurantCard restaurant={restaurant} /></Col>;
+		return <Col xs="12" sm="6" md="6" lg="3"><RestaurantSearchCard restaurant={restaurant} searchTerms={searchTerms}/></Col>;
 	});
 
 	const restaurantComponent = 
@@ -172,7 +203,7 @@ export default class Search extends Component {
 		</Row>
 		</div>;
 	const hotelCards = this.state.displayedHotels.map(function(hotel) {
-		return <Col xs="12" sm="6" md="6" lg="3"><HotelCard hotel={hotel} /></Col>;
+		return <Col xs="12" sm="6" md="6" lg="3"><HotelSearchCard hotel={hotel} searchTerms={searchTerms}/></Col>;
 	});
 
 	const hotelComponent = 
@@ -186,7 +217,7 @@ export default class Search extends Component {
 		</Row>
 		</div>;
 	const attractionCards = this.state.displayedAttractions.map(function(attraction) {
-		return <Col xs="12" sm="6" md="6" lg="3"><AttractionCard attraction={attraction} /></Col>;
+		return <Col xs="12" sm="6" md="6" lg="3"><AttractionSearchCard attraction={attraction} searchTerms={searchTerms}/></Col>;
 	});
 
 	const attractionComponent = 
