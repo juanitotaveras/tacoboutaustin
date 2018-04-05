@@ -11,12 +11,12 @@ import { NavItem, NavLink } from 'reactstrap';
 const wrapper = mount(<NavigationBar />);
 
 describe('NavigationBar Component', () => {
-  it('renders 4 NavItems', () => {
-    expect(wrapper.find(NavItem)).to.have.length(4);
+  it('renders 5 NavItems', () => {
+    expect(wrapper.find(NavItem)).to.have.length(5);
   }),
 
-  it('has 4 NavLinks, one for each NavItem', () => {
-    expect(wrapper.find(NavLink)).to.have.length(4);
+  it('has 5 NavLinks, one for each NavItem', () => {
+    expect(wrapper.find(NavLink)).to.have.length(5);
   }),
 
   it('has the correct label for the first NavItem', () => {
@@ -31,8 +31,12 @@ describe('NavigationBar Component', () => {
     expect(wrapper.find(NavItem).at(2).text()).to.equal('Hotels');
   }),
 
-  it('has the correct label for the last NavItem', () => {
+  it('has the correct label for the fourth NavItem', () => {
     expect(wrapper.find(NavItem).at(3).text()).to.equal('About');
+  }),
+
+  it('has the correct label for the last NavItem', () => {
+    expect(wrapper.find(NavItem).at(4).text()).to.equal('Search');
   })
 })
 
