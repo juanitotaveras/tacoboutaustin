@@ -1,0 +1,1648 @@
+{
+	"info": {
+		"name": "tacoboutaustin api tests",
+		"_postman_id": "a81d2d2c-9c0c-9328-a3bd-6f6275a76aad",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "restaurants",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "01bdb6e1-5450-4b0c-bb04-78a39e8d570e",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"var schema = {",
+							"    \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"list\": {",
+							"            \"type\": \"array\",",
+							"            \"items\" : {",
+							"                \"type\": \"object\",",
+							"                \"properties\" : {",
+							"                    \"address\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"string\"",
+							"                        }",
+							"                    },",
+							"                    \"id\": {",
+							"                        \"type\": \"integer\"",
+							"                    },",
+							"                    \"image\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"name\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"rating\": {",
+							"                        \"type\": \"number\"",
+							"                    }",
+							"                },",
+							"                \"additionalProperties\": false,",
+							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"            }",
+							"        }",
+							"    }",
+							"}",
+							"",
+							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
+							"",
+							"var last_id = -1;",
+							"var uniqueID = true;",
+							"var validRatings = true;",
+							"var validImages = true;",
+							"var validAddress = true;",
+							"var validNames = true;",
+							"for(let item of resp.list){",
+							"    uniqueID = item.id > last_id && uniqueID;",
+							"    last_id = item.id;",
+							"    validRatings = (item.rating > 0 && item.rating % 0.5 === 0) && validRatings;",
+							"    validImages = item.image !== \"\" && validImages;",
+							"    validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
+							"    validNames = (item.name !== \"\") && validNames;",
+							"}",
+							"",
+							"tests[\"ID's are unique\"] = uniqueID;",
+							"tests[\"Ratings are valid\"] = validRatings;",
+							"tests[\"All instances have frontpage images\"] = validImages;",
+							"tests[\"Addresses are not NULL\"] = validAddress;",
+							"tests[\"Names are not NULL\"] = validNames;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/restaurants",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"restaurants"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "restaraunt pagination & filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "04b4a178-9d0e-4ff8-923f-889244baedb1",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"tests[\"return 12 items\"] = resp.total <= 12",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = item.rating >= 4 && item.zipcode == 78704 && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/restaurants?page=1&rating=4&zipcode=78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"restaurants"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "rating",
+							"value": "4",
+							"equals": true
+						},
+						{
+							"key": "zipcode",
+							"value": "78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "restaraunt search or",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23a7c991-786a-42fb-8dca-42405909d167",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") || item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/restaurants?search=taco,78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"restaurants"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "taco,78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "restaraunt search and",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "69ba4ad2-056c-4196-ad82-d0c83814d9c9",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") && item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/restaurants?search=taco,78704&search_type=and",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"restaurants"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "taco,78704",
+							"equals": true
+						},
+						{
+							"key": "search_type",
+							"value": "and",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "hotels",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0930a4d4-e7ba-4ed3-80c7-b9c9de101df3",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"var schema = {",
+							"    \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"list\": {",
+							"            \"type\": \"array\",",
+							"            \"items\" : {",
+							"                \"type\": \"object\",",
+							"                \"properties\" : {",
+							"                    \"address\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"string\"",
+							"                        }",
+							"                    },",
+							"                    \"id\": {",
+							"                        \"type\": \"integer\"",
+							"                    },",
+							"                    \"image\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"name\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"rating\": {",
+							"                        \"type\": \"number\"",
+							"                    }",
+							"                },",
+							"                \"additionalProperties\": false,",
+							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"            }",
+							"        }",
+							"    }",
+							"}",
+							"",
+							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
+							"",
+							"var last_id = -1;",
+							"var uniqueID = true;",
+							"var validRatings = true;",
+							"var validImages = true;",
+							"var validAddress = true;",
+							"var validNames = true;",
+							"for(let item of resp.list){",
+							"    uniqueID = item.id > last_id && uniqueID;",
+							"    last_id = item.id;",
+							"    validRatings = (item.rating > 0 && item.rating % 0.5 === 0) && validRatings;",
+							"    validImages = item.image !== \"\" && validImages;",
+							"    validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
+							"    validNames = (item.name !== \"\") && validNames;",
+							"}",
+							"",
+							"tests[\"ID's are unique\"] = uniqueID;",
+							"tests[\"Ratings are valid\"] = validRatings;",
+							"tests[\"All instances have frontpage images\"] = validImages;",
+							"tests[\"Addresses are not NULL\"] = validAddress;",
+							"tests[\"Names are not NULL\"] = validNames;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/hotels",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"hotels"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "hotel pagination & filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "04b4a178-9d0e-4ff8-923f-889244baedb1",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"tests[\"return 12 items\"] = resp.total <= 12",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = item.rating >= 4 && item.zipcode == 78704 && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/hotels?page=1&rating=4&zipcode=78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"hotels"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "rating",
+							"value": "4",
+							"equals": true
+						},
+						{
+							"key": "zipcode",
+							"value": "78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "hotel search or",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23a7c991-786a-42fb-8dca-42405909d167",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") || item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/hotels?search=driskill,78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"hotels"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "driskill,78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "hotels search and",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "69ba4ad2-056c-4196-ad82-d0c83814d9c9",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") && item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/hotels?search=driskill,78704&search_type=and",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"hotels"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "driskill,78704",
+							"equals": true
+						},
+						{
+							"key": "search_type",
+							"value": "and",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attractions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7d97a549-1bc4-47be-8349-9d5d09fcde77",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"var schema = {",
+							"    \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"list\": {",
+							"            \"type\": \"array\",",
+							"            \"items\" : {",
+							"                \"type\": \"object\",",
+							"                \"properties\" : {",
+							"                    \"address\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"string\"",
+							"                        }",
+							"                    },",
+							"                    \"id\": {",
+							"                        \"type\": \"integer\"",
+							"                    },",
+							"                    \"image\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"name\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"rating\": {",
+							"                        \"type\": \"number\"",
+							"                    }",
+							"                },",
+							"                \"additionalProperties\": false,",
+							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"            }",
+							"        }",
+							"    }",
+							"}",
+							"",
+							"var last_id = -1;",
+							"var uniqueID = true;",
+							"var validRatings = true;",
+							"var validImages = true;",
+							"var validAddress = true;",
+							"var validNames = true;",
+							"for(let item of resp.list){",
+							"    uniqueID = item.id > last_id && uniqueID;",
+							"    last_id = item.id;",
+							"    validRatings = (item.rating > 0 && item.rating % 0.5 === 0) && validRatings;",
+							"    validImages = item.image !== \"\" && validImages;",
+							"    validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
+							"    validNames = (item.name !== \"\") && validNames;",
+							"}",
+							"",
+							"tests[\"ID's are unique\"] = uniqueID;",
+							"tests[\"Ratings are valid\"] = validRatings;",
+							"tests[\"All instances have frontpage images\"] = validImages;",
+							"tests[\"Addresses are not NULL\"] = validAddress;",
+							"tests[\"Names are not NULL\"] = validNames;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attraction pagination & filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "04b4a178-9d0e-4ff8-923f-889244baedb1",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"tests[\"return 12 items\"] = resp.total <= 12",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = item.rating >= 4 && item.zipcode == 78704 && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions?page=1&rating=4&zipcode=78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "rating",
+							"value": "4",
+							"equals": true
+						},
+						{
+							"key": "zipcode",
+							"value": "78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attraction search or",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23a7c991-786a-42fb-8dca-42405909d167",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") || item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions?search=alamo,78704",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "alamo,78704",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attraction search and",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "69ba4ad2-056c-4196-ad82-d0c83814d9c9",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"",
+							"var matchesFilter = true;",
+							"for(let item of resp.list){",
+							"    matchesFilter = (item.name.includes(\"taco\") && item.zipcode == 78704) && matchesFilter",
+							"}",
+							"",
+							"tests[\"Response matches filter\"] = matchesFilter"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions?search=alamo,78704&search_type=and",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "alamo,78704",
+							"equals": true
+						},
+						{
+							"key": "search_type",
+							"value": "and",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "restaurants/<id> valid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1cbf03d3-07d9-4379-ab20-c4ad714ad190",
+						"type": "text/javascript",
+						"exec": [
+							"//pm.environment.set(\"resID\", String(parseInt(pm.environment.get(\"resID\")) + 1))"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "3bfbea3c-1041-4d06-8c1a-f10fabfdaaaf",
+						"type": "text/javascript",
+						"exec": [
+							"function validate_nearby(near){",
+							"    var validID = true;",
+							"    var validRatings = true;",
+							"    var validImages = true;",
+							"    var validAddress = true;",
+							"    var validNames = true;",
+							"    for(let item of near){",
+							"        validID = item.id >= 0 && validID;",
+							"        validRatings = (item.rating > 0 && item.rating % 0.5 === 0) && validRatings;",
+							"        validImages = item.image !== \"\" && validImages;",
+							"        validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
+							"        validNames = (item.name !== \"\") && validNames;",
+							"    }",
+							"    return validID && validImages && validRatings && validAddress && validNames;",
+							"}",
+							"",
+							"function validate_reviews(list){",
+							"    validReviews = true;",
+							"    validReviews = list[0].text !== \"\" && list[0].link !== \"\" && validReviews;",
+							"    validReviews = list[1].text !== \"\" && list[1].link !== \"\" && validReviews;",
+							"    validReviews = list[2].text !== \"\" && list[2].link !== \"\" && validReviews;",
+							"    ",
+							"    return validReviews;",
+							"}",
+							"",
+							"function validate_images(list){",
+							"    validImages = true;",
+							"    validImages = list[0] !== \"\" && validImages;",
+							"    validImages = list[1] !== \"\" && validImages;",
+							"    validImages = list[2] !== \"\" && validImages;",
+							" ",
+							"    return validImages;   ",
+							"}",
+							"",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"var schema = {",
+							"    \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"close_by_attractions\": {",
+							"            \"type\": \"array\",",
+							"            \"items\" : {",
+							"                \"type\": \"object\",",
+							"                \"properties\" : {",
+							"                    \"address\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"string\"",
+							"                        }",
+							"                    },",
+							"                    \"id\": {",
+							"                        \"type\": \"integer\"",
+							"                    },",
+							"                    \"image\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"name\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"rating\": {",
+							"                        \"type\": \"number\"",
+							"                    }",
+							"                },",
+							"                \"additionalProperties\": false,",
+							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"            }",
+							"        },",
+							"        \"close_by_hotels\": {",
+							"            \"type\": \"array\",",
+							"            \"items\" : {",
+							"                \"type\": \"object\",",
+							"                \"properties\" : {",
+							"                    \"address\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"string\"",
+							"                        }",
+							"                    },",
+							"                    \"id\": {",
+							"                        \"type\": \"integer\"",
+							"                    },",
+							"                    \"image\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"name\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"rating\": {",
+							"                        \"type\": \"number\"",
+							"                    }",
+							"                },",
+							"                \"additionalProperties\": false,",
+							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"            }",
+							"        },",
+							"        \"restaurant\": {",
+							"        \"type\": \"object\",",
+							"            \"properties\" : {",
+							"                \"address\": {",
+							"                    \"type\": \"array\",",
+							"                    \"properties\": {",
+							"                        \"type\": \"string\"",
+							"                    }",
+							"                },",
+							"                \"hours\": {",
+							"                    \"type\": \"string\"",
+							"                },",
+							"                \"id\": {",
+							"                    \"type\": \"integer\"",
+							"                },",
+							"                \"images\": {",
+							"                    \"type\": \"array\",",
+							"                    \"properties\": {",
+							"                        \"type\": \"string\"",
+							"                    }",
+							"                },",
+							"                \"location\": {",
+							"                    \"type\": \"object\",",
+							"                    \"properties\": {",
+							"                        \"lat\": {",
+							"                            \"type\": \"number\"",
+							"                        },",
+							"                        \"long\": {",
+							"                            \"type\": \"number\"",
+							"                        }",
+							"                    }",
+							"                },",
+							"                \"name\": {",
+							"                    \"type\": \"string\"",
+							"                },",
+							"                \"phone\": {",
+							"                    \"type\": \"string\"",
+							"                },",
+							"                \"rating\": {",
+							"                    \"type\": \"number\"",
+							"                },",
+							"                \"reviews\": {",
+							"                    \"type\": \"array\",",
+							"                    \"items\": {",
+							"                        \"type\": \"object\",",
+							"                        \"properties\": {",
+							"                            \"link\": {",
+							"                                \"type\": \"string\"",
+							"                            },",
+							"                            \"text\": {",
+							"                                \"type\": \"string\"",
+							"                            }",
+							"                        }",
+							"                    }",
+							"                }",
+							"            },",
+							"            \"additionalProperties\": false,",
+							"            \"required\": [\"address\", \"hours\", \"id\", \"images\", \"location\", \"name\", \"phone\", \"rating\", \"reviews\"]",
+							"        }",
+							"    }",
+							"}",
+							"",
+							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
+							"",
+							"tests[\"2 Nearby Attractions\"] = resp.close_by_attractions.length == 2;",
+							"tests[\"Attractions have valid information\"] = validate_nearby(resp.close_by_attractions);",
+							"tests[\"2 Nearby Hotels\"] = resp.close_by_hotels.length == 2;",
+							"tests[\"Hotels have valid information\"] = validate_nearby(resp.close_by_hotels);",
+							"",
+							"var item = resp.restaurant;",
+							"tests[\"Address is Valid\"] = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\");",
+							"tests[\"ID is valid\"] = item.id >= 0;",
+							"tests[\"Rating is valid\"] = item.rating > 0 && item.rating % 0.5 === 0;",
+							"tests[\"Images are Valid\"] = validate_images(item.images);",
+							"tests[\"Name is valid\"] = item.name !== \"\";",
+							"tests[\"Phone Number is Valid\"] = item.phone !== \"\" && item.phone.length == 14;",
+							"tests[\"Reviews are Valid\"] = item.reviews.length == 3 && validate_reviews(item.reviews);",
+							"tests[\"Location is Valid\"] = item.location.lat >= -90.0 && item.location.lat <= 90.0 && item.location.long >= -180.0 && item.location.long <= 180.0; ",
+							"tests[\"Hours are Valid\"] = item.hours !== \"\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/restaurants/0",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"restaurants",
+						"0"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attractions/<id> valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d9fa5ded-18a9-4734-86e5-56a96b7ce5a5",
+						"type": "text/javascript",
+						"exec": [
+							"function validate_nearby(near){",
+							"    var validID = true;",
+							"    var validRatings = true;",
+							"    var validImages = true;",
+							"    var validAddress = true;",
+							"    var validNames = true;",
+							"    for(let item of near){",
+							"        validID = item.id >= 0 && validID;",
+							"        validRatings = (item.rating > 0 && item.rating % 0.5 === 0) && validRatings;",
+							"        validImages = item.image !== \"\" && validImages;",
+							"        validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
+							"        validNames = (item.name !== \"\") && validNames;",
+							"    }",
+							"    return validID && validImages && validRatings && validAddress && validNames;",
+							"}",
+							"",
+							"function validate_reviews(list){",
+							"    validReviews = true;",
+							"    validReviews = list[0].text !== \"\" && list[0].link !== \"\" && validReviews;",
+							"    validReviews = list[1].text !== \"\" && list[1].link !== \"\" && validReviews;",
+							"    validReviews = list[2].text !== \"\" && list[2].link !== \"\" && validReviews;",
+							"    ",
+							"    return validReviews;",
+							"}",
+							"",
+							"function validate_images(list){",
+							"    validImages = true;",
+							"    validImages = list[0] !== \"\" && validImages;",
+							"    validImages = list[1] !== \"\" && validImages;",
+							"    validImages = list[2] !== \"\" && validImages;",
+							" ",
+							"    return validImages;   ",
+							"}",
+							"",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"var schema = {",
+							"    \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"attraction\": {",
+							"        \"type\": \"object\",",
+							"            \"properties\" : {",
+							"                \"address\": {",
+							"                    \"type\": \"array\",",
+							"                    \"properties\": {",
+							"                        \"type\": \"string\"",
+							"                    }",
+							"                },",
+							"                \"id\": {",
+							"                    \"type\": \"integer\"",
+							"                },",
+							"                \"images\": {",
+							"                    \"type\": \"array\",",
+							"                    \"properties\": {",
+							"                        \"type\": \"string\"",
+							"                    }",
+							"                },",
+							"                \"location\": {",
+							"                    \"type\": \"object\",",
+							"                    \"properties\": {",
+							"                        \"lat\": {",
+							"                            \"type\": \"number\"",
+							"                        },",
+							"                        \"long\": {",
+							"                            \"type\": \"number\"",
+							"                        }",
+							"                    }",
+							"                },",
+							"                \"name\": {",
+							"                    \"type\": \"string\"",
+							"                },",
+							"                \"phone\": {",
+							"                    \"type\": \"string\"",
+							"                },",
+							"                \"rating\": {",
+							"                    \"type\": \"number\"",
+							"                },",
+							"                \"reviews\": {",
+							"                    \"type\": \"array\",",
+							"                    \"items\": {",
+							"                        \"type\": \"object\",",
+							"                        \"properties\": {",
+							"                            \"link\": {",
+							"                                \"type\": \"string\"",
+							"                            },",
+							"                            \"text\": {",
+							"                                \"type\": \"string\"",
+							"                            }",
+							"                        }",
+							"                    }",
+							"                }",
+							"            },",
+							"            \"additionalProperties\": false,",
+							"            \"required\": [\"address\", \"id\", \"images\", \"location\", \"name\", \"phone\", \"rating\", \"reviews\"]",
+							"        },",
+							"        \"close_by_hotels\": {",
+							"            \"type\": \"array\",",
+							"            \"items\" : {",
+							"                \"type\": \"object\",",
+							"                \"properties\" : {",
+							"                    \"address\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"string\"",
+							"                        }",
+							"                    },",
+							"                    \"id\": {",
+							"                        \"type\": \"integer\"",
+							"                    },",
+							"                    \"image\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"name\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"rating\": {",
+							"                        \"type\": \"number\"",
+							"                    }",
+							"                },",
+							"                \"additionalProperties\": false,",
+							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"            }",
+							"        },",
+							"        \"close_by_restaurants\": {",
+							"            \"type\": \"array\",",
+							"            \"items\" : {",
+							"                \"type\": \"object\",",
+							"                \"properties\" : {",
+							"                    \"address\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"string\"",
+							"                        }",
+							"                    },",
+							"                    \"id\": {",
+							"                        \"type\": \"integer\"",
+							"                    },",
+							"                    \"image\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"name\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"rating\": {",
+							"                        \"type\": \"number\"",
+							"                    }",
+							"                },",
+							"                \"additionalProperties\": false,",
+							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"            }",
+							"        }",
+							"    }",
+							"}",
+							"",
+							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
+							"",
+							"tests[\"2 Nearby Hotels\"] = resp.close_by_hotels.length == 2;",
+							"tests[\"Hotels have valid information\"] = validate_nearby(resp.close_by_hotels);",
+							"tests[\"2 Nearby Restaurants\"] = resp.close_by_restaurants.length == 2;",
+							"tests[\"Restaurants have valid information\"] = validate_nearby(resp.close_by_restaurants);",
+							"",
+							"var item = resp.attraction;",
+							"tests[\"Address is Valid\"] = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\");",
+							"tests[\"ID is valid\"] = item.id >= 0;",
+							"tests[\"Rating is valid\"] = item.rating > 0 && item.rating % 0.5 === 0;",
+							"tests[\"Images are Valid\"] = validate_images(item.images);",
+							"tests[\"Name is valid\"] = item.name !== \"\";",
+							"tests[\"Phone Number is Valid\"] = item.phone !== \"\" && item.phone.length == 14;",
+							"tests[\"Reviews are Valid\"] = item.reviews.length == 3 && validate_reviews(item.reviews);",
+							"tests[\"Location is valid\"] = item.location.lat >= -90.0 && item.location.lat <= 90.0 && item.location.long >= -180.0 && item.location.long <= 180.0; "
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions/1",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions",
+						"1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "hotels/<id> valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8c83dc1b-06f8-405b-8677-d3f15c46ac6f",
+						"type": "text/javascript",
+						"exec": [
+							"function validate_nearby(near){",
+							"    var validID = true;",
+							"    var validRatings = true;",
+							"    var validImages = true;",
+							"    var validAddress = true;",
+							"    var validNames = true;",
+							"    for(let item of near){",
+							"        validID = item.id >= 0 && validID;",
+							"        validRatings = (item.rating > 0 && item.rating % 0.5 === 0) && validRatings;",
+							"        validImages = item.image !== \"\" && validImages;",
+							"        validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
+							"        validNames = (item.name !== \"\") && validNames;",
+							"    }",
+							"    return validID && validImages && validRatings && validAddress && validNames;",
+							"}",
+							"",
+							"function validate_reviews(list){",
+							"    validReviews = true;",
+							"    validReviews = list[0].text !== \"\" && list[0].link !== \"\" && validReviews;",
+							"    validReviews = list[1].text !== \"\" && list[1].link !== \"\" && validReviews;",
+							"    validReviews = list[2].text !== \"\" && list[2].link !== \"\" && validReviews;",
+							"    ",
+							"    return validReviews;",
+							"}",
+							"",
+							"function validate_images(list){",
+							"    validImages = true;",
+							"    validImages = list[0] !== \"\" && validImages;",
+							"    validImages = list[1] !== \"\" && validImages;",
+							"    validImages = list[2] !== \"\" && validImages;",
+							" ",
+							"    return validImages;   ",
+							"}",
+							"",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returns json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";",
+							"",
+							"var resp = JSON.parse(responseBody);",
+							"var schema = {",
+							"    \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"close_by_attractions\": {",
+							"            \"type\": \"array\",",
+							"            \"items\" : {",
+							"                \"type\": \"object\",",
+							"                \"properties\" : {",
+							"                    \"address\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"string\"",
+							"                        }",
+							"                    },",
+							"                    \"id\": {",
+							"                        \"type\": \"integer\"",
+							"                    },",
+							"                    \"image\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"name\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"rating\": {",
+							"                        \"type\": \"number\"",
+							"                    }",
+							"                },",
+							"                \"additionalProperties\": false,",
+							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"            }",
+							"        },",
+							"        \"close_by_restaurants\": {",
+							"            \"type\": \"array\",",
+							"            \"items\" : {",
+							"                \"type\": \"object\",",
+							"                \"properties\" : {",
+							"                    \"address\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"string\"",
+							"                        }",
+							"                    },",
+							"                    \"id\": {",
+							"                        \"type\": \"integer\"",
+							"                    },",
+							"                    \"image\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"name\": {",
+							"                        \"type\": \"string\"",
+							"                    },",
+							"                    \"rating\": {",
+							"                        \"type\": \"number\"",
+							"                    }",
+							"                },",
+							"                \"additionalProperties\": false,",
+							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"            }",
+							"        },",
+							"        \"hotel\": {",
+							"        \"type\": \"object\",",
+							"            \"properties\" : {",
+							"                \"address\": {",
+							"                    \"type\": \"array\",",
+							"                    \"properties\": {",
+							"                        \"type\": \"string\"",
+							"                    }",
+							"                },",
+							"                \"id\": {",
+							"                    \"type\": \"integer\"",
+							"                },",
+							"                \"images\": {",
+							"                    \"type\": \"array\",",
+							"                    \"properties\": {",
+							"                        \"type\": \"string\"",
+							"                    }",
+							"                },",
+							"                \"location\": {",
+							"                    \"type\": \"object\",",
+							"                    \"properties\": {",
+							"                        \"lat\": {",
+							"                            \"type\": \"number\"",
+							"                        },",
+							"                        \"long\": {",
+							"                            \"type\": \"number\"",
+							"                        }",
+							"                    }",
+							"                },",
+							"                \"name\": {",
+							"                    \"type\": \"string\"",
+							"                },",
+							"                \"phone\": {",
+							"                    \"type\": \"string\"",
+							"                },",
+							"                \"rating\": {",
+							"                    \"type\": \"number\"",
+							"                },",
+							"                \"reviews\": {",
+							"                    \"type\": \"array\",",
+							"                    \"items\": {",
+							"                        \"type\": \"object\",",
+							"                        \"properties\": {",
+							"                            \"link\": {",
+							"                                \"type\": \"string\"",
+							"                            },",
+							"                            \"text\": {",
+							"                                \"type\": \"string\"",
+							"                            }",
+							"                        }",
+							"                    }",
+							"                }",
+							"            },",
+							"            \"additionalProperties\": false,",
+							"            \"required\": [\"address\", \"id\", \"images\", \"location\", \"name\", \"phone\", \"rating\", \"reviews\"]",
+							"        }",
+							"    }",
+							"}",
+							"",
+							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
+							"",
+							"tests[\"2 Nearby Attractions\"] = resp.close_by_attractions.length == 2;",
+							"tests[\"Attractions have valid information\"] = validate_nearby(resp.close_by_attractions);",
+							"tests[\"2 Nearby Restaurants\"] = resp.close_by_restaurants.length == 2;",
+							"tests[\"Restaurants have valid information\"] = validate_nearby(resp.close_by_restaurants);",
+							"",
+							"var item = resp.hotel;",
+							"tests[\"Address is Valid\"] = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\");",
+							"tests[\"ID is valid\"] = item.id >= 0;",
+							"tests[\"Rating is valid\"] = item.rating > 0 && item.rating % 0.5 === 0;",
+							"tests[\"Images are Valid\"] = validate_images(item.images);",
+							"tests[\"Name is valid\"] = item.name !== \"\";",
+							"tests[\"Phone Number is Valid\"] = item.phone !== \"\" && item.phone.length == 14;",
+							"tests[\"Reviews are Valid\"] = item.reviews.length == 3 && validate_reviews(item.reviews);",
+							"tests[\"Location is valid\"] = item.location.lat >= -90.0 && item.location.lat <= 90.0 && item.location.long >= -180.0 && item.location.long <= 180.0; "
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/hotels/0",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"hotels",
+						"0"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "restaurants/<id> invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8fdefcd4-cc1a-4cc8-887c-7e378163fee6",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Invalid ID Response fails\"] = responseCode.code === 404;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/restaurants/1",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"restaurants",
+						"1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "restaurants/<id> invalid 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "04bac233-d510-4296-890e-be6592420ee3",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Invalid ID Response fails\"] = responseCode.code === 404;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/restaurants/kladfjlk;asdkfj",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"restaurants",
+						"kladfjlk;asdkfj"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attractions/<id> invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ac33298f-1f82-46e8-b108-31992520a2db",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Invalid ID Response fails\"] = responseCode.code === 404;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions/0",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions",
+						"0"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "attractions/<id> invalid 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8a1e936d-1a51-4139-8012-0e69e9105006",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Invalid ID Response fails\"] = responseCode.code === 404;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/attractions/ldfhkldfhklasdhfilah",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"attractions",
+						"ldfhkldfhklasdhfilah"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "hotels/<id> invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fc22e1d7-aa39-4be7-b09f-bc4bfe0b2e3a",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Invalid ID Response fails\"] = responseCode.code === 404;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/hotels/1",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"hotels",
+						"1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "hotels/<id> invalid 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fc22e1d7-aa39-4be7-b09f-bc4bfe0b2e3a",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Invalid ID Response fails\"] = responseCode.code === 404;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.tacoboutaustin.me/hotels/adfkjadfkljahfkjfdah",
+					"protocol": "http",
+					"host": [
+						"api",
+						"tacoboutaustin",
+						"me"
+					],
+					"path": [
+						"hotels",
+						"adfkjadfkljahfkjfdah"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
