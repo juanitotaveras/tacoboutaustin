@@ -58,14 +58,14 @@ export default class Search extends Component {
 		let hotels_parsed = JSON.parse(responseText)["list"];
 		for (let h of hotels_parsed) {
 			// TODO: Highlight matching search terms
-			hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"]));
+			hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"], h["zip_code"]));
 		}
 	}
 
 	fillInAttractions(responseText) {
 		let attractions_parsed = JSON.parse(responseText)["list"];
 		for (let a of attractions_parsed) 
-			attractions.push(new Attraction(a["address"], a["id"], a["image"], a["name"], a["rating"]));
+			attractions.push(new Attraction(a["address"], a["id"], a["image"], a["name"], a["rating"], a["zip_code"]));
 	} 
 
 
