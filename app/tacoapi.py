@@ -13,7 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, or_
 from main import app
 from copy import copy
-from models import Restaurant, Hotel, Images, Review, Attraction
+from models import Restaurant, Hotel, Images, Review, Attraction, Category
 import re
 
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
@@ -97,7 +97,7 @@ def get_restaurants():
     rating = request.args.get('rating', default=None, type=str)
     time = request.args.get('time', default=None, type=str)
     zipcode = request.args.get('zipcode', default=None, type=str)
-    category = request.args.get('category', default=None, type=str)
+    categories = request.args.get('categories', default=None, type=str)
 
     if(search_type == 'and' or search is None):
         query = Restaurant.query
@@ -122,8 +122,10 @@ def get_restaurants():
         query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
     if zipcode is not None:
         query = query.filter_by(zipcode=zipcode)
-    if category is not None:
-        pass
+    if categories is not None:
+        categoriesTokens = categories.split(',')
+        for token in categoriesTokens:
+            query = query.filter(Restaurant.categories.any(category_id = token))
     if order_by is None:
         order_by = 'name'
     if order is not None:
