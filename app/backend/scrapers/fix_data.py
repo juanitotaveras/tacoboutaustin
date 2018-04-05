@@ -58,6 +58,12 @@ def fix_attractions():
         db.session.delete(attraction)
     db.session.commit()
 
+def delete_restaurant(restaurant):
+    associations = Association.query.filter_by(restaurant_id = restaurant.id).all()
+    for association in associations:
+        db.session.delete(association)
+    db.session.delete(restaurant)
+
 def fix_zip_code():
     restaurants = Restaurant.query.all()
     hotels = Hotel.query.all()
@@ -71,7 +77,7 @@ def fix_zip_code():
         if len(same_zipcode_hotels) < 2 or len(same_zipcode_attractions) < 2:
             same_zipcode_restaurants = Restaurant.query.filter_by(zipcode=zipcode).all()
             for res in same_zipcode_restaurants:
-                db.session.delete(res)
+                delete_restaurant(res)
             for hot in same_zipcode_hotels:
                 db.session.delete(hot)
             for att in same_zipcode_attractions:
@@ -86,7 +92,7 @@ def fix_zip_code():
         if len(same_zipcode_restaurants) < 2 or len(same_zipcode_hotels) < 2:
             same_zipcode_attractions = Attraction.query.filter_by(zipcode=zipcode).all()
             for res in same_zipcode_restaurants:
-                db.session.delete(res)
+                delete_restaurant(res)
             for hot in same_zipcode_hotels:
                 db.session.delete(hot)
             for att in same_zipcode_attractions:
@@ -101,7 +107,7 @@ def fix_zip_code():
         if len(same_zipcode_restaurants) < 2 or len(same_zipcode_attractions) < 2:
             same_zipcode_hotels = Hotel.query.filter_by(zipcode=zipcode).all()
             for res in same_zipcode_restaurants:
-                db.session.delete(res)
+                delete_restaurant(res)
             for hot in same_zipcode_hotels:
                 db.session.delete(hot)
             for att in same_zipcode_attractions:

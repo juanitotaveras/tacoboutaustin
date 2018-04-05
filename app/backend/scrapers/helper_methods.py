@@ -13,8 +13,10 @@ import sys, os
 FILE_ABSOLUTE_PATH = os.path.abspath(__file__)  # get absolute filepath
 CURRENT_DIR = os.path.dirname(FILE_ABSOLUTE_PATH)  # get directory path of file
 PARENT_DIR = os.path.dirname(CURRENT_DIR)  # get parent directory path
-sys.path.append(PARENT_DIR)
-from models import *
+BASE_DIR = os.path.dirname(PARENT_DIR)  # get grand parent directory path
+sys.path.append(BASE_DIR)
+from main import app, db
+from models import Restaurant, Hotel, Images, Review, Attraction, Category, Association
 #from sqlalchemy import func
 import pprint
 
@@ -75,10 +77,15 @@ def convert_hour(hours):
 
 def convert_military(time):
     hour_num = int(time[:2])
+    result =""
     if hour_num > 12:
-        return str(hour_num - 12) + ":" + time[-2:] + "PM"
+        result = str(hour_num - 12) + ":" + time[-2:] + "PM"
     else:
-        return str(hour_num) + ":" + time[-2:] +"AM"
+        result = str(hour_num) + ":" + time[-2:] +"AM"
+    if result == "0:00AM":
+        result = "12:00AM"
+    return result 
+
 
 """
 def close_places(place_type, number, zip_code):

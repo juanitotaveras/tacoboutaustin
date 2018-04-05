@@ -4,38 +4,46 @@ import RestaurantJumbotron from './RestaurantJumbotron';
 import HotelCard from './HotelCard';
 import AttractionCard from './AttractionCard';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { api_url } from "./config";
 
 var r_details = {};
 var nearby_hotels = [];
 var nearby_attractions = [];
+var redirect = false;
 
 export default class RestaurantDetails extends Component {
 
 	componentWillMount() {
 		function parseData(responseText) {
-			let restaurant = JSON.parse(responseText)["restaurant"];
-	      	let attractions = JSON.parse(responseText)["close_by_attractions"];
-	        let hotels = JSON.parse(responseText)["close_by_hotels"];
+			if(JSON.parse(responseText)["status"] === "INVALID_ID") {
+				redirect = true;
+			}
 
-	        for (let attraction of attractions) {
-	        	nearby_attractions.push(attraction);
-	        }
+			else {
+				let restaurant = JSON.parse(responseText)["restaurant"];
+		      	let attractions = JSON.parse(responseText)["close_by_attractions"];
+		        let hotels = JSON.parse(responseText)["close_by_hotels"];
 
-	        for(let hotel of hotels) {
-	        	nearby_hotels.push(hotel);
-	        }
+		        for (let attraction of attractions) {
+		        	nearby_attractions.push(attraction);
+		        }
 
-	        r_details = restaurant;
+		        for(let hotel of hotels) {
+		        	nearby_hotels.push(hotel);
+		        }
+
+		        r_details = restaurant;
+			}
       	}
+        window.scroll(0, 0);
 
         const url = api_url + "/restaurants/" + this.props.match.params.res_id;
 
     	function request(url, parseResponse) {
       		var xmlHttp = new XMLHttpRequest();
       		xmlHttp.onreadystatechange = function() {
-        		if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+        		if (xmlHttp.readyState == 4) 
           			parseResponse(xmlHttp.responseText);
       		}
       		xmlHttp.open("GET", url, false) // true for asynchronous
@@ -51,8 +59,10 @@ export default class RestaurantDetails extends Component {
 	}
 
 	buildMapSrc() {
-		var address = r_details.address[0] + " " + r_details.address[1];
-		var s = "https://www.google.com/maps/embed/v1/place?q=" + encodeURI(address) + "&key=AIzaSyD7QCCYdGEGvI3J74sDAwqJbaWieKC6V2k";
+		if(redirect == false) {
+			var address = r_details.address[0] + " " + r_details.address[1];
+			var s = "https://www.google.com/maps/embed/v1/place?q=" + encodeURI(address) + "&key=AIzaSyD7QCCYdGEGvI3J74sDAwqJbaWieKC6V2k";
+		}
 		return s;
 	}
 
@@ -69,30 +79,38 @@ export default class RestaurantDetails extends Component {
 
 		return (
 			<Container>
-				<Row>
-					<Col sm="12">
-					<h1>Restaurant Details</h1>
-					</Col>
-					<Col>
-                		<RestaurantJumbotron
-                		name={r_details.name}
-		        		images={r_details.images}
-		        		map_src={map}
-		        		hours={r_details.hours}
-		        		rating={r_details.rating}
-		        		reviews={r_details.reviews}
-                		/>
-              		</Col>
-				</Row>
-				<h1>Nearby things!</h1>
-				<h2> Hotels </h2>
-				<Row>
-					{nearby_hotel_cards}
-				</Row>
-				<h2> Attractions </h2>
-				<Row>
-					{nearby_attraction_cards}
-				</Row>
+				{
+					redirect == true &&
+					<Redirect to="/badURL" />
+				}
+				{
+					redirect == false &&
+					<div><Row>
+						<Col sm="12">
+						<h1>Restaurant Details</h1>
+						</Col>
+						<Col>
+	                		<RestaurantJumbotron
+	                		name={r_details.name}
+			        		images={r_details.images}
+			        		map_src={map}
+			        		hours={r_details.hours}
+			        		rating={r_details.rating}
+			        		reviews={r_details.reviews}
+	                		/>
+	              		</Col>
+					</Row>
+						<h1>Nearby things</h1>
+						<h2> Hotels </h2>
+					<Row>
+						{nearby_hotel_cards}
+					</Row>
+						<h2> Attractions </h2>
+					<Row>
+						{nearby_attraction_cards}
+					</Row></div>
+				}
+				
 			</Container>
 		);
 	}
