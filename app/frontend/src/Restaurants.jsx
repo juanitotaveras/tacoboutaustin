@@ -44,7 +44,7 @@ export default class Restaurants extends Component {
   componentWillMount() {
     const url = api_url + "/restaurants";
     this.request(url, this.getCount);
-    this.getPage(1);
+    this.getPage(1, null, null, false);
   }
 
   fillInRestaurants(responseText) {
@@ -87,76 +87,61 @@ export default class Restaurants extends Component {
     return timeString;
   }
 
-  getPage(pageNum, sortParam, fil, changedFilters) {
-    var page_url = api_url + "/restaurants?page=";
 
-    page_url += pageNum;
+  getPage(pageNum, sortParam, fils) {
+    var apiParams = [];
+    var url = api_url + "/restaurants?";
 
-    // Sorting doesn't require recalculating page numbers
+    // Sorting
     if(sortParam != null)
     {
-      if (sortParam == "name") 
-        page_url += "&order_by=name&order=asc";
-      else
-        page_url += "&order_by=rating&order=desc";
-    }
-
-    var count_url = "";
-
-    // Must recalculate page numbers
-    if (fil != null) {
-      if(fil.rating != 0) {
-        if (changedFilters == true) {
-          count_url += api_url + "/restaurants?filter_by=rating&rating=" + fil.rating;
-          this.request(count_url, this.getCount);
-        }
-        page_url += "&filter_by=rating&rating=" + fil.rating;
-      } 
-
-      else if(fil.zipcode != 0) {
-        if (changedFilters == true) {
-          count_url += api_url + "/restaurants?filter_by=zipcode&zipcode=" + fil.zipcode;
-          this.request(count_url, this.getCount);
-        }
-        page_url += "&filter_by=zipcode&zipcode=" + fil.zipcode;
-        console.log(page_url);
-      } 
-
-      else if(fil.open == true) {
-        var timeString = this.getDateString();
-
-        if (changedFilters != null) {
-          count_url += count_url == "" ? api_url + "/restaurants?filter_by=open_hour&time=" + timeString : "&filter_by=open_hour&time=" + timeString;
-          this.request(count_url, this.getCount);
-        }
-        page_url += "&filter_by=open_hour&time=" + timeString;
-      } 
-
-      else if(changedFilters == true) {
-          // Unapply all filters
-          var count_url = api_url + "/restaurants";
-          this.request(count_url, this.getCount);
+      if (sortParam == "name") {
+        apiParams.push("order_by=name");
+        apiParams.push("order=asc");
+      }
+      else {
+        apiParams.push("order_by=rating");
+        apiParams.push("order=desc");
       }
     }
 
+    // Apply filters
+    if(fils != null) {
+      if(fils.rating != 0) {
+        apiParams.push("rating=" + fils.rating);
+      }
+      if(fils.zipcode != 0) {
+        apiParams.push("zipcode=" + fils.zipcode);
+      }
+      if(fils.open == true) {
+        var timeString = this.getDateString();
+        apiParams.push("time=" + timeString);
+      }
+    }
+
+    const count_url = url + apiParams.join("&");
+    const page_url = count_url + "&page=" + pageNum;
+
+    this.request(count_url, this.getCount);
     this.request(page_url, this.fillInRestaurants);
     this.setState({
       onPage: pageNum,
       sorted: sortParam,
-      filters: fil
+      filters: fils
     });
   }
 
+
   filterPage(filters) {
-    this.getPage(1, null, filters, true);
+    this.getPage(1, this.state.sorted, filters);
   }
 
   sortPage(category) {
-    this.getPage(1, category, this.state.filters, false);
+    this.getPage(1, category, this.state.filters);
   }
 
   handlePageClick(pageNum) {
-    this.getPage(pageNum, this.state.sorted, this.state.filters, false);
+    this.getPage(pageNum, this.state.sorted, this.state.filters);
   }
 
   render() {
@@ -192,7 +177,7 @@ export default class Restaurants extends Component {
                 }
                 {
                   res_count == 0 &&
-                  <h1>No results found. </h1>
+                  <h1>No results found.</h1>
                 }
                 </Container></Col>
             </Row>
