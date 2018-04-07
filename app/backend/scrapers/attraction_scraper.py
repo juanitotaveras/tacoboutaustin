@@ -40,7 +40,8 @@ def scrap_attractions():
 			new_attraction = Attraction(detail['name'], attraction['location']['lng'], attraction['location']['lat'], rating, number)
 			for x in range(0, len(detail['photos'])):
 				new_attraction.addImage(detail['photos'][x])
-			hotel.addCover(detail['photos'][0])
+			if len(detail['photos']) > 0:
+				new_attraction.addCover(detail['photos'][0])
 			new_attraction.addAddress(address, int(detail['location']['zip_code']))
 
 			if not review is None:
