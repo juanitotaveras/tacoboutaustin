@@ -88,13 +88,68 @@ def getQueryCol(model, s):
         return model.rating
     return None
 
+# type: "restaurant", "hotel", "attraction"
+def getQuery(args, type):
+    search = args.get('search', default=None, type=str)
+    page = args.get('page', default=None, type=int)
+    order_by = args.get('order_by', default=None, type=str)
+    order = args.get('order', default=None, type=str)
+    search_type = args.get('search_type', default=None, type=str)
+    rating = args.get('rating', default=None, type=str)
+    zipcode = request.args.get('zipcode', default=None, type=str)
+
+    if(search_type == 'and' or search is None):
+        query = Place.query.filter_by(type = type)
+    else:
+        query = Restaurant.query.filter_by(type = type).filter_by(id=-1)
+    if search is not None:
+        searchTokens = search.split(',')
+        for token in searchTokens:
+            if(search_type == 'and'):
+                query = query.filter(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%")))
+            else:
+                query = Restaurant.query.filter(or_(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%"), Restaurant.id.in_(restaurant.id for restaurant in query.all()))))
+    if rating is not None:
+        query = query.filter(Restaurant.rating >= float(rating))
+    if type == "restaurant":
+        time = request.args.get('time', default=None, type=str)
+        categories = request.args.get('categories', default=None, type=str)
+        if time is not None:
+            restaraunts = query.all()
+            open_restaurants = []
+            for restaurant in restaraunts:
+                timeList = time.split(",")
+                if isOpen(restaurant.open_hour, timeList):
+                    open_restaurants.append(restaurant)
+            query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
+        if categories is not None:
+            categoriesTokens = categories.split(',')
+            for token in categoriesTokens:
+                query = query.filter(Restaurant.categories.any(category_id = token))
+
+    if zipcode is not None:
+        query = query.filter_by(zipcode=zipcode)
+    if order_by is None:
+        order_by = 'name'
+    if order is not None:
+        if order == 'asc':
+            query = query.order_by(getQueryCol(Place, order_by).asc())
+        else:
+            query = query.order_by(getQueryCol(Place, order_by).desc())
+    if page is not None:
+        query = query.limit(12).offset(12*(page-1))
+    return query
+
+
+
 @app.route('/')
 def hello_user():
     return render_template('hello.html')
 
+
 @app.route('/restaurants')
 def get_restaurants():
-    search = request.args.get('search', default=None, type=str)
+    """ search = request.args.get('search', default=None, type=str)
     page = request.args.get('page', default=None, type=int)
     order_by = request.args.get('order_by', default=None, type=str)
     order = request.args.get('order', default=None, type=str)
@@ -139,7 +194,8 @@ def get_restaurants():
         else:
             query = query.order_by(getQueryCol(Restaurant, order_by).desc())
     if page is not None:
-        query = query.limit(12).offset(12*(page-1))
+        query = query.limit(12).offset(12*(page-1))"""
+    query = getQuery(request.args, "restaurant")
     restaurants = query.all()
 
     output = []
