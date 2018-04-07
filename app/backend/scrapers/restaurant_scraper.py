@@ -46,8 +46,8 @@ def scrap_restaurants():
 			for x in range(0, len(detail['photos'])):
 				new_restaurant.addImage(detail['photos'][x])
 			new_restaurant.addCover(detail['photos'][0])
-			
-			new_restaurant.addHour(convert_hour(detail['hours'][0]['open']))
+			for time in detail['hours'][0]['open']:
+				new_restaurant.addHour(time)
 			new_restaurant.addAddress(address, int(detail['location']['zip_code']))
 
 			for category in detail['categories']:
