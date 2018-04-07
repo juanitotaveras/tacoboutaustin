@@ -42,7 +42,7 @@ class Review(db.Model):
 class Hour(db.Model):
     __tablename__ = "hour"
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), primary_key=True)
-    restaurant = db.relationship('Restaurant', cascade = "all,delete", backref=db.backref('hours',lazy=True))
+    restaurant = db.relationship('Restaurant', cascade = "all", back_populates="hours")
     day = db.Column(db.Integer, primary_key = True)
     open_time = db.Column(db.String(4), primary_key = True)
     close_time = db.Column(db.String(4))
@@ -51,6 +51,23 @@ class Hour(db.Model):
         self.day = day
         self.open_time = open_time
         self.close_time = close_time
+
+class Zipcode(db.Model):
+    __tablename__ = "zipcode"
+    value = db.Column(db.Integer, primary_key = True)
+    places = db.relationship('Place', cascade="all, delete-orphan", back_populates="zip_code")
+
+    def __init__(self, value):
+        self.value = value
+
+    @classmethod
+    def get_or_create(self, value):
+        exists = db.session.query(Zipcode.value).filter_by(value = value).scalar() is not None
+        if exists:
+            return db.session.query(Zipcode).filter_by(value = value).first()
+        new_zipcode = self(value)
+        db.session.add(new_zipcode)
+        return new_zipcode
 
 class Association(db.Model):
     __tablename__ = 'association'
@@ -91,7 +108,8 @@ class Place(db.Model):
     address2 = db.Column(db.String(100))
     phone = db.Column(db.String(20))
 
-    zipcode = db.Column(db.Integer)
+    zipcode = db.Column(db.Integer, ForeignKey('zipcode.value'))
+    zip_code = relationship("Zipcode", back_populates="places")
     def __init__(self, name, longtitude, latitude, rating, phone):
         self.name = name
         self.longtitude = longtitude
@@ -101,11 +119,13 @@ class Place(db.Model):
 
     def addReview(self, text, link):
         new_review = Review(text, link)
-        self.reviews.append(new_review)
+        with db.session.no_autoflush:
+            self.reviews.append(new_review)
     
     def addImage(self, image):
         new_images = Image(image)
-        self.images.append(new_images)
+        with db.session.no_autoflush:
+            self.images.append(new_images)
     
     def addCover(self, cover):
         self.cover_image = cover
@@ -113,7 +133,9 @@ class Place(db.Model):
     def addAddress(self, address, zipcode):
         self.address1 = address[0]
         self.address2 = address[1]
-        self.zipcode = zipcode
+        new_zipcode = Zipcode.get_or_create(zipcode)
+        with db.session.no_autoflush:
+            self.zip_code = new_zipcode
 
     __mapper_args__ = {
         'polymorphic_identity':'place',
@@ -140,12 +162,20 @@ class Restaurant (Place):
     __tablename__ = "restaurant" 
     id = db.Column(db.Integer, ForeignKey('place.id'))
     restaurant_id = db.Column(db.Integer, primary_key=True)
-    open_hour = db.Column(db.String(200))
-    categories = relationship("Association", back_populates="restaurant")
+    hours = relationship("Hour", back_populates = "restaurant", cascade="all, delete-orphan")
+    categories = relationship("Association", back_populates="restaurant", cascade="all, delete-orphan")
+
+    def addCategories(self, categories):
+        for category in categories:
+            a = Association()
+            a.category = Category.get_or_create(category['alias'], category['title'])
+            with db.session.no_autoflush:
+                self.categories.append(a)
 
     def addHour(self, time):
         new_hour = Hour(time['day'], time['start'], time['end'])
-        self.hours.append(new_hour)
+        with db.session.no_autoflush:
+            self.hours.append(new_hour)
 
     __mapper_args__ = {
         'polymorphic_identity':'restaurant',

@@ -65,58 +65,19 @@ def delete_restaurant(restaurant):
     db.session.delete(restaurant)
 
 def fix_zip_code():
-    restaurants = Restaurant.query.all()
-    hotels = Hotel.query.all()
-    attractions = Attraction.query.all()
-
-    for restaurant in restaurants:
-        zipcode = restaurant.zipcode
+    for zipcode in Zipcode.query.all():
+        restaurants = Restaurant.query.filter_by(zipcode = zipcode.value).all()
+        hotels = Hotel.query.filter_by(zipcode = zipcode.value).all()
+        attractions = Attraction.query.filter_by(zipcode = zipcode.value).all()
         
-        same_zipcode_hotels = Hotel.query.filter_by(zipcode=zipcode).all()
-        same_zipcode_attractions = Attraction.query.filter_by(zipcode=zipcode).all()
-        if len(same_zipcode_hotels) < 2 or len(same_zipcode_attractions) < 2:
-            same_zipcode_restaurants = Restaurant.query.filter_by(zipcode=zipcode).all()
-            for res in same_zipcode_restaurants:
-                delete_restaurant(res)
-            for hot in same_zipcode_hotels:
-                db.session.delete(hot)
-            for att in same_zipcode_attractions:
-                db.session.delete(att)
+        if len(restaurants) < 2 or len(hotels) < 2 or len(attractions) < 2:
+            db.session.delete(zipcode)
             db.session.commit()
     
-    for attraction in attractions:
-        zipcode = attraction.zipcode   
-        same_zipcode_restaurants = Restaurant.query.filter_by(zipcode=zipcode).all()
-        same_zipcode_hotels = Hotel.query.filter_by(zipcode=zipcode).all()
-        
-        if len(same_zipcode_restaurants) < 2 or len(same_zipcode_hotels) < 2:
-            same_zipcode_attractions = Attraction.query.filter_by(zipcode=zipcode).all()
-            for res in same_zipcode_restaurants:
-                delete_restaurant(res)
-            for hot in same_zipcode_hotels:
-                db.session.delete(hot)
-            for att in same_zipcode_attractions:
-                db.session.delete(att)
-            db.session.commit()
-            
-    for hotel in hotels:
-        zipcode = hotel.zipcode
-        same_zipcode_restaurants = Restaurant.query.filter_by(zipcode=zipcode).all()
-        same_zipcode_attractions = Attraction.query.filter_by(zipcode=zipcode).all()
-        
-        if len(same_zipcode_restaurants) < 2 or len(same_zipcode_attractions) < 2:
-            same_zipcode_hotels = Hotel.query.filter_by(zipcode=zipcode).all()
-            for res in same_zipcode_restaurants:
-                delete_restaurant(res)
-            for hot in same_zipcode_hotels:
-                db.session.delete(hot)
-            for att in same_zipcode_attractions:
-                db.session.delete(att)
-            db.session.commit()
 
 if __name__ == "__main__":
     #fix_sixth_street()
-    #fix_zip_code()
-    fix_hotels()
-    fix_attractions()
-    db.session.commit()
+    fix_zip_code()
+    #fix_hotels()
+    #fix_attractions()
+    #db.session.commit()

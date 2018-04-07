@@ -43,17 +43,15 @@ def scrap_restaurants():
 				address[1] = detail['location']['display_address'][1]
 
 			new_restaurant = Restaurant(detail['name'], restaurant['location']['lng'], restaurant['location']['lat'], rating, number)
+			db.session.commit()
 			for x in range(0, len(detail['photos'])):
 				new_restaurant.addImage(detail['photos'][x])
 			new_restaurant.addCover(detail['photos'][0])
 			for time in detail['hours'][0]['open']:
 				new_restaurant.addHour(time)
 			new_restaurant.addAddress(address, int(detail['location']['zip_code']))
+			new_restaurant.addCategories(detail['categories'])
 
-			for category in detail['categories']:
-				a = Association()
-				a.category = Category.get_or_create(category['alias'], category['title'])
-				new_restaurant.categories.append(a)
 			if not review is None:
 				for x in range(0, min(3, review['total'])):
 					new_restaurant.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
