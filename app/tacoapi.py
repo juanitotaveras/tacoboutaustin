@@ -13,7 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, or_
 from main import app
 from copy import copy
-from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category
+from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Hour
 import re
 
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
@@ -172,8 +172,16 @@ def get_restaurant(id):
     restaurant_data = {}
     restaurant_data['id'] = restaurant.restaurant_id
     restaurant_data['name'] = restaurant.name
-    restaurant_data['phone'] = restaurant.phone
-    restaurant_data['hours'] = restaurant.open_hour
+    restaurant_data['phone'] = restaurant.phone 
+    hours_data = []
+    for hour in restaurant.hours:
+        hour_data = {}
+        hour_data['day'] = hour.day
+        hour_data['open_time'] = hour.open_time
+        hour_data['close_time'] = hour.close_time
+        hours_data += [hour_data]
+
+    restaurant_data['hours'] = hours_data
     restaurant_data['location'] = {
         'lat': restaurant.latitude, 'long': restaurant.longtitude}
     restaurant_data['address'] = [restaurant.address1, restaurant.address2]

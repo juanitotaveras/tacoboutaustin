@@ -39,6 +39,19 @@ class Review(db.Model):
         self.text = ReviewText
         self.link = ReviewLink
 
+class Hour(db.Model):
+    __tablename__ = "hour"
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), primary_key=True)
+    restaurant = db.relationship('Restaurant', cascade = "all,delete", backref=db.backref('hours',lazy=True))
+    day = db.Column(db.Integer, primary_key = True)
+    open_time = db.Column(db.String(4), primary_key = True)
+    close_time = db.Column(db.String(4))
+
+    def __init__(self, day, open_time, close_time):
+        self.day = day
+        self.open_time = open_time
+        self.close_time = close_time
+
 class Association(db.Model):
     __tablename__ = 'association'
     category_id = db.Column(db.String(100), ForeignKey('category.id'), primary_key=True)
@@ -130,10 +143,10 @@ class Restaurant (Place):
     open_hour = db.Column(db.String(200))
     categories = relationship("Association", back_populates="restaurant")
 
-    def addHour(self, hour):
-        open_hour = hour
+    def addHour(self, time):
+        new_hour = Hour(time['day'], time['start'], time['end'])
+        self.hours.append(new_hour)
 
     __mapper_args__ = {
         'polymorphic_identity':'restaurant',
     }
-    
