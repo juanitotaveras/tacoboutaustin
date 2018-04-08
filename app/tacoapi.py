@@ -88,8 +88,28 @@ def getQueryCol(model, s):
         return model.rating
     return None
 
+def getModel(type):
+    if type == "restaurant":
+        return Restaurant
+    if type == "hotel":
+        return Hotel
+    if type == "attraction":
+        return Attraction
+    return Place
+
+def getIdType(model, type):
+    if type == "restaurant":
+        return model.restaurant_id
+    if type == "hotel":
+        return model.hotel_id
+    if type == "attraction":
+        return model.attraction_id
+    return model.id
+
 # type: "restaurant", "hotel", "attraction"
-def getQuery(args, type):
+# args = requests.args
+def getList(args, type):
+    # get optional attributes
     search = args.get('search', default=None, type=str)
     page = args.get('page', default=None, type=int)
     order_by = args.get('order_by', default=None, type=str)
@@ -98,20 +118,23 @@ def getQuery(args, type):
     rating = args.get('rating', default=None, type=str)
     zipcode = request.args.get('zipcode', default=None, type=str)
 
+    Model = getModel(type)  # get the right model
+
+    # process all the optional attributes
     if(search_type == 'and' or search is None):
-        query = Place.query.filter_by(type = type)
+        query = Model.query.filter_by(type = type)
     else:
-        query = Restaurant.query.filter_by(type = type).filter_by(id=-1)
+        query = Model.query.filter_by(type = type).filter_by(id=-1)
     if search is not None:
         searchTokens = search.split(',')
         for token in searchTokens:
             if(search_type == 'and'):
-                query = query.filter(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%")))
+                query = query.filter(or_(Model.zipcode.like(token), Model.name.like("%"+token+"%")))
             else:
-                query = Restaurant.query.filter(or_(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%"), Restaurant.id.in_(restaurant.id for restaurant in query.all()))))
+                query = Model.query.filter(or_(or_(Model.zipcode.like(token), Model.name.like("%"+token+"%"), Model.id.in_(place.id for place in query.all()))))
     if rating is not None:
-        query = query.filter(Restaurant.rating >= float(rating))
-    if type == "restaurant":
+        query = query.filter(Model.rating >= float(rating))
+    if type == "restaurant":  # special case with restaurant, because restaurant have open hour and categories
         time = request.args.get('time', default=None, type=str)
         categories = request.args.get('categories', default=None, type=str)
         if time is not None:
@@ -133,14 +156,32 @@ def getQuery(args, type):
         order_by = 'name'
     if order is not None:
         if order == 'asc':
-            query = query.order_by(getQueryCol(Place, order_by).asc())
+            query = query.order_by(getQueryCol(Model, order_by).asc())
         else:
-            query = query.order_by(getQueryCol(Place, order_by).desc())
+            query = query.order_by(getQueryCol(Model, order_by).desc())
     if page is not None:
         query = query.limit(12).offset(12*(page-1))
-    return query
 
-
+    # get the output of the request (a list of places with type provided)
+    places = query.all()
+    output = []
+    for place in places:
+        place_data = {}
+        place_data['id'] = getIdType(place, type)
+        place_data['name'] = place.name
+        place_data['image'] = place.cover_image
+        place_data['rating'] = place.rating
+        place_data['address'] = [place.address1, place.address2]
+        place_data['zip_code'] = place.zipcode
+        if type == "restaurant":
+            place_data['categories'] = []
+            for association in place.categories:
+                category_data = {}
+                category_data['id'] = association.category.id
+                category_data['name'] = association.category.name
+                place_data['categories'].append(category_data)
+        output.append(place_data)
+    return output
 
 @app.route('/')
 def hello_user():
@@ -149,72 +190,8 @@ def hello_user():
 
 @app.route('/restaurants')
 def get_restaurants():
-    """ search = request.args.get('search', default=None, type=str)
-    page = request.args.get('page', default=None, type=int)
-    order_by = request.args.get('order_by', default=None, type=str)
-    order = request.args.get('order', default=None, type=str)
-    search_type = request.args.get('search_type', default=None, type=str)
-    rating = request.args.get('rating', default=None, type=str)
-    time = request.args.get('time', default=None, type=str)
-    zipcode = request.args.get('zipcode', default=None, type=str)
-    categories = request.args.get('categories', default=None, type=str)
-
-    if(search_type == 'and' or search is None):
-        query = Restaurant.query
-    else:
-        query = Restaurant.query.filter_by(id=-1)
-    if search is not None:
-        searchTokens = search.split(',')
-        for token in searchTokens:
-            if(search_type == 'and'):
-                query = query.filter(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%")))
-            else:
-                query = Restaurant.query.filter(or_(or_(Restaurant.zipcode.like(token), Restaurant.name.like("%"+token+"%"), Restaurant.id.in_(restaurant.id for restaurant in query.all()))))
-    if rating is not None:
-        query = query.filter(Restaurant.rating >= float(rating))
-    if time is not None:
-        restaraunts = query.all()
-        open_restaurants = []
-        for restaurant in restaraunts:
-            timeList = time.split(",")
-            if isOpen(restaurant.open_hour, timeList):
-                open_restaurants.append(restaurant)
-        query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
-    if zipcode is not None:
-        query = query.filter_by(zipcode=zipcode)
-    if categories is not None:
-        categoriesTokens = categories.split(',')
-        for token in categoriesTokens:
-            query = query.filter(Restaurant.categories.any(category_id = token))
-    if order_by is None:
-        order_by = 'name'
-    if order is not None:
-        if order == 'asc':
-            query = query.order_by(getQueryCol(Restaurant, order_by).asc())
-        else:
-            query = query.order_by(getQueryCol(Restaurant, order_by).desc())
-    if page is not None:
-        query = query.limit(12).offset(12*(page-1))"""
-    query = getQuery(request.args, "restaurant")
-    restaurants = query.all()
-
-    output = []
-    for restaurant in restaurants:
-        restaurant_data = {}
-        restaurant_data['id'] = restaurant.restaurant_id
-        restaurant_data['name'] = restaurant.name
-        restaurant_data['image'] = restaurant.cover_image
-        restaurant_data['rating'] = restaurant.rating
-        restaurant_data['address'] = [restaurant.address1, restaurant.address2]
-        restaurant_data['categories'] = []
-        restaurant_data['zip_code'] = restaurant.zipcode
-        for association in restaurant.categories:
-            category_data = {}
-            category_data['id'] = association.category.id
-            category_data['name'] = association.category.name
-            restaurant_data['categories'].append(category_data)
-        output.append(restaurant_data)
-    return jsonify({'status': "OK", 'list': output, 'total': len(restaurants)})
+    output = getList(request.args, "restaurant")
+    return jsonify({'status': "OK", 'list': output, 'total': len(output)})
 
 
 @app.route('/restaurants/<id>')
@@ -229,14 +206,6 @@ def get_restaurant(id):
     restaurant_data['id'] = restaurant.restaurant_id
     restaurant_data['name'] = restaurant.name
     restaurant_data['phone'] = restaurant.phone 
-    hours_data = []
-    for hour in restaurant.hours:
-        hour_data = {}
-        hour_data['day'] = hour.day
-        hour_data['open_time'] = hour.open_time
-        hour_data['close_time'] = hour.close_time
-        hours_data += [hour_data]
-
     restaurant_data['hours'] = hours_data
     restaurant_data['location'] = {
         'lat': restaurant.latitude, 'long': restaurant.longtitude}
@@ -250,6 +219,14 @@ def get_restaurant(id):
     for image in restaurant.images:
         image_data += [image.image_url]
     restaurant_data['images'] = image_data
+
+    hours_data = []
+    for hour in restaurant.hours:
+        hour_data = {}
+        hour_data['day'] = hour.day
+        hour_data['open_time'] = hour.open_time
+        hour_data['close_time'] = hour.close_time
+        hours_data += [hour_data]
  
     restaurant_data['categories'] = []
     for association in restaurant.categories:
@@ -266,51 +243,8 @@ def get_restaurant(id):
 
 @app.route('/hotels')
 def get_hotels():
-    search = request.args.get('search', default=None, type=str)
-    page = request.args.get('page', default=None, type=int)
-    order_by = request.args.get('order_by', default=None, type=str)
-    order = request.args.get('order', default=None, type=str)
-    search_type = request.args.get('search_type', default=None, type=str)
-    rating = request.args.get('rating', default=None, type=str)
-    zipcode = request.args.get('zipcode', default=None, type=str)
-
-    if(search_type == 'and' or search is None):
-        query = Hotel.query
-    else:
-        query = Hotel.query.filter_by(id=-1)
-
-    if search is not None:
-        searchTokens = search.split(',')
-        for token in searchTokens:
-            if(search_type == 'and'):
-                query = query.filter(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%")))
-            else:
-                query = Hotel.query.filter(or_(or_(Hotel.zipcode.like(token), Hotel.name.like("%"+token+"%"), Hotel.id.in_(hotel.id for hotel in query.all()))))
-    if rating is not None:
-        query = query.filter(Hotel.rating >= float(rating))
-    if zipcode is not None:
-        query = query.filter_by(zipcode=zipcode)
-    if order_by is None:
-        order_by = 'name'
-    if order is not None:
-        if order == 'asc':
-            query = query.order_by(getQueryCol(Hotel, order_by).asc())
-        else:
-            query = query.order_by(getQueryCol(Hotel, order_by).desc())
-    if page is not None:
-        query = query.limit(12).offset(12*(page-1))
-    hotels = query.all()
-    output = []
-    for hotel in hotels:
-        hotel_data = {}
-        hotel_data['id'] = hotel.hotel_id
-        hotel_data['name'] = hotel.name
-        hotel_data['image'] = hotel.cover_image
-        hotel_data['rating'] = hotel.rating
-        hotel_data['address'] = [hotel.address1, hotel.address2]
-        hotel_data['zip_code'] = hotel.zipcode
-        output.append(hotel_data)
-    return jsonify({'status': "OK", 'list': output, 'total': len(hotels)})
+    output = getList(request.args, "hotel")
+    return jsonify({'status': "OK", 'list': output, 'total': len(output)})
 
 
 @app.route('/hotels/<id>')
@@ -344,52 +278,9 @@ def get_hotel(id):
 
 @app.route('/attractions')
 def get_attractions():
-    search = request.args.get('search', default=None, type=str)
-    page = request.args.get('page', default=None, type=int)
-    order_by = request.args.get('order_by', default=None, type=str)
-    order = request.args.get('order', default=None, type=str)
-    search_type = request.args.get('search_type', default=None, type=str)
-    rating = request.args.get('rating', default=None, type=str)
-    zipcode = request.args.get('zipcode', default=None, type=str)
+    output = getList(request.args, "attraction")
+    return jsonify({'status': "OK", 'list': output, 'total': len(output)})
 
-    if(search_type == 'and' or search is None):
-        query = Attraction.query
-    else:
-        query = Attraction.query.filter_by(id=-1)
-
-    if search is not None:
-        searchTokens = search.split(',')
-        for token in searchTokens:
-            if(search_type == 'and'):
-                query = query.filter(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%")))
-            else:
-                query = Attraction.query.filter(or_(or_(Attraction.zipcode.like(token), Attraction.name.like("%"+token+"%"), Attraction.id.in_(attraction.id for attraction in query.all()))))
-
-    if rating is not None:
-        query = query.filter(Attraction.rating >= float(rating))
-    if zipcode is not None:
-        query = query.filter_by(zipcode=zipcode)
-    if order_by is None:
-        order_by = 'name'
-    if order is not None:
-        if order == 'asc':
-            query = query.order_by(getQueryCol(Attraction, order_by).asc())
-        else:
-            query = query.order_by(getQueryCol(Attraction, order_by).desc())
-    if page is not None:
-        query = query.limit(12).offset(12*(page-1))
-    attractions = query.all()
-    output = []
-    for attraction in attractions:
-        attraction_data = {}
-        attraction_data['id'] = attraction.attraction_id
-        attraction_data['name'] = attraction.name
-        attraction_data['image'] = attraction.cover_image
-        attraction_data['rating'] = attraction.rating
-        attraction_data['address'] = [attraction.address1, attraction.address2]
-        attraction_data['zip_code'] = attraction.zipcode
-        output.append(attraction_data)
-    return jsonify({'status': "OK", 'list': output, 'total': len(attractions)})
 
 
 @app.route('/attractions/<id>')
