@@ -206,7 +206,6 @@ def get_restaurant(id):
     restaurant_data['id'] = restaurant.restaurant_id
     restaurant_data['name'] = restaurant.name
     restaurant_data['phone'] = restaurant.phone 
-    restaurant_data['hours'] = hours_data
     restaurant_data['location'] = {
         'lat': restaurant.latitude, 'long': restaurant.longtitude}
     restaurant_data['address'] = [restaurant.address1, restaurant.address2]
@@ -227,7 +226,8 @@ def get_restaurant(id):
         hour_data['open_time'] = hour.open_time
         hour_data['close_time'] = hour.close_time
         hours_data += [hour_data]
- 
+    restaurant_data['hours'] = hours_data
+    
     restaurant_data['categories'] = []
     for association in restaurant.categories:
         category_data = {}
