@@ -19,8 +19,6 @@ import re
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
            "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
 
-noonDict = {"AM": 0, "PM": 12}
-
 def close_places(place_type, number, zip_code):
     places = None
     if place_type == "restaurant":
@@ -50,35 +48,36 @@ def close_places(place_type, number, zip_code):
             places_data.append(place_data)
     return places_data
 
-def toMilitaryTime(n, p):
-    global noonDict
-    if(n != 12):
-        return n + noonDict[p]
-    elif(p == "PM"):
-        return 12
-    return 0
-
 #time is a tuple w/ day, hour, AM/PM
-def isOpen(hours, time):
-    global dayDict
-
-    days = hours.split("<br>")
-    day = days[dayDict[time[0]]]
-    hour = day.split(": ")
-    hourList = hour[1].split(" - ")
-    if(hourList[0] == 'closed'):
-        return False
-    timeComp = time[1].split(":")
-    timeComp[0] = str(toMilitaryTime(int(timeComp[0]), time[2]))
-    hourComp = list(tok.split(":") for tok in (comp[:-2] for comp in hourList))
-    hourComp[0][0] = str(toMilitaryTime(int(hourComp[0][0]), hourList[0][-2:]))
-    hourComp[1][0] = str(toMilitaryTime(int(hourComp[1][0]), hourList[1][-2: ]))
-    if(int(timeComp[0]) > int(hourComp[0][0]) or (int(timeComp[0]) == int(hourComp[0][0]) and int(timeComp[1]) >= int(hourComp[0][1]))):
-        if(int(timeComp[0]) < int(hourComp[1][0]) or (int(timeComp[0]) == int(hourComp[1][0]) and int(timeComp[1]) <= int(hourComp[1][1]))):
-            return True
+def isBetween(open_hour, timeGet):
+    open_timeH = open_hour.open_time[:-2]
+    open_timeM = open_hour.open_time[-2:]
+    close_timeH = open_hour.close_time[:-2]
+    close_timeM = open_hour.close_time[-2:]
+    if close_timeH == "00":
+        close_timeH = "24"
+    if open_timeH == "00":
+        open_timeH = "24"
+    open_time = 60 * int(open_timeH) + int(open_timeM)
+    close_time = int(close_timeH)*60 + int(close_timeM)
+    if int(close_timeH) < 6:
+        close_time += 1440
+    print(open_time, close_time, timeGet)
+    if timeGet > open_time and timeGet < close_time:
+        return True
     return False
-    
-    
+
+def isOpen(hours, time):
+    result = False
+    day = dayDict[time[0]]
+    timeComp = time[1].split(":")
+    timeGet = int(timeComp[0])*60 + int(timeComp[1])
+    for open_hour in hours:
+        print(day, open_hour.day, open_hour.open_time, open_hour.close_time)
+        if open_hour.day == day and isBetween(open_hour, timeGet):
+            result = True
+    return result
+
 def getQueryCol(model, s):
     if s == 'name':
         return model.name
@@ -142,7 +141,7 @@ def getList(args, type):
             open_restaurants = []
             for restaurant in restaraunts:
                 timeList = time.split(",")
-                if isOpen(restaurant.open_hour, timeList):
+                if isOpen(restaurant.hours, timeList):
                     open_restaurants.append(restaurant)
             query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
         if categories is not None:
@@ -242,7 +241,7 @@ def get_restaurant(id):
         hour_data['close_time'] = hour.close_time
         hours_data += [hour_data]
     restaurant_data['hours'] = hours_data
-    
+ 
     restaurant_data['categories'] = []
     for association in restaurant.categories:
         category_data = {}
