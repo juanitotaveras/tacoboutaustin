@@ -167,7 +167,8 @@ def getList(args, type):
     output = []
     for place in places:
         place_data = {}
-        place_data['id'] = getIdType(place, type)
+        id = getIdType(place, type)
+        place_data['id'] = id
         place_data['name'] = place.name
         place_data['image'] = place.cover_image
         place_data['rating'] = place.rating
@@ -180,6 +181,20 @@ def getList(args, type):
                 category_data['id'] = association.category.id
                 category_data['name'] = association.category.name
                 place_data['categories'].append(category_data)
+        if type == "restaurant":
+            dayStr = request.args.get('day', default=None, type=str)
+            if dayStr is not None:
+                day = dayDict[dayStr]
+                hours = Hour.query.filter_by(restaurant_id = id).filter_by(day = day)
+                hours_data = []
+                for hour in hours:
+                    hour_data = {}
+                    hour_data['day'] = hour.day
+                    hour_data['open_time'] = hour.open_time
+                    hour_data['close_time'] = hour.close_time
+                    hours_data += [hour_data]
+                place_data['hours'] = hours_data
+            
         output.append(place_data)
     return output
 
