@@ -325,3 +325,17 @@ def get_attraction(id):
     hotels = close_places("hotel", 2, attraction.zipcode)
 
     return jsonify({'status': "OK", 'attraction': attraction_data, 'close_by_restaurants': restaurants, 'close_by_hotels': hotels})
+
+
+@app.route('/categories')
+def get_categories():
+    categories = Category.query.all()
+    output = []
+    for category in categories:
+        category_data = {}
+        category_data['id'] = category.id
+        category_data['name'] = category.name
+        category_data['number'] = len(category.restaurants)
+        output.append(category_data)
+    return jsonify({'status': "OK", 'list': output, 'total': len(output)})
+
