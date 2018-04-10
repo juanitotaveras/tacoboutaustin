@@ -12,7 +12,7 @@ export default class RestaurantCard extends Component {
         <Card>
           <Link to={'/restaurants/' + r.id}><CardImg top width="100%" height="200em" src={r.image} alt="Le food" /></Link>
           <CardBody>
-            <CardTitle>{r.name}</CardTitle>
+            <CardTitle><div className="wrap">{r.name}</div></CardTitle>
             <CardSubtitle>{r.food}</CardSubtitle>
             <CardText><span>Rating: {r.rating}/5</span> <span style={{float: 'right'}}>Zip code: {r.zip_code}</span></CardText>
             <Link to={'/restaurants/' + r.id}><Button outline >Check it out!</Button></Link>
