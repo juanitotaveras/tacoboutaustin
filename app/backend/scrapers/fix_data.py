@@ -73,11 +73,16 @@ def fix_zip_code():
         if len(restaurants) < 2 or len(hotels) < 2 or len(attractions) < 2:
             db.session.delete(zipcode)
             db.session.commit()
-    
+def fix_categories():
+    for category in Category.query.all():
+        if len(category.restaurants) == 0:
+            db.session.delete(category)
+            db.session.commit()
 
 if __name__ == "__main__":
     #fix_sixth_street()
     fix_zip_code()
     #fix_hotels()
     #fix_attractions()
+    fix_categories()
     #db.session.commit()
