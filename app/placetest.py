@@ -17,6 +17,8 @@ def test1():
         attractions = Attraction.query.filter_by(zipcode = zipcode.value).all()
         print(zipcode.value, len(restaurants), len(hotels), len(attractions))"""
     places = Place.query.all()
+    query = Place.query.filter_by(id = 4)
+    print(type(query))
     noImageCount = 0
     for place in places:
         if len(place.images) == 0:
