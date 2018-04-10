@@ -73,7 +73,13 @@ export default class RestaurantJumbotron extends Component {
         day = "";
         day += days[h[i].day] + ": ";
       }
-      day += this.convertTime(h[i].open_time) + "-" + this.convertTime(h[i].close_time);
+      if(this.convertTime(h[i].open_time) == "0:00AM" &&
+        this.convertTime(h[i].close_time) == "0:00AM") {
+        day += "24 hours"
+      }
+      else {
+        day += this.convertTime(h[i].open_time) + "-" + this.convertTime(h[i].close_time);
+      }
       
       if(i < h.length - 1 && h[i+1].day == h[i].day) {
         day += ", ";
