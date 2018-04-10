@@ -13,6 +13,7 @@ import {
   Container } from 'reactstrap';
 
 var parsed_opening_hours;
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export default class RestaurantJumbotron extends Component {
 
@@ -51,14 +52,47 @@ export default class RestaurantJumbotron extends Component {
       this.setState({ activeIndex: newIndex });
   }
 
+  convertTime(timeString) {
+    let t = parseInt(timeString.slice(0, 2));
+    if (t < 12) {
+      return t + ":" + timeString.slice(2) + "AM"
+    } 
+    else {
+      return (t==12) ? t + ":" + timeString.slice(2) + "PM" : t%12 + ":" + timeString.slice(2) + "PM"
+    }
+  }
+
+  // Needs to accomodate days that are closed and multiple opening hours on a day
   parseBR() {
-    var splitted_array = this.props.hours.split("<br>");
-    this.parsed_opening_hours = splitted_array.map(function(hours){
+    var h = this.props.hours;
+    var appending = false;
+    var splittedHours = [];
+    var day;
+    for (var i = 0; i < h.length; i++) {
+      if (!appending) {
+        day = "";
+        day += days[h[i].day] + ": ";
+      }
+      day += this.convertTime(h[i].open_time) + "-" + this.convertTime(h[i].close_time);
+      
+      if(i < h.length - 1 && h[i+1].day == h[i].day) {
+        day += ", ";
+        appending = true
+      }
+      else {
+        appending = false
+      }
+      if(!appending)
+        splittedHours.push(day)
+    }
+
+    this.parsed_opening_hours = splittedHours.map(function(hours) {
       return <div><p>{hours}</p></div>
-    })
+    }); 
   };
 
   componentWillMount() {
+    this.parsed_opening_hours = "";
     this.parseBR();
   }
 
@@ -126,9 +160,6 @@ export default class RestaurantJumbotron extends Component {
         <p><b>Reviews</b><br/>
         <blockquote><q>{reviews}</q></blockquote></p>
         <br/>
-        {/*<p className="lead">
-          <Button color="primary">Learn More</Button>
-        </p>*/}
       </Jumbotron>
     </div>
   )};
@@ -139,6 +170,6 @@ RestaurantJumbotron.propTypes = {
   rating: PropTypes.string,
   images: PropTypes.object,
   map_src: PropTypes.string,
-  hours: PropTypes.string,
+  hours: PropTypes.array,
   reviews: PropTypes.object
 };
