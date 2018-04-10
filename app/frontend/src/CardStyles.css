@@ -3,3 +3,7 @@
     overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.background {
+	background-color: rgb(246, 249, 250)
+}

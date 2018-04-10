@@ -77,13 +77,7 @@ export default class Restaurants extends Component {
     var hour = d.getHours();
     var day = d.getDay(); 
     var timeString = days[day] + ",";
-    if(hour / 12 >= 1) {
-      timeString += hour == 12 ? 12 : hour % 12;
-      timeString += ":00,PM";
-    } else {
-      timeString += hour + ":00,AM";
-    }
-
+    timeString += hour + ":00"
     return timeString;
   }
 
@@ -159,7 +153,7 @@ export default class Restaurants extends Component {
     })
 
     return (
-    	<div>
+    	<div className="background">
     		<Container>
             <Row>
                 <Col><h1>Restaurants</h1></Col>
