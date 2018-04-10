@@ -145,7 +145,7 @@ export default class Restaurants extends Component {
       page_numbers.push(i);
 
     var cards = this.state.restaurants_display.map(function(restaurant) {
-            return <Col xs="6" sm="4"><RestaurantCard restaurant={restaurant} /></Col>;
+            return <Col xs="12" md="4"><RestaurantCard restaurant={restaurant} /></Col>;
           })
 
     var pages = page_numbers.map((pageNum) => {
@@ -156,15 +156,17 @@ export default class Restaurants extends Component {
     	<div className="background">
     		<Container>
             <Row>
-                <Col><h1>Restaurants</h1></Col>
+                <Col xs="12" md="2"><h1>Restaurants</h1></Col>
+                <Col xs="0" md="10"/>
       			</Row>
             <Row>
-                <Col xs="2">
+                <Col xs="12" md="2">
                   <RestaurantFilter handler={this.filterPage}/>
                   <br />
                   <Sort handler={this.sortPage}/>
                 </Col>
-                <Col><Container>
+
+                <Col xs="12" md="10">
                 {
                   res_count > 0 &&
                   cards
@@ -173,11 +175,14 @@ export default class Restaurants extends Component {
                   res_count == 0 &&
                   <h1>No results found.</h1>
                 }
-                </Container></Col>
+                </Col>
             </Row>
             <Row>
-                <Col sm="5"></Col>
-                <Col><Pagination size="lg">{pages}</Pagination></Col>
+              <Col md="4"/>
+              <Col xs="12" md="4">
+                <Pagination size="lg">{pages}</Pagination>
+                </Col>
+              <Col md="4"/>
             </Row>
       	</Container>
       </div>

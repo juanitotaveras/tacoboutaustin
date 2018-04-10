@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Container, Form, Row, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Container, Form, Row, FormGroup, Label, Input, Button, Col } from 'reactstrap';
 import PropTypes from "prop-types";
 
 export default class RestaurantFilter extends Component {
@@ -74,46 +74,46 @@ export default class RestaurantFilter extends Component {
 
   render() {
     return(
-      <Container>
+      <Row>
           <Form>
-              <Row><legend>Filter by:</legend></Row>
-              <Row>
+              <Col xs="12"><legend>Filter by:</legend></Col>
+              <Col xs="12">
 
                <FormGroup check inline>
                   <Label for="ratingFilter">Rating of at least:</Label>
                   <Input type="number" min="0" max="5" ref="ratFilter" id="ratingFilter" placeholder="1-5" onChange={e => this.handleRatingChange(e)}
                   onKeyPress={this.enterPressed.bind(this)}/>
                 </FormGroup>
-              </Row>
+              </Col>
 
               <br />
 
-              <Row>
+              <Col xs="12">
                 <FormGroup check inline>
                   <Label check>
                     <Input type="checkbox" ref="openFilter" onChange={e => this.handleHourChange(e)} onKeyPress={this.enterPressed.bind(this)}/>Show what's open right now
                   </Label>
                 </FormGroup>
-              </Row>
+              </Col>
 
               <br />
 
-              <Row>
+              <Col xs="12">
                 <FormGroup>
                   <Label for="zipcodeFilter">Filter by zipcode</Label>
                   <Input type="number" ref="zipFilter" id="zipcodeFilter" placeholder="Enter a zipcode" onChange={e => this.handleZipChange(e)}
                     onKeyPress={this.enterPressed.bind(this)}/>
                 </FormGroup>
-              </Row>
+              </Col>
 
-              <Row>
+             <Col xs="12">
                 <Button outline color="primary" onClick={this.gatherFilters}>Apply filters</Button>
-              </Row>
-              <Row>
+              </Col>
+              <Col xs="12">
                 <Button outline color="primary" onClick={this.unapplyFilters}>Clear all filters</Button>
-              </Row>
+              </Col>
           </Form>
-        </Container>
+        </Row>
     );
   }
 

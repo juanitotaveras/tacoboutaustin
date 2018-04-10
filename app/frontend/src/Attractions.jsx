@@ -145,7 +145,7 @@ export default class Attractions extends Component {
       page_numbers.push(i);
 
     var cards = this.state.attractions_display.map(function(attraction){
-            return <Col xs="6" sm="4"><AttractionCard attraction={attraction} /></Col>;
+            return <Col xs="12" md="4"><AttractionCard attraction={attraction} /></Col>;
           })
 
     var pages = page_numbers.map((pageNum) => {
@@ -156,15 +156,17 @@ export default class Attractions extends Component {
       <div>
         <Container>
             <Row>
-                <Col><h1>Attractions</h1></Col>
+                <Col xs="12" md="2"><h1>Attractions</h1></Col>
+                <Col xs="0" md="10"/>
             </Row>
             <Row>
-                <Col xs="2">
+                <Col xs="12" md="2">
                   <Filter handler={this.filterPage}/>
                   <br />
                   <Sort handler={this.sortPage}/>
                 </Col>
-                <Col><Container>
+
+                <Col xs="12" md="10">
                 {
                   att_count > 0 &&
                   cards
@@ -173,11 +175,14 @@ export default class Attractions extends Component {
                   att_count == 0 &&
                   <h1>No results found.</h1>
                 }
-                </Container></Col>
+                </Col>
             </Row>
             <Row>
-                <Col sm="5"></Col>
-                <Col><Pagination size="lg">{pages}</Pagination></Col>
+              <Col md="4"/>
+              <Col xs="12" md="4">
+                <Pagination size="lg">{pages}</Pagination>
+                </Col>
+              <Col md="4"/>
             </Row>
           </Container>
         </div>
