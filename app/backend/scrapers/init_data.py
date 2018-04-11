@@ -11,7 +11,7 @@
 from hotel_scraper import scrap_hotels
 from restaurant_scraper import scrap_restaurants
 from attraction_scraper import scrap_attractions
-from fix_data import fix_sixth_street, fix_zip_code, fix_hotels, fix_attractions
+from fix_data import fix_all
 from helper_methods import db
 
 def init_db():
@@ -27,10 +27,7 @@ def init_db():
     scrap_attractions()
     db.session.commit()
     print("Attractions: done. Start fixing data")
-    #fix_sixth_street()
-    #fix_zip_code()
-    fix_hotels()
-    fix_attractions()
+    fix_all()
     db.session.commit()
     print("everything done.")
 

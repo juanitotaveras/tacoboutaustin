@@ -10,41 +10,46 @@
 
 from flask import render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func, or_
-from main import app
+from sqlalchemy import func, or_, text
+from main import app,db
 from copy import copy
-from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Hour
+from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Hour, Distance
 import re
 
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
            "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
+def getOtherType(type):
+    if type == "restaurant":
+        return "hotel", "attraction" 
+    if type == "hotel":
+        return "restaurant", "attraction"
+    if type == "attraction":
+        return "restaurant", "hotel"
 
-def close_places(place_type, number, zip_code):
-    places = None
-    if place_type == "restaurant":
-        places = Restaurant.query.filter_by(zipcode=zip_code).order_by(
-            func.random()).limit(number).all()
-    if place_type == "hotel":
-        places = Hotel.query.filter_by(zipcode=zip_code).order_by(
-            func.random()).limit(number).all()
-    if place_type == "attraction":
-        places = Attraction.query.filter_by(zipcode=zip_code).order_by(
-            func.random()).limit(number).all()
+def getIdType(model, type):
+    if type == "restaurant":
+        return model.restaurant_id
+    if type == "hotel":
+        return model.hotel_id
+    if type == "attraction":
+        return model.attraction_id
+    return model.id
+
+def close_places(place, type, number):
+    query_string = "SELECT place.*, " + type + ".*, distance.* FROM " + type + " inner join distance ON " + type + ".id = distance.second_place_id inner join place ON " +type + ".id = place.id WHERE distance.id = " + str(place.id) + " ORDER BY distance.distance asc LIMIT 2"
+    query = text(query_string)
+    places = db.session.execute(query)
     places_data = []
     if places is not None:
         for place in places:
             place_data = {}
-            if place_type == "restaurant":
-                place_data['id'] = place.restaurant_id
-            if place_type == "hotel":
-                place_data['id'] = place.hotel_id
-            if place_type == "attraction":
-                place_data['id'] = place.attraction_id
+            place_data['id'] = getIdType(place, type)
             place_data['name'] = place.name
             place_data['image'] = place.cover_image
             place_data['rating'] = place.rating
             place_data['address'] = [place.address1, place.address2]
             place_data['zip_code'] = place.zipcode
+            place_data['distance'] = place.distance
             places_data.append(place_data)
     return places_data
 
@@ -96,14 +101,6 @@ def getModel(type):
         return Attraction
     return Place
 
-def getIdType(model, type):
-    if type == "restaurant":
-        return model.restaurant_id
-    if type == "hotel":
-        return model.hotel_id
-    if type == "attraction":
-        return model.attraction_id
-    return model.id
 
 # type: "restaurant", "hotel", "attraction"
 # args = requests.args
@@ -166,8 +163,7 @@ def getList(args, type):
     output = []
     for place in places:
         place_data = {}
-        id = getIdType(place, type)
-        place_data['id'] = id
+        place_data['id'] = getIdType(place, type)
         place_data['name'] = place.name
         place_data['image'] = place.cover_image
         place_data['rating'] = place.rating
@@ -180,20 +176,6 @@ def getList(args, type):
                 category_data['id'] = association.category.id
                 category_data['name'] = association.category.name
                 place_data['categories'].append(category_data)
-        if type == "restaurant":
-            dayStr = request.args.get('day', default=None, type=str)
-            if dayStr is not None:
-                day = dayDict[dayStr]
-                hours = Hour.query.filter_by(restaurant_id = id).filter_by(day = day)
-                hours_data = []
-                for hour in hours:
-                    hour_data = {}
-                    hour_data['day'] = hour.day
-                    hour_data['open_time'] = hour.open_time
-                    hour_data['close_time'] = hour.close_time
-                    hours_data += [hour_data]
-                place_data['hours'] = hours_data
-            
         output.append(place_data)
     return output
 
@@ -249,8 +231,8 @@ def get_restaurant(id):
         category_data['name'] = association.category.name
         restaurant_data['categories'].append(category_data)
 
-    hotels = close_places("hotel", 2, restaurant.zipcode)
-    attractions = close_places("attraction", 2, restaurant.zipcode)
+    hotels = close_places(restaurant, "hotel", 2)
+    attractions = close_places(restaurant, "attraction", 2)
 
     return jsonify({'status': "OK", 'restaurant': restaurant_data, 'close_by_hotels': hotels, 'close_by_attractions': attractions})
 
@@ -284,8 +266,8 @@ def get_hotel(id):
         image_data += [image.image_url]
     hotel_data['images'] = image_data
 
-    restaurants = close_places("restaurant", 2, hotel.zipcode)
-    attractions = close_places("attraction", 2, hotel.zipcode)
+    restaurants = close_places(hotel, "restaurant", 2)
+    attractions = close_places(hotel, "attraction", 2)
 
     return jsonify({'status': "OK", 'hotel': hotel_data, 'close_by_restaurants': restaurants, 'close_by_attractions': attractions})
 
@@ -321,21 +303,7 @@ def get_attraction(id):
         image_data += [image.image_url]
     attraction_data['images'] = image_data
 
-    restaurants = close_places("restaurant", 2, attraction.zipcode)
-    hotels = close_places("hotel", 2, attraction.zipcode)
+    restaurants = close_places(attraction, "restaurant", 2)
+    hotels = close_places(attraction, "hotel", 2)
 
     return jsonify({'status': "OK", 'attraction': attraction_data, 'close_by_restaurants': restaurants, 'close_by_hotels': hotels})
-
-
-@app.route('/categories')
-def get_categories():
-    categories = Category.query.all()
-    output = []
-    for category in categories:
-        category_data = {}
-        category_data['id'] = category.id
-        category_data['name'] = category.name
-        category_data['number'] = len(category.restaurants)
-        output.append(category_data)
-    return jsonify({'status': "OK", 'list': output, 'total': len(output)})
-

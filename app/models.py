@@ -13,14 +13,13 @@ from sqlalchemy.orm import relationship
 from flask import jsonify
 from main import app, db
 
-
 class Image(db.Model):
     __tablename__ = "images"
     id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.String(200))
 
     place_id = db.Column(db.Integer, db.ForeignKey('place.id'), nullable=True)
-    place = db.relationship('Place', backref=db.backref('images',lazy=True))
+    place = db.relationship('Place', backref=db.backref('images',lazy=True, cascade= "all, delete-orphan"))
 
     def __init__(self, image):
         self.image_url = image
@@ -33,7 +32,7 @@ class Review(db.Model):
     text = db.Column(db.String(200))
 
     place_id = db.Column(db.Integer, db.ForeignKey('place.id'), nullable=True)
-    place = db.relationship('Place', backref=db.backref('reviews',lazy=True))
+    place = db.relationship('Place', backref=db.backref('reviews',lazy=True, cascade= "all, delete-orphan"))
 
     def __init__(self, ReviewText, ReviewLink):
         self.text = ReviewText
@@ -92,7 +91,12 @@ class Category(db.Model):
         if exists:
             return db.session.query(Category).filter_by(id=id).first()
         return self(id, name)
-        
+class Distance(db.Model):
+    __tablename__ = 'distance'
+    id = db.Column(db.Integer, ForeignKey('place.id'), primary_key = True)
+    second_place_id = db.Column(db.Integer, ForeignKey('place.id'), primary_key = True)
+    distance = db.Column(db.Integer)
+
 class Place(db.Model):
     __tablename__ = "place"
 
@@ -110,6 +114,15 @@ class Place(db.Model):
 
     zipcode = db.Column(db.Integer, ForeignKey('zipcode.value'))
     zip_code = relationship("Zipcode", back_populates="places")
+    distances = relationship("Distance", cascade="all, delete-orphan", primaryjoin=id==Distance.id)
+
+    def addDistance(self, place, distance):
+        d = Distance()
+        d.second_place_id = place.id
+        d.distance = distance
+        with db.session.no_autoflush:
+            self.distances.append(d)
+
     def __init__(self, name, longtitude, latitude, rating, phone):
         self.name = name
         self.longtitude = longtitude
@@ -171,6 +184,7 @@ class Restaurant (Place):
             a.category = Category.get_or_create(category['alias'], category['title'])
             with db.session.no_autoflush:
                 self.categories.append(a)
+
 
     def addHour(self, time):
         new_hour = Hour(time['day'], time['start'], time['end'])

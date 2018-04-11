@@ -9,12 +9,11 @@
 # --------------------------------------
 
 from helper_methods import *
+from math import radians, cos, sin, asin, sqrt
 
 def fix_sixth_street():
     attraction = Attraction.query.filter_by(name='Sixth street').first()
-    attraction.address1 = "W 6th St"
-    attraction.address2 = "Austin, TX 78703"
-    attraction.zipcode = 78703
+    attraction.addAddress(["W 6th St", "Austin, TX 78703"], 78703)
     db.session.commit()
 
 def fix_hotels():
@@ -38,13 +37,15 @@ def fix_hotels():
     if hotel is not None:
         db.session.delete(hotel)
 
-    hotel = Hotel.query.filter_by(name = "Archer Hotel Austin").first()
+    hotel1 = Hotel.query.filter_by(name = "Archer Hotel Austin").first()
+    print(hotel1)
     if hotel is not None:
+        print(hotel1)
         db.session.delete(hotel)
 
-    hotel = Hotel.query.filter_by(name = "Omni Austin Hotel Downtown").first()
-    if hotel is not None:
-        db.session.delete(hotel)
+    hotel2 = Hotel.query.filter_by(name = "Omni Austin Hotel Downtown").first()
+    if hotel2 is not None:
+        db.session.delete(hotel2)
    
     db.session.commit()
 
@@ -66,11 +67,8 @@ def delete_restaurant(restaurant):
 
 def fix_zip_code():
     for zipcode in Zipcode.query.all():
-        restaurants = Restaurant.query.filter_by(zipcode = zipcode.value).all()
-        hotels = Hotel.query.filter_by(zipcode = zipcode.value).all()
-        attractions = Attraction.query.filter_by(zipcode = zipcode.value).all()
-        
-        if len(restaurants) < 2 or len(hotels) < 2 or len(attractions) < 2:
+        count = Place.query.filter_by(zipcode = zipcode.value).count()
+        if count < 1:
             db.session.delete(zipcode)
             db.session.commit()
 def fix_categories():
@@ -79,10 +77,50 @@ def fix_categories():
             db.session.delete(category)
             db.session.commit()
 
-if __name__ == "__main__":
-    #fix_sixth_street()
-    fix_zip_code()
-    #fix_hotels()
-    #fix_attractions()
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a))
+    miles = 3963*c # radius of the earth ~ 3963 miles
+    return miles
+
+"""
+def test1():
+    restaurant = Restaurant.query.filter_by(id = 1).first()
+    restaurants = Restaurant.query.filter(Restaurant.id != 1).all()
+    close_restaurant = restaurants[0]
+    for restaurantC in restaurants:
+        print(close_restaurant.id, haversine(close_restaurant.longtitude, close_restaurant.latitude, restaurant.longtitude, restaurant.latitude), restaurantC.id, haversine(restaurantC.longtitude, restaurantC.latitude,restaurant.longtitude, restaurant.latitude))
+        if compareDistance(restaurant, restaurantC, close_restaurant):
+            close_restaurant = restaurantC
+"""
+
+def init_distances():
+    places = Place.query.all()
+    for place in places:
+        other_places = Place.query.filter(Place.id != place.id)
+        for other_place in other_places:
+            place.addDistance(other_place, haversine(place.longtitude, place.latitude, other_place.longtitude, other_place.latitude))
+        db.session.commit()
+
+def fix_all():
+    fix_sixth_street()
+    fix_hotels()
+    fix_attractions()
     fix_categories()
-    #db.session.commit()
+    fix_zip_code()
+    print("finish fixing data, start initialize distances table")
+    init_distances()
+
+
+if __name__ == "__main__":
+    fix_all()
+    db.session.commit()
