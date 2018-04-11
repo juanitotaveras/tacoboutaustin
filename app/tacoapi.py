@@ -13,7 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, or_, text
 from main import app,db
 from copy import copy
-from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Hour, Distance
+from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Hour, Distance, Zipcode
 import re
 
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
@@ -318,4 +318,23 @@ def get_categories():
         category_data['name'] = category.name
         category_data['number'] = len(category.restaurants)
         output.append(category_data)
+    return jsonify({'status': "OK", 'list': output, 'total': len(output)})
+
+@app.route('/zipcodes')
+def get_zipcodes():
+    type = request.args.get('type', default=None, type=str)
+    query_string = "SELECT zipcode.*, COUNT(place.id) as Count FROM zipcode inner join place on place.zipcode = zipcode.value"
+
+    if type is not None:
+        query_string = query_string + " WHERE place.type = \"" + type + "\""  
+    query_string = query_string + " GROUP BY zipcode.value"
+    query = text(query_string)
+    zipcodes = db.session.execute(query)
+
+    output = []
+    for zipcode in zipcodes:
+        zipcode_data = {}
+        zipcode_data['value'] = zipcode.value
+        zipcode_data['number'] = zipcode.Count
+        output.append(zipcode_data)
     return jsonify({'status': "OK", 'list': output, 'total': len(output)})
