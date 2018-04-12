@@ -3,6 +3,7 @@ import './App.css';
 import { Container, Row, Col, Button, Pagination, PaginationItem, 
   PaginationLink, Form, FormGroup } from 'reactstrap';
 import AttractionCard from './AttractionCard';
+import Header from './Header';
 import { api_url } from './config';
 import Sort from './Sort';
 import Filter from './Filter';
@@ -153,7 +154,9 @@ export default class Attractions extends Component {
     })
 
     return (
-      <div>
+      <div classname="background">
+        <Header title="Attractions" description="Attractions description"/>
+        <br />
         <Container>
             <Row>
                 <Col xs="12" md="2"><h1>Attractions</h1></Col>

@@ -156,7 +156,7 @@ export default class Restaurants extends Component {
 
     return (
     	<div className="background">
-        <Header />
+        <Header title="Restaurants" description="Restaurants description"/>
         <br />
     		<Container id="jump">
             <Col xs="12" md="2">

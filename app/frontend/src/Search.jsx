@@ -12,6 +12,7 @@ import AttractionSearchCard from './AttractionSearchCard';
 import './App.css';
 import { api_url } from './config';
 import classnames from 'classnames';
+import Header from './Header';
 
 // var restaurants = [Restaurant('address', 'id', 'image', 'name', 'rating')];
 var restaurants = [];
@@ -418,7 +419,9 @@ export default class Search extends Component {
 
 	if (this.state.hasSearched) {
 		return(
-			<div>
+			<div className="background">
+        	<Header title="Search Austin"/>
+        	<br />
 			<Container>
 				<Row>	
 					<Col xs="5"/><Col xs="2"><h1>Search Austin</h1></Col><Col xs="5"/>
@@ -438,7 +441,11 @@ export default class Search extends Component {
 			</div>
 			);
 	} else {
-		return(							<div>
+		return(							
+			<div className="background">
+        	<Header title="Search Austin"/>
+        	<br />
+
 			<Container>
 				<Row>	
 					<Col xs="5"/><Col xs="2"><h1>Search Austin</h1></Col><Col xs="5"/>

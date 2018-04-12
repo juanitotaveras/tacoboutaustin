@@ -1,5 +1,6 @@
 import React from 'react';
 import NavigationBar from './NavigationBar';
+import PropTypes from 'prop-types';
 import "./IntroStyles.css";
 
 export default class Header extends React.Component {
@@ -19,8 +20,8 @@ export default class Header extends React.Component {
                   <br/>
               </div>
 
-              <h1>Restaurants</h1>
-              <p>Description</p>
+              <h1>{this.props.title}</h1>
+              <p>{this.props.description}</p>
 
               <div className="emptySpace">
                   <br/>
@@ -30,6 +31,11 @@ export default class Header extends React.Component {
     );
   }
 }
+
+Header.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string
+};
 
 
 

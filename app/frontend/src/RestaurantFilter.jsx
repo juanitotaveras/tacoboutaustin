@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Form, Row, FormGroup, Label, Input, Button, Col } from 'reactstrap';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+// import 'react-select/dist/react-select.css';
 import PropTypes from "prop-types";
 
 export default class RestaurantFilter extends Component {
@@ -117,7 +116,8 @@ export default class RestaurantFilter extends Component {
                 </FormGroup>
               </Col>
 
-              <Row>
+  {/*            <Row>
+            
                <Select
                   name="form-field-name"
                   value={value}
@@ -127,7 +127,7 @@ export default class RestaurantFilter extends Component {
                     { value: 'two', label: 'Two' },
                   ]}
                 />
-              </Row>
+              </Row>*/}
 
               <br />
 

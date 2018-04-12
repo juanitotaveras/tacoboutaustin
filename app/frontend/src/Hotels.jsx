@@ -3,6 +3,7 @@ import './App.css';
 import { Container, Row, Col, Button, Pagination, PaginationItem, 
   PaginationLink, Form, FormGroup } from 'reactstrap';
 import HotelCard from './HotelCard';
+import Header from './Header';
 import { api_url } from './config';
 import Sort from './Sort';
 import Filter from './Filter';
@@ -152,7 +153,10 @@ export default class Hotels extends Component {
 
 
     return (
-      <div>
+      <div className="background">
+        <Header title="Hotels" description="Hotels description"/>
+        <br />
+
         <Container>
             <Row>
                 <Col xs="12" md="2"><h1>Hotels</h1></Col>

@@ -6,6 +6,7 @@ import Eduardo from './assets/about_eduardo.jpg';
 import James from './assets/about_james.jpeg';
 import Juanito from './assets/about_juanito.jpg';
 import TeamMember from './TeamMember';
+import Header from './Header';
 import {
   Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem,
   NavLink, UncontrolledDropdown, DropdownToggle, DropdownMenu,
@@ -182,7 +183,10 @@ class About extends Component {
 
  render(props) {
     return (
-    	<div styles={styles}>
+    	<div className="background" styles={styles}>
+        <Header title="About Us"/>
+        <br />
+
       <Container>
           <Row>
           <Col>
