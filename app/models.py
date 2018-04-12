@@ -71,15 +71,15 @@ class Zipcode(db.Model):
 class Association(db.Model):
     __tablename__ = 'association'
     category_id = db.Column(db.String(100), ForeignKey('category.id'), primary_key=True)
-    restaurant_id = db.Column(db.Integer, ForeignKey('restaurant.id'), primary_key=True)
-    category = relationship("Category", back_populates="restaurants")
-    restaurant = relationship("Restaurant", back_populates="categories")
+    place_id = db.Column(db.Integer, ForeignKey('place.id'), primary_key=True)
+    category = relationship("Category", back_populates="places")
+    place = relationship("Place", back_populates="categories")
 
 class Category(db.Model):
     __tablename__ = "category"
     id = db.Column(db.String(100), primary_key=True)
     name = db.Column(db.String(200))
-    restaurants = relationship("Association", back_populates="category", cascade="all, delete-orphan")
+    places = relationship("Association", back_populates="category", cascade="all, delete-orphan")
 
     def __init__(self, id, name):
         self.id = id
@@ -115,6 +115,15 @@ class Place(db.Model):
     zipcode = db.Column(db.Integer, ForeignKey('zipcode.value'))
     zip_code = relationship("Zipcode", back_populates="places")
     distances = relationship("Distance", cascade="all, delete-orphan", primaryjoin=id==Distance.id)
+
+    categories = relationship("Association", back_populates="place", cascade="all, delete-orphan")
+
+    def addCategories(self, categories):
+        for category in categories:
+            a = Association()
+            a.category = Category.get_or_create(category['alias'], category['title'])
+            with db.session.no_autoflush:
+                self.categories.append(a)
 
     def addDistance(self, place, distance):
         d = Distance()
@@ -176,14 +185,6 @@ class Restaurant (Place):
     id = db.Column(db.Integer, ForeignKey('place.id'))
     restaurant_id = db.Column(db.Integer, primary_key=True)
     hours = relationship("Hour", back_populates = "restaurant", cascade="all, delete-orphan")
-    categories = relationship("Association", back_populates="restaurant", cascade="all, delete-orphan")
-
-    def addCategories(self, categories):
-        for category in categories:
-            a = Association()
-            a.category = Category.get_or_create(category['alias'], category['title'])
-            with db.session.no_autoflush:
-                self.categories.append(a)
 
 
     def addHour(self, time):

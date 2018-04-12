@@ -73,7 +73,7 @@ def fix_zip_code():
             db.session.commit()
 def fix_categories():
     for category in Category.query.all():
-        if len(category.restaurants) == 0:
+        if len(category.places) == 0:
             db.session.delete(category)
             db.session.commit()
 

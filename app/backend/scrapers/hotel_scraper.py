@@ -45,6 +45,7 @@ def scrap_hotels():
 			if len(detail['photos']) > 0:
 				new_hotel.addCover(detail['photos'][0])
 			new_hotel.addAddress(address, int(detail['location']['zip_code']))
+			new_hotel.addCategories(detail['categories'])
 
 			if not review is None:
 				for x in range(0, min(3, review['total'])):

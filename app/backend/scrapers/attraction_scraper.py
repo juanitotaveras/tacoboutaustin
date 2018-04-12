@@ -43,6 +43,7 @@ def scrap_attractions():
 			if len(detail['photos']) > 0:
 				new_attraction.addCover(detail['photos'][0])
 			new_attraction.addAddress(address, int(detail['location']['zip_code']))
+			new_attraction.addCategories(detail['categories'])
 
 			if not review is None:
 				for x in range(0, min(3, review['total'])):

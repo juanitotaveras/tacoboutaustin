@@ -17,7 +17,7 @@ def test1():
         attractions = Attraction.query.filter_by(zipcode = zipcode.value).all()
         count = Place.query.filter_by(zipcode = zipcode.value).count() 
         print(zipcode.value, count, len(restaurants), len(hotels), len(attractions))
-    #places = Place.query.limit(5)
+    places = Place.query.all()
     #query = Place.query.filter_by(id = 4)
     #print(type(query))
     #noImageCount = 0
@@ -30,11 +30,12 @@ def test1():
         #for close in place.close_by_places:
         #    print(close.name, close.type)
 
-    #restaurants = Restaurant.query.all()
-    #hotels = Hotel.query.all()
-    #attractions = Attraction.query.all()
-    #print(noImageCount, len(places), len(restaurants), len(hotels), len(attractions))
-
+    restaurants = Restaurant.query.all()
+    hotels = Hotel.query.all()
+    attractions = Attraction.query.all()
+    print(len(places), len(restaurants), len(hotels), len(attractions))
+    for place in Place.query.all():
+        print(place.type, place.name, place.id)
     """categories = Category.query.all()
     print(len(categories))
     for category in categories:
