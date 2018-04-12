@@ -314,8 +314,8 @@ def get_categories():
     output = []
     for category in categories:
         category_data = {}
-        category_data['id'] = category.id
-        category_data['name'] = category.name
+        category_data['value'] = category.id
+        category_data['label'] = category.name
         category_data['number'] = len(category.restaurants)
         output.append(category_data)
     return jsonify({'status': "OK", 'list': output, 'total': len(output)})
@@ -335,6 +335,6 @@ def get_zipcodes():
     for zipcode in zipcodes:
         zipcode_data = {}
         zipcode_data['value'] = zipcode.value
-        zipcode_data['number'] = zipcode.Count
+        zipcode_data['label'] = str(zipcode.value) + ": " + str(zipcode.Count) + " place(s)"
         output.append(zipcode_data)
     return jsonify({'status': "OK", 'list': output, 'total': len(output)})
