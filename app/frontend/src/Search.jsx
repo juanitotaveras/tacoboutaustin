@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Input, InputGroup, Button, Container, Row, Jumbotron, Col, Pagination, PaginationItem, 
-	PaginationLink, Form, FormGroup, Label  } from 'reactstrap';
+	PaginationLink, Form, FormGroup, Label, Nav, NavItem, NavLink,
+	TabPane, Card, CardTitle, CardText, TabContent  } from 'reactstrap';
 	import {Restaurant} from './Restaurants';
 // import Restaurants from './Restaurants';
 import RestaurantSearchCard from './RestaurantSearchCard';
@@ -10,12 +11,13 @@ import {Attraction} from './Attractions';
 import AttractionSearchCard from './AttractionSearchCard';
 import './App.css';
 import { api_url } from './config';
+import classnames from 'classnames';
 
 // var restaurants = [Restaurant('address', 'id', 'image', 'name', 'rating')];
 var restaurants = [];
 var hotels = [];
 var attractions = [];
-let per_page = 24;
+let per_page = 20;
 let per_category = per_page/3;
 
 var searchTerms = [];
@@ -29,19 +31,40 @@ export default class Search extends Component {
 		this.state = {
 			value: '', 
 			onPage: 0,
+			rPage: 0,
+			hPage: 0,
+			aPage: 0,
 			displayedRestaurants: [],
 			displayedHotels: [],
 			displayedAttractions: [],
-			hasSearched: false};
+			hasSearched: false,
+			activeTab: '1'
+		};
+		this.toggle = this.toggle.bind(this);
+		this.onChange = this.onChange.bind(this);
+		this.onSearch = this.onSearch.bind(this);
 
-			this.onChange = this.onChange.bind(this);
-			this.onSearch = this.onSearch.bind(this);
-
-		}
+	}
 
 		handlePageClick(pageNum) {
+			switch (this.state.activeTab) {
+				case "restaurantsTab":
+					this.setState({
+						rPage: pageNum
+					});
+					break;
+				case "attractionsTab":
+					this.setState({
+						aPage: pageNum
+					});
+					break;
+				case "hotelsTab":
+					this.setState({
+						hPage: pageNum
+					});
+					break;
+			}
 			this.setState({
-				onPage: pageNum,
 				done_loading: false
 			});
 
@@ -88,11 +111,39 @@ export default class Search extends Component {
   	// TODO: Try to display equal number of results for each
   	// maybe like 7 for each
 
-  	let idx = pageNum * per_category;
+  	let idx = pageNum * per_page;
+
+  	if (!this.state.hasSearched) {
+  		if (restaurants.length > 0)
+  			this.toggle("restaurantsTab");
+  		else if (attractions.length > 0)
+  			this.toggle("attractionsTab");
+  		else if (hotels.length > 0)
+  			this.toggle("hotelsTab");
+  	}
+
+  	var rIdx = this.state.rPage * per_page;
+  	var aIdx = this.state.aPage * per_page;
+  	var hIdx = this.state.hPage * per_page;
+	switch (this.state.activeTab) {
+		case "restaurantsTab":
+			rIdx = pageNum * per_page;
+			break;
+		case "attractionsTab":
+			aIdx = pageNum * per_page;
+			break;
+		case "hotelsTab":
+			hIdx = pageNum * per_page;
+			break;
+	}
+
+  	let rArray = restaurants.slice(rIdx, rIdx+per_page);
+  	let hArray = hotels.slice(hIdx, hIdx+per_page);
+  	let aArray = attractions.slice(aIdx, aIdx+per_page);
   	this.setState({
-  		displayedRestaurants: restaurants.slice(idx, idx+per_category),
-  		displayedHotels: hotels.slice(idx, idx+per_category),
-  		displayedAttractions: attractions.slice(idx, idx+per_category),
+  		displayedRestaurants: rArray,
+  		displayedHotels: hArray,
+  		displayedAttractions: aArray,
   		hasSearched: true
   	});
   }
@@ -150,8 +201,6 @@ export default class Search extends Component {
 		if (matchAllTerms) 
 			searchText += "&search_type=and"
 
-		console.log("SEARCHTEXT" + searchText);
-
 		const urls = ["/restaurants", "/hotels", "/attractions"].map((elem) => api_url + elem + searchText);
 		this.request(urls[0], this.fillInRestaurants);
 		this.request(urls[1], this.fillInHotels);
@@ -174,6 +223,14 @@ export default class Search extends Component {
 	noResultsFound() {
 		return restaurants.length == 0 && hotels.length == 0 && attractions.length == 0;
 	}
+
+	toggle(tab) {
+		if (this.state.activeTab !== tab) {
+	    	this.setState({
+	        	activeTab: tab
+	      	});
+	    }
+	 }
 
 
 	render() {
@@ -203,68 +260,161 @@ export default class Search extends Component {
 			</div>;
 
 	const page_numbers = [];
-	let largestArrayLength = Math.max(restaurants.length, attractions.length, hotels.length);
-	for(var i = 0; i <= (largestArrayLength/per_page) ; i++)
+	var arrayLength = 0;
+	switch (this.state.activeTab) {
+		case "restaurantsTab":
+			arrayLength = restaurants.length;
+			break;
+		case "attractionsTab":
+			arrayLength = attractions.length;
+			break;
+		case "hotelsTab":
+			arrayLength = hotels.length;
+			break;
+	}
+	for(var i = 0; i <= (arrayLength/per_page) ; i++)
 		page_numbers.push(i);
 
 	// console.log("PAGE COUNT: " + page_numbers.length + " RESPONSES: " + largestArrayLength);
 	var restaurantCards = this.state.displayedRestaurants.map(function(restaurant) {
-		return <Col xs="12" sm="6" md="6" lg="3"><RestaurantSearchCard restaurant={restaurant} searchTerms={searchTerms}/></Col>;
+		return <Col xs="12" sm="6" md="3"><RestaurantSearchCard restaurant={restaurant} searchTerms={searchTerms}/></Col>;
 	});
 
 	const restaurantComponent = 
-		<div><br/><Row>
-		<div className="searchDiv">
-		<h1> Restaurants</h1>
 		<Row>
+		<div>
+		<br/>
 		{restaurantCards}
-		</Row>
+{/*		{
+			page_numbers.length > 1 &&
+			paginationComponent
+			
+		}*/}
 		</div>
-		</Row>
-		</div>;
+		</Row>;
+
+
 	const hotelCards = this.state.displayedHotels.map(function(hotel) {
-		return <Col xs="12" sm="6" md="6" lg="3"><HotelSearchCard hotel={hotel} searchTerms={searchTerms}/></Col>;
+		return <Col xs="12" sm="6" md="3"><HotelSearchCard hotel={hotel} searchTerms={searchTerms}/></Col>;
 	});
 
 	const hotelComponent = 
-		<div><br/><Row>
-		<div className="searchDiv">
-		<h1> Hotels</h1>
+		<div>
+		<br/>
 		<Row>
 		{hotelCards}
 		</Row>
-		</div>
-		</Row>
+{/*		{
+			// page_numbers.length > 1 &&
+			paginationComponent
+		}*/}
 		</div>;
 	const attractionCards = this.state.displayedAttractions.map(function(attraction) {
-		return <Col xs="12" sm="6" md="6" lg="3"><AttractionSearchCard attraction={attraction} searchTerms={searchTerms}/></Col>;
+		return <Col xs="12" sm="6" md="3"><AttractionSearchCard attraction={attraction} searchTerms={searchTerms}/></Col>;
 	});
 
 	const attractionComponent = 
-		<div><br/><Row>
-		<div className="searchDiv">
-		<h1> Attractions</h1>
+		<div>
+		<br />
 		<Row>
-		{attractionCards}
+			{attractionCards}
 		</Row>
-		</div>
-		</Row></div>;
+{/*		{
+			// page_numbers.length > 1 &&
+			paginationComponent
+		}*/}
+		</div>;
 	var pages = page_numbers.map((pageNum) => {
 		return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum+1}</PaginationLink></PaginationItem></li>;
 	});
 
-	const paginationComponent = 
-		<Row>
-		<Col sm="5"></Col>
-		<Col>
-		<Pagination size="lg">
-		<PaginationItem disabled>
-		{/*<PaginationLink previous href="#" />*/}
-		</PaginationItem>
-		{pages}
-		</Pagination>
+	const pagesDiv = 
+	<div>
+	<Row>
+		<Col sm="0"/>
+		{/*<Col>*/}
+		<Col sm="auto">
+			<Pagination size="lg">
+			<PaginationItem disabled>
+			{/*<PaginationLink previous href="#" />*/}
+			</PaginationItem>
+			{pages}
+			</Pagination>
 		</Col>
-		</Row>;
+		 <Col sm="0"/> 
+		 </Row>
+		 </div>
+
+	const paginationComponent = 
+		<div>
+		{
+			page_numbers.length > 1 &&
+			pagesDiv
+		}
+		</div>;
+
+	const restaurantsNavItem =
+		          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === 'restaurantsTab' })}
+              onClick={() => { this.toggle('restaurantsTab'); }}
+            >
+              Restaurants ({restaurants.length})
+            </NavLink>
+          </NavItem>;
+    const hotelsNavItem =
+              <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === 'attractionsTab' })}
+              onClick={() => { this.toggle('attractionsTab'); }}
+            >
+              Attractions ({attractions.length})
+            </NavLink>
+          </NavItem>;
+    const attractionsNavItem = 
+              <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === 'hotelsTab' })}
+              onClick={() => { this.toggle('hotelsTab'); }}
+            >
+              Hotels ({hotels.length})
+            </NavLink>
+          </NavItem>;
+
+	const tabContainer = 
+	<div>
+        <Nav tabs>
+        	{
+        		restaurants.length > 0 &&
+        		restaurantsNavItem
+        	}
+        	{
+        		hotels.length > 0 &&
+        		hotelsNavItem
+        	}
+        	{
+        		attractions.length > 0 &&
+        		attractionsNavItem
+        	}
+
+        </Nav>
+
+        <TabContent activeTab={this.state.activeTab}>
+
+          <TabPane tabId="restaurantsTab">
+            {restaurantComponent}
+          </TabPane>
+
+          <TabPane tabId="attractionsTab">
+            {attractionComponent}
+          </TabPane>
+
+          <TabPane tabId="hotelsTab">
+          	{hotelComponent}
+          </TabPane>
+        </TabContent>
+      </div>;
+
 
 	if (this.state.hasSearched) {
 		return(
@@ -275,25 +425,15 @@ export default class Search extends Component {
 				</Row>
 			{searchBox}
 			{
-				restaurants.length > 0 &&
-				restaurantComponent
-			}
-			{
-				hotels.length > 0 &&
-				hotelComponent
-			}
-			{
-				attractions.length > 0 &&
-				attractionComponent
-			}
-			{
-				this.noResultsFound() &&
+				this.noResultsFound() ?
 				noResultsComponent
+				:
+				tabContainer
 			}
 			{
-				page_numbers.length > 1 &&
 				paginationComponent
 			}
+
 			</Container>
 			</div>
 			);
