@@ -13,13 +13,7 @@ class App extends Component {
   render() {
     return (
     	<div>
-    	{/*<Container>*/}
-    	  {/*<Row>*/}
-    	    {/*<Col>*/}
-        	  <NavigationBar/>
-        	{/*</Col>*/}
-          {/*</Row>*/}
-    	{/*</Container>*/}
+        	<NavigationBar/>
         	<Router />
         </div>
     );

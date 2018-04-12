@@ -3,9 +3,10 @@ import search from './assets/search.png';
 import './App.css';
 import RestaurantCard from './RestaurantCard';
 import RestaurantFilter from './RestaurantFilter';
+import Header from './Header';
 import Sort from './Sort';
 import { Container, Row, Col, Button, Pagination, PaginationItem, 
-  PaginationLink, Form, FormGroup } from 'reactstrap';
+  PaginationLink, Form, FormGroup, CardColumns } from 'reactstrap';
 import { api_url } from './config';
 
 var res_count = 0;
@@ -135,6 +136,7 @@ export default class Restaurants extends Component {
   }
 
   handlePageClick(pageNum) {
+    document.getElementById('jump').scrollIntoView();
     this.getPage(pageNum, this.state.sorted, this.state.filters);
   }
 
@@ -145,7 +147,7 @@ export default class Restaurants extends Component {
       page_numbers.push(i);
 
     var cards = this.state.restaurants_display.map(function(restaurant) {
-            return <Col xs="12" md="4"><RestaurantCard restaurant={restaurant} /></Col>;
+            return <RestaurantCard restaurant={restaurant} />;
           })
 
     var pages = page_numbers.map((pageNum) => {
@@ -154,29 +156,26 @@ export default class Restaurants extends Component {
 
     return (
     	<div className="background">
-    		<Container>
-            <Row>
-                <Col xs="12" md="2"><h1>Restaurants</h1></Col>
-                <Col xs="0" md="10"/>
-      			</Row>
-            <Row>
-                <Col xs="12" md="2">
-                  <RestaurantFilter handler={this.filterPage}/>
-                  <br />
-                  <Sort handler={this.sortPage}/>
-                </Col>
+        <Header />
+        <br />
+    		<Container id="jump">
+            <Col xs="12" md="2">
+              <RestaurantFilter handler={this.filterPage}/>
+              <br />
+              <Sort handler={this.sortPage}/>
+            </Col>
 
-                <Col xs="12" md="10">
-                {
-                  res_count > 0 &&
-                  cards
-                }
-                {
-                  res_count == 0 &&
-                  <h1>No results found.</h1>
-                }
-                </Col>
-            </Row>
+            <CardColumns>
+            {
+              res_count > 0 &&
+              cards
+            }
+            {
+              res_count == 0 &&
+              <h1>No results found.</h1>
+            }
+            </CardColumns>
+
             <Row>
               <Col md="4"/>
               <Col xs="12" md="4">

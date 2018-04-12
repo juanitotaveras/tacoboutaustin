@@ -9,10 +9,11 @@ import {
   Row, 
   Col
 } from 'reactstrap';
+import austin_skyline from './assets/austin_skyline.jpg';
 
 const items = [
   {
-    src: 'https://odis.homeaway.com/odis/destination/5f483ac3-763b-4506-9e15-3fff2e1e8291.hw1.jpg',
+    src: austin_skyline,
     altText: 'Austin, Texas',
     caption: 'Explore Austin!'
   },
@@ -82,22 +83,15 @@ export default class Splash extends Component {
     });
 
     return (
-    	<Container>
-    		<Row>
-          <Col>
-  		      <Carousel
-  		        activeIndex={activeIndex}
-  		        next={this.next}
-  		        previous={this.previous}
-  		      >
-  		        {/*<CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={this.goToIndex} />*/}
-  		        {slides}
-  		        <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
-  		        <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
-  		      </Carousel>
-          </Col>
-	      </Row>
-	    </Container>
+	      <Carousel
+	        activeIndex={activeIndex}
+	        next={this.next}
+	        previous={this.previous}
+	      >
+	        {slides}
+	        <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
+	        <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
+	      </Carousel>
   )};
 }
 

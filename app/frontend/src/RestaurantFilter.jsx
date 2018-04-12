@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Form, Row, FormGroup, Label, Input, Button, Col } from 'reactstrap';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 import PropTypes from "prop-types";
 
 export default class RestaurantFilter extends Component {
@@ -12,7 +14,8 @@ export default class RestaurantFilter extends Component {
     this.state = {
       rating: 0,
       zipcode: 0,
-      open: false
+      open: false,
+      selectedOption: '',
     };
   }
 
@@ -72,7 +75,15 @@ export default class RestaurantFilter extends Component {
       } 
   }
 
+   handleChange = (selectedOption) => {
+    this.setState({ selectedOption });
+    // console.log(`Selected: ${selectedOption.label}`);
+  }
+
   render() {
+     const { selectedOption } = this.state;
+    const value = selectedOption && selectedOption.value;
+
     return(
       <Row>
           <Form>
@@ -106,7 +117,22 @@ export default class RestaurantFilter extends Component {
                 </FormGroup>
               </Col>
 
+              <Row>
+               <Select
+                  name="form-field-name"
+                  value={value}
+                  onChange={this.handleChange}
+                  options={[
+                    { value: 'one', label: 'One' },
+                    { value: 'two', label: 'Two' },
+                  ]}
+                />
+              </Row>
+
+              <br />
+
              <Col xs="12">
+
                 <Button outline color="primary" onClick={this.gatherFilters}>Apply filters</Button>
               </Col>
               <Col xs="12">
