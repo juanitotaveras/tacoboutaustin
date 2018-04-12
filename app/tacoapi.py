@@ -16,6 +16,8 @@ from copy import copy
 from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Hour, Distance, Zipcode
 import re
 
+numberOfClosePlace = 2
+
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
            "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
 def getOtherType(type):
@@ -35,8 +37,8 @@ def getIdType(model, type):
         return model.attraction_id
     return model.id
 
-def close_places(place, type, number):
-    query_string = "SELECT place.*, " + type + ".*, distance.* FROM " + type + " inner join distance ON " + type + ".id = distance.second_place_id inner join place ON " +type + ".id = place.id WHERE distance.id = " + str(place.id) + " ORDER BY distance.distance asc LIMIT 2"
+def close_places(original_place, type, number):
+    query_string = "SELECT place.*, place.id as place_id, " + type + ".*, distance.* FROM " + type + " inner join distance ON " + type + ".id = distance.second_place_id inner join place ON " + type + ".id = place.id WHERE distance.id = " + str(original_place.id) + " ORDER BY distance.distance asc LIMIT " + str(number)
     query = text(query_string)
     places = db.session.execute(query)
     places_data = []
@@ -48,8 +50,18 @@ def close_places(place, type, number):
             place_data['image'] = place.cover_image
             place_data['rating'] = place.rating
             place_data['address'] = [place.address1, place.address2]
-            place_data['zip_code'] = place.zipcode
+            place_data['zip_code'] = place.zipcode  
             place_data['distance'] = place.distance
+
+            category_string = "SELECT category.* FROM category inner join association on category.id = association.category_id inner join place on place.id = association.place_id where place.id = " + str(place.place_id)
+            category_query = text(category_string)
+            categories = db.session.execute(category_query)
+            place_data['categories'] = []
+            for category in categories:
+                category_data = {}
+                category_data['id'] = category.id
+                category_data['name'] = category.name
+                place_data['categories'].append(category_data)
             places_data.append(place_data)
     return places_data
 
@@ -113,6 +125,7 @@ def getList(args, type):
     search_type = args.get('search_type', default=None, type=str)
     rating = args.get('rating', default=None, type=str)
     zipcode = request.args.get('zipcode', default=None, type=str)
+    categories = request.args.get('categories', default=None, type=str)
 
     Model = getModel(type)  # get the right model
 
@@ -130,9 +143,13 @@ def getList(args, type):
                 query = Model.query.filter(or_(or_(Model.zipcode.like(token), Model.name.like("%"+token+"%"), Model.id.in_(place.id for place in query.all()))))
     if rating is not None:
         query = query.filter(Model.rating >= float(rating))
+    if categories is not None:
+        categoriesTokens = categories.split(',')
+        for token in categoriesTokens:
+            query = query.filter(Model.categories.any(category_id = token))
+
     if type == "restaurant":  # special case with restaurant, because restaurant have open hour and categories
         time = request.args.get('time', default=None, type=str)
-        categories = request.args.get('categories', default=None, type=str)
         if time is not None:
             restaraunts = query.all()
             open_restaurants = []
@@ -141,10 +158,7 @@ def getList(args, type):
                 if isOpen(restaurant.hours, timeList):
                     open_restaurants.append(restaurant)
             query = query.filter(Restaurant.id.in_((rest.id for rest in open_restaurants)))
-        if categories is not None:
-            categoriesTokens = categories.split(',')
-            for token in categoriesTokens:
-                query = query.filter(Restaurant.categories.any(category_id = token))
+
 
     if zipcode is not None:
         query = query.filter_by(zipcode=zipcode)
@@ -169,13 +183,13 @@ def getList(args, type):
         place_data['rating'] = place.rating
         place_data['address'] = [place.address1, place.address2]
         place_data['zip_code'] = place.zipcode
-        if type == "restaurant":
-            place_data['categories'] = []
-            for association in place.categories:
-                category_data = {}
-                category_data['id'] = association.category.id
-                category_data['name'] = association.category.name
-                place_data['categories'].append(category_data)
+
+        place_data['categories'] = []
+        for association in place.categories:
+            category_data = {}
+            category_data['id'] = association.category.id
+            category_data['name'] = association.category.name
+            place_data['categories'].append(category_data)
         output.append(place_data)
     return output
 
@@ -231,8 +245,8 @@ def get_restaurant(id):
         category_data['name'] = association.category.name
         restaurant_data['categories'].append(category_data)
 
-    hotels = close_places(restaurant, "hotel", 2)
-    attractions = close_places(restaurant, "attraction", 2)
+    hotels = close_places(restaurant, "hotel", numberOfClosePlace)
+    attractions = close_places(restaurant, "attraction", numberOfClosePlace)
 
     return jsonify({'status': "OK", 'restaurant': restaurant_data, 'close_by_hotels': hotels, 'close_by_attractions': attractions})
 
@@ -266,8 +280,15 @@ def get_hotel(id):
         image_data += [image.image_url]
     hotel_data['images'] = image_data
 
-    restaurants = close_places(hotel, "restaurant", 2)
-    attractions = close_places(hotel, "attraction", 2)
+    hotel_data['categories'] = []
+    for association in hotel.categories:
+        category_data = {}
+        category_data['id'] = association.category.id
+        category_data['name'] = association.category.name
+        hotel_data['categories'].append(category_data)
+
+    restaurants = close_places(hotel, "restaurant", numberOfClosePlace)
+    attractions = close_places(hotel, "attraction", numberOfClosePlace)
 
     return jsonify({'status': "OK", 'hotel': hotel_data, 'close_by_restaurants': restaurants, 'close_by_attractions': attractions})
 
@@ -302,21 +323,34 @@ def get_attraction(id):
     for image in attraction.images:
         image_data += [image.image_url]
     attraction_data['images'] = image_data
+    attraction_data['categories'] = []
+    for association in attraction.categories:
+        category_data = {}
+        category_data['id'] = association.category.id
+        category_data['name'] = association.category.name
+        attraction_data['categories'].append(category_data)
 
-    restaurants = close_places(attraction, "restaurant", 2)
-    hotels = close_places(attraction, "hotel", 2)
+    restaurants = close_places(attraction, "restaurant", numberOfClosePlace)
+    hotels = close_places(attraction, "hotel", numberOfClosePlace)
 
     return jsonify({'status': "OK", 'attraction': attraction_data, 'close_by_restaurants': restaurants, 'close_by_hotels': hotels})
 
 @app.route('/categories')
 def get_categories():
-    categories = Category.query.all()
+    type = request.args.get('type', default=None, type=str)
+    query_string = "SELECT category.*, COUNT(place.id) as Count FROM category inner join association on category.id = association.category_id inner join place on place.id = association.place_id"
+
+    if type is not None:
+        query_string = query_string + " WHERE place.type = \"" + type + "\""  
+    query_string = query_string + " GROUP BY category.id" 
+    query = text(query_string)
+    categories = db.session.execute(query)
     output = []
     for category in categories:
         category_data = {}
         category_data['value'] = category.id
         category_data['label'] = category.name
-        category_data['number'] = len(category.restaurants)
+        category_data['number'] = category.Count
         output.append(category_data)
     return jsonify({'status': "OK", 'list': output, 'total': len(output)})
 
