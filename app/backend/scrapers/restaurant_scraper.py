@@ -20,6 +20,7 @@ def is_restaurant(restaurant):
 	#return restaurant['id'] == "amys-ice-creams-austin-8"
 
 def scrap_restaurants():
+	print("Start scrape restaurants data.")
 	response = requests.get(AUSTIN_EATING, headers = sygic_headers)
 	restaurants = response.json()['data']['places']
 
@@ -55,13 +56,14 @@ def scrap_restaurants():
 			if not review is None:
 				for x in range(0, min(3, review['total'])):
 					new_restaurant.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
-			db.session.add(new_restaurant)
-			db.session.commit()
+			if isNotExist(new_restaurant):
+				db.session.add(new_restaurant)
+			#db.session.commit()
 	db.session.commit()
+	print("Done scraping restaurants data.")
 
 if __name__ == '__main__':
 	db.drop_all()
 	db.create_all()
-	print("start")
 	db.session.commit()
 	scrap_restaurants()

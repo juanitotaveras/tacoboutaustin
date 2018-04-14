@@ -32,7 +32,7 @@ def fix_hotels():
     hotel = Hotel.query.filter_by(name = "Austin Folk House").first()
     hotel.addImage("https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg")
     hotel.addCover("https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg")
-
+    """
     hotel = Hotel.query.filter_by(name = "Studio 6 Austin").first()
     if hotel is not None:
         db.session.delete(hotel)
@@ -45,7 +45,7 @@ def fix_hotels():
 
     hotel2 = Hotel.query.filter_by(name = "Omni Austin Hotel Downtown").first()
     if hotel2 is not None:
-        db.session.delete(hotel2)
+        db.session.delete(hotel2)"""
    
     db.session.commit()
 
@@ -92,17 +92,6 @@ def haversine(lon1, lat1, lon2, lat2):
     miles = 3963*c # radius of the earth ~ 3963 miles
     return miles
 
-"""
-def test1():
-    restaurant = Restaurant.query.filter_by(id = 1).first()
-    restaurants = Restaurant.query.filter(Restaurant.id != 1).all()
-    close_restaurant = restaurants[0]
-    for restaurantC in restaurants:
-        print(close_restaurant.id, haversine(close_restaurant.longtitude, close_restaurant.latitude, restaurant.longtitude, restaurant.latitude), restaurantC.id, haversine(restaurantC.longtitude, restaurantC.latitude,restaurant.longtitude, restaurant.latitude))
-        if compareDistance(restaurant, restaurantC, close_restaurant):
-            close_restaurant = restaurantC
-"""
-
 def init_distances():
     places = Place.query.all()
     for place in places:
@@ -112,14 +101,14 @@ def init_distances():
         db.session.commit()
 
 def fix_all():
+    print("Start fixing data")
     fix_sixth_street()
     fix_hotels()
-    fix_attractions()
+    #fix_attractions()
     fix_categories()
     fix_zip_code()
     print("finish fixing data, start initialize distances table")
     init_distances()
-
 
 if __name__ == "__main__":
     fix_all()

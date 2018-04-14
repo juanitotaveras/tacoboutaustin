@@ -15,6 +15,7 @@ AUSTIN_HOTEL = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:3
 
 
 def scrap_hotels():
+	print("Start scrape hotels data.")
 	response = requests.get(AUSTIN_HOTEL, headers = sygic_headers)
 	hotels = response.json()['data']['places']
 
@@ -50,9 +51,11 @@ def scrap_hotels():
 			if not review is None:
 				for x in range(0, min(3, review['total'])):
 					new_hotel.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
-			db.session.add(new_hotel)
-			db.session.commit()
+			if isNotExist(new_hotel):
+				db.session.add(new_hotel)
+			#db.session.commit()
 	db.session.commit()
+	print("Done scraping hotels data.")
 
 if __name__ == '__main__':
 	db.drop_all()

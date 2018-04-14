@@ -47,6 +47,9 @@ def scrap_yelp_data(name, longitude, latitude):
     
     return detail, review
 
+def isNotExist(place):
+    another_place = Place.query.filter(Place.id != place.id).filter_by(name = place.name).filter_by(address1 = place.address1).filter_by(address2 = place.address2).first()
+    return (another_place is None)
 
 if __name__ == "__main__":
     pass

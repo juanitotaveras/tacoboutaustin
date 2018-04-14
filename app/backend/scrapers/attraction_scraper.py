@@ -14,6 +14,7 @@ from helper_methods import *
 AUSTIN_ATRACTION = "https://api.sygictravelapi.com/1.0/en/places/list?parents=city:397&categories=going_out&limit=200"
 
 def scrap_attractions():
+	print("Start scrape attractions data.")
 	response = requests.get(AUSTIN_ATRACTION, headers = sygic_headers)
 	attractions = response.json()['data']['places']
 
@@ -48,12 +49,14 @@ def scrap_attractions():
 			if not review is None:
 				for x in range(0, min(3, review['total'])):
 					new_attraction.addReview(review['reviews'][x]['text'], review['reviews'][x]['url'])
-			db.session.add(new_attraction)
-			db.session.commit()
+			if isNotExist(new_attraction):
+				db.session.add(new_attraction)
+			#db.session.commit()
 	db.session.commit()
+	print("Done scraping attractions data!")
 
 if __name__ == '__main__':
-	#db.drop_all()
-	#db.create_all()
-	#db.session.commit()
+	db.drop_all()
+	db.create_all()
+	db.session.commit()
 	scrap_attractions()

@@ -11,12 +11,12 @@ def test1():
         print(restaurant.name)
         for hour in restaurant.hours:
             print(hour.day, hour.open_time, hour.close_time)"""
-    for zipcode in Zipcode.query.all():
+    """for zipcode in Zipcode.query.all():
         restaurants = Restaurant.query.filter_by(zipcode = zipcode.value).all()
         hotels = Hotel.query.filter_by(zipcode = zipcode.value).all()
         attractions = Attraction.query.filter_by(zipcode = zipcode.value).all()
         count = Place.query.filter_by(zipcode = zipcode.value).count() 
-        print(zipcode.value, count, len(restaurants), len(hotels), len(attractions))
+        print(zipcode.value, count, len(restaurants), len(hotels), len(attractions))"""
     places = Place.query.all()
     #query = Place.query.filter_by(id = 4)
     #print(type(query))
@@ -34,8 +34,13 @@ def test1():
     hotels = Hotel.query.all()
     attractions = Attraction.query.all()
     print(len(places), len(restaurants), len(hotels), len(attractions))
+    i = 0
     for place in Place.query.all():
-        print(place.type, place.name, place.id)
+        another_place = Place.query.filter(Place.id != place.id).filter_by(name = place.name).filter_by(address1 = place.address1).filter_by(address1 = place.address1).first()
+        if another_place is not None:
+            i += 1
+            print(place.type, place.name, place.id)
+    print(i, len(places) -i)
     """categories = Category.query.all()
     print(len(categories))
     for category in categories:
