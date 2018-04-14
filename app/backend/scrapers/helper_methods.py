@@ -27,19 +27,39 @@ GOOGLE_KEY = "AIzaSyD6F4xULR2I7GtEAH82L9vL6dAaEQAqnpQ"
 sygic_headers = {'x-api-key': SYGIC_KEY}
 yelp_headers = {'Authorization': YELP_KEY}
 
+
+pp = pprint.PrettyPrinter(indent=4)
+
+def getModel(type):
+    if type == "restaurant":
+        return Restaurant
+    if type == "hotel":
+        return Hotel
+    if type == "attraction":
+        return Attraction
+    return Place
+
 def scrap_yelp_data(name, longitude, latitude):
     url = "https://api.yelp.com/v3/businesses/search?term=" + "\"" + name + "\"&latitude=" + str(latitude) + "&longitude=" + str(longitude)
     response = requests.get(url, headers = yelp_headers)
     response_json = response.json()
-    if response_json['total'] <= 0 or len(response_json['businesses']) == 0:
+    if 'error' in response_json or response_json['total'] <= 0 or len(response_json['businesses']) == 0:
         return None, None
-    #pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(response.json())
-    id = response_json['businesses'][0]['id']
+    found = False
+    for business in response_json['businesses']:
+        if isNotExist(business):
+            id = business['id']
+            found = True
+            break
+    if not found:
+        return None, None
 
     url = "https://api.yelp.com/v3/businesses/" + id
     response = requests.get(url, headers = yelp_headers)
     detail = response.json()
+
+    if len(detail['location']['display_address']) < 2 or detail['location']['zip_code'] == '':
+        return None, None
 
     url = "https://api.yelp.com/v3/businesses/" + id + "/reviews"
     response = requests.get(url, headers = yelp_headers)
@@ -47,9 +67,18 @@ def scrap_yelp_data(name, longitude, latitude):
     
     return detail, review
 
-def isNotExist(place):
-    another_place = Place.query.filter(Place.id != place.id).filter_by(name = place.name).filter_by(address1 = place.address1).filter_by(address2 = place.address2).first()
+
+def isNotExist(response):
+    another_place = Place.query.filter_by(name = response['name']).filter_by(phone = response['display_phone']).filter_by(address1 = response['location']['address1']).first()
     return (another_place is None)
+
+def isHotel(categories):
+    for category in categories:
+        if category['alias'] == "realestateagents" or category['alias'] == "homedecor" or category['alias'] == "collegeuniv" or category['alias'] == "structuralengineers" or category['alias'] == "hair_extensions":
+            return False
+    return True
+
+
 
 if __name__ == "__main__":
     pass

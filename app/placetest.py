@@ -36,11 +36,24 @@ def test1():
     print(len(places), len(restaurants), len(hotels), len(attractions))
     i = 0
     for place in Place.query.all():
-        another_place = Place.query.filter(Place.id != place.id).filter_by(name = place.name).filter_by(address1 = place.address1).filter_by(address1 = place.address1).first()
+        another_place = Place.query.filter(Place.id != place.id).filter_by(name = place.name).filter_by(address1 = place.address1).filter_by(phone = place.phone).first()
         if another_place is not None:
             i += 1
-            print(place.type, place.name, place.id)
+            print(place.type, place.name, place.id, another_place.type, another_place.name, another_place.id)
     print(i, len(places) -i)
+
+    j = 0
+    hotels = Hotel.query.all()
+    for hotel in hotels:
+        a = True
+        for assoc in hotel.categories:
+            if assoc.category.id == "hotels":
+                a = False
+                j += 1
+        if a:
+            print(hotel.name, hotel.hotel_id)
+    print(len(hotels), j, len(hotels) - j)
+
     """categories = Category.query.all()
     print(len(categories))
     for category in categories:

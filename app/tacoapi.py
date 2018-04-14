@@ -205,8 +205,10 @@ def getList(args, type):
     return output
 
 def getOne(id, type):
+    print(id)
     Model = getModel(type)
-    place = Model.query.filter(getIdType(Model, type)).first()
+    place = Model.query.filter(getIdType(Model, type) == id).first()
+    print(place)
     if place == None:
         response = jsonify({'status': "INVALID_ID"})
         response.status_code = 404
@@ -220,9 +222,9 @@ def getOne(id, type):
         'lat': place.latitude, 'long': place.longtitude}
     place_data['address'] = [place.address1, place.address2]
     place_data['rating'] = place.rating
-    place_data['reviews'] = [{'text': place.reviews[0].text, 'link': place.reviews[0].link}, {
-        'text': place.reviews[1].text, 'link': place.reviews[1].link}, {
-        'text': place.reviews[2].text, 'link': place.reviews[2].link}]
+    place_data['reviews'] = []
+    for review in place.reviews:
+        place_data['reviews'] += [{'text': place.reviews[0].text, 'link': place.reviews[0].link}]
 
     image_data = []
     for image in place.images:

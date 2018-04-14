@@ -24,7 +24,7 @@ def fix_hotels():
     
     hotel = Hotel.query.filter_by(address1 = "109 E 7th St").first()
     hotel.name = "Aloft Austin Downtown"
-    
+
     hotel = Hotel.query.filter_by(name = "Mehl's Motel").first()
     hotel.addImage("http://2.bp.blogspot.com/_YUD_TKP5xJk/TE3qHiCAGQI/AAAAAAAAADE/XNsebuQEf_Y/s1600/DSC08018.JPG")
     hotel.addCover("http://2.bp.blogspot.com/_YUD_TKP5xJk/TE3qHiCAGQI/AAAAAAAAADE/XNsebuQEf_Y/s1600/DSC08018.JPG")
@@ -32,38 +32,8 @@ def fix_hotels():
     hotel = Hotel.query.filter_by(name = "Austin Folk House").first()
     hotel.addImage("https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg")
     hotel.addCover("https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg")
-    """
-    hotel = Hotel.query.filter_by(name = "Studio 6 Austin").first()
-    if hotel is not None:
-        db.session.delete(hotel)
-
-    hotel1 = Hotel.query.filter_by(name = "Archer Hotel Austin").first()
-    print(hotel1)
-    if hotel is not None:
-        print(hotel1)
-        db.session.delete(hotel)
-
-    hotel2 = Hotel.query.filter_by(name = "Omni Austin Hotel Downtown").first()
-    if hotel2 is not None:
-        db.session.delete(hotel2)"""
    
     db.session.commit()
-
-def fix_attractions():
-    attraction = Attraction.query.filter_by(name = "HandleBar").first()
-    if attraction is not None:
-        db.session.delete(attraction)
-    
-    attraction = Attraction.query.filter_by(name = "Backbeat").first()
-    if attraction is not None:
-        db.session.delete(attraction)
-    db.session.commit()
-
-def delete_restaurant(restaurant):
-    associations = Association.query.filter_by(restaurant_id = restaurant.id).all()
-    for association in associations:
-        db.session.delete(association)
-    db.session.delete(restaurant)
 
 def fix_zip_code():
     for zipcode in Zipcode.query.all():
@@ -104,7 +74,6 @@ def fix_all():
     print("Start fixing data")
     fix_sixth_street()
     fix_hotels()
-    #fix_attractions()
     fix_categories()
     fix_zip_code()
     print("finish fixing data, start initialize distances table")
