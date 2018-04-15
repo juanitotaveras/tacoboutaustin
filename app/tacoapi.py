@@ -280,7 +280,7 @@ def get_hotels():
 def get_hotel(id):
     hotel_data, type1, type1_place, type2, type2_place = getOne(id, "hotel")
     
-    return jsonify({'status': "OK", 'retaurant': hotel_data, type1: type1_place, type2: type2_place})
+    return jsonify({'status': "OK", 'hotel': hotel_data, type1: type1_place, type2: type2_place})
 
 @app.route('/attractions')
 def get_attractions():
@@ -291,4 +291,4 @@ def get_attractions():
 def get_attraction(id):
     attraction_data, type1, type1_place, type2, type2_place = getOne(id, "attraction")
     
-    return jsonify({'status': "OK", 'retaurant': attraction_data, type1: type1_place, type2: type2_place})
+    return jsonify({'status': "OK", 'attraction': attraction_data, type1: type1_place, type2: type2_place})

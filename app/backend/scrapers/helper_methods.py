@@ -7,7 +7,7 @@
 # --------------------------------------
 # app/backend/scraper/Helper_methods.py
 # --------------------------------------
-
+from __future__ import print_function
 import requests
 import sys, os
 FILE_ABSOLUTE_PATH = os.path.abspath(__file__)  # get absolute filepath
@@ -68,8 +68,8 @@ def scrap_yelp_data(name, longitude, latitude):
     return detail, review
 
 
-def isNotExist(response):
-    another_place = Place.query.filter_by(name = response['name']).filter_by(phone = response['display_phone']).filter_by(address1 = response['location']['address1']).first()
+def isNotExist(business):
+    another_place = Place.query.filter_by(name = business['name']).filter_by(phone = business['display_phone']).first() 
     return (another_place is None)
 
 def isHotel(categories):
@@ -77,8 +77,6 @@ def isHotel(categories):
         if category['alias'] == "realestateagents" or category['alias'] == "homedecor" or category['alias'] == "collegeuniv" or category['alias'] == "structuralengineers" or category['alias'] == "hair_extensions":
             return False
     return True
-
-
 
 if __name__ == "__main__":
     pass

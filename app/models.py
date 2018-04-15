@@ -153,8 +153,12 @@ class Place(db.Model):
         self.cover_image = cover
 
     def addAddress(self, address, zipcode):
-        self.address1 = address[0]
-        self.address2 = address[1]
+        if len(address) == 3:
+            self.address1 = address[0] + ", " + address[1]
+            self.address2 = address[2]
+        else:
+            self.address1 = address[0]
+            self.address2 = address[1]
         new_zipcode = Zipcode.get_or_create(zipcode)
         with db.session.no_autoflush:
             self.zip_code = new_zipcode

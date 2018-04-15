@@ -25,23 +25,16 @@ def scrape_places(URL, type):
         detail, review = scrap_yelp_data(place['name'], place['location']['lng'], place['location']['lat'])
         address = ['', '']
         
-        if not detail is None and (type != "restaurant" or 'hours' in detail) and (type != "hotel" or isHotel(detail['categories'])):
+        if not detail is None and \
+            (type != "restaurant" or 'hours' in detail) and \
+            (type != "hotel" or isHotel(detail['categories'])):
             #pp.pprint(detail)
-            rating = detail['rating']
-            number = detail['display_phone']
-            if len(detail['location']['display_address']) == 3:
-                address[0]  =  detail['location']['display_address'][0] + ", " + detail['location']['display_address'][1]
-                address[1] = detail['location']['display_address'][2]
-            else:
-                address[0] = detail['location']['display_address'][0]
-                address[1] = detail['location']['display_address'][1]
-
-            new_place = Model(detail['name'], detail['coordinates']['longitude'],detail['coordinates']['latitude'], rating, number)
+            new_place = Model(detail['name'], detail['coordinates']['longitude'],detail['coordinates']['latitude'], detail['rating'], detail['display_phone'])
             for x in range(0, len(detail['photos'])):
                 new_place.addImage(detail['photos'][x])
             if len(detail['photos']) > 0:
                 new_place.addCover(detail['photos'][0])
-            new_place.addAddress(address, int(detail['location']['zip_code']))
+            new_place.addAddress(detail['location']['display_address'], int(detail['location']['zip_code']))
             new_place.addCategories(detail['categories'])
             if not review is None:
                 for x in range(0, min(3, review['total'])):
