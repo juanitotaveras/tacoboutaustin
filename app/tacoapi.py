@@ -39,7 +39,12 @@ def getIdType(model, type):
     return model.id
 
 def close_places(original_place, type, number):
-    query_string = "SELECT place.*, place.id as place_id, " + type + ".*, distance.* FROM " + type + " inner join distance ON " + type + ".id = distance.second_place_id inner join place ON " + type + ".id = place.id WHERE distance.id = " + str(original_place.id) + " ORDER BY distance.distance asc LIMIT " + str(number)
+    query_string = "SELECT place.*, place.id as place_id, " + \
+    type + ".*, distance.* FROM " + type + " inner join distance ON " + \
+    type + ".id = distance.second_place_id inner join place ON " + type + \
+    ".id = place.id WHERE distance.id = " + str(original_place.id) + \
+    " ORDER BY distance.distance asc LIMIT " + str(number) 
+
     query = text(query_string)
     places = db.session.execute(query)
     places_data = []
@@ -179,9 +184,12 @@ def getSortAndPageQuery(query, args, Model):
 def getList(args, type):
     Model = getModel(type)  # get the right model
 
-    query = getSearchQuery(args, Model)             # Get search query
-    query = getFilterQuery(query, args, Model)      # Get all filter queries: rating, zipcode, categories, time
-    query = getSortAndPageQuery(query, args, Model) # Get sort and pagination queries
+    # Get search query
+    query = getSearchQuery(args, Model)
+    # Get all filter queries: rating, zipcode, categories, time
+    query = getFilterQuery(query, args, Model)
+    # Get sort and pagination queries
+    query = getSortAndPageQuery(query, args, Model)
 
     # get the output of the request (a list of places with type provided)
     places = query.all()
@@ -205,10 +213,8 @@ def getList(args, type):
     return output
 
 def getOne(id, type):
-    print(id)
     Model = getModel(type)
     place = Model.query.filter(getIdType(Model, type) == id).first()
-    print(place)
     if place == None:
         response = jsonify({'status': "INVALID_ID"})
         response.status_code = 404

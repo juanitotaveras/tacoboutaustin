@@ -7,7 +7,8 @@
 # --------------------------------------
 # app/backend/scraper/Helper_methods.py
 # --------------------------------------
-from __future__ import print_function
+
+#from __future__ import print_function
 import requests
 import sys, os
 FILE_ABSOLUTE_PATH = os.path.abspath(__file__)  # get absolute filepath
@@ -17,7 +18,6 @@ BASE_DIR = os.path.dirname(PARENT_DIR)  # get grand parent directory path
 sys.path.append(BASE_DIR)
 from main import app, db
 from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Association, Zipcode
-#from sqlalchemy import func
 import pprint
 
 SYGIC_KEY = "EPrgMMQzpr9RMzaj25Tsw9QXrjtKbVMX2kY4NdWz"

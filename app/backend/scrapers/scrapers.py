@@ -5,7 +5,7 @@
 # pylint: disable = missing-docstring
 
 # --------------------------------------
-# app/backend/scraper/hotel_scraper.py
+# app/backend/scraper/scrapers.py
 # --------------------------------------
 
 from helper_methods import *
