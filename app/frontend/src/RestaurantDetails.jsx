@@ -21,7 +21,7 @@ export default class RestaurantDetails extends Component {
 			}
 
 			else {
-				let restaurant = JSON.parse(responseText)["restaurant"];
+				let restaurant = JSON.parse(responseText)["retaurant"];
 		      	let attractions = JSON.parse(responseText)["close_by_attractions"];
 		        let hotels = JSON.parse(responseText)["close_by_hotels"];
 
@@ -60,8 +60,20 @@ export default class RestaurantDetails extends Component {
 
 	buildMapSrc() {
 		if(redirect == false) {
-			var address = r_details.address[0] + " " + r_details.address[1];
+			var address = r_details["location"]["lat"] + "," + r_details["location"]["long"];
 			var s = "https://www.google.com/maps/embed/v1/place?q=" + encodeURI(address) + "&key=AIzaSyD7QCCYdGEGvI3J74sDAwqJbaWieKC6V2k";
+		}
+		return s;
+	}
+
+	parseCategories() {
+		var categories = r_details["categories"];
+		var s = "";
+		for (var i = 0; i < categories.length; i++) {
+			if(i == categories.length-1)
+				s += categories[i]["name"];
+			else
+				s += categories[i]["name"] + ", ";
 		}
 		return s;
 	}
@@ -76,6 +88,7 @@ export default class RestaurantDetails extends Component {
 		          })
 
 		var map = this.buildMapSrc();
+		var categories = this.parseCategories();
 
 		return (
 			<Container>
@@ -94,6 +107,8 @@ export default class RestaurantDetails extends Component {
 			        		hours={r_details.hours}
 			        		rating={r_details.rating}
 			        		reviews={r_details.reviews}
+			        		phone={r_details.phone}
+			        		categories={categories}
 	                		/>
 	              		</Col>
 					</Row>
