@@ -11,12 +11,12 @@
 	float: right;
 }
 
-.carousel-inner, .carousel-item {
+.carousel-inner, .nav-carousel-item {
     width: 100% !important;
     height: 100% !important;
 }
 
-.carousel-item img {
+.nav-carousel-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;

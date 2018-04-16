@@ -72,6 +72,7 @@ export default class Splash extends Component {
     const slides = items.map((item) => {
       return (
         <CarouselItem
+          className="nav-carousel-item"
           onExiting={this.onExiting}
           onExited={this.onExited}
           key={item.src} 
