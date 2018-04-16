@@ -273,7 +273,7 @@ def get_restaurants():
 def get_restaurant(id):
     restaurant_data, type1, type1_place, type2, type2_place = getOne(id, "restaurant")
     
-    return jsonify({'status': "OK", 'retaurant': restaurant_data, type1: type1_place, type2: type2_place})
+    return jsonify({'status': "OK", 'restaurant': restaurant_data, type1: type1_place, type2: type2_place})
 
 
 @app.route('/hotels')
