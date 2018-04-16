@@ -230,7 +230,7 @@ def getOne(id, type):
     place_data['rating'] = place.rating
     place_data['reviews'] = []
     for review in place.reviews:
-        place_data['reviews'] += [{'text': place.reviews[0].text, 'link': place.reviews[0].link}]
+        place_data['reviews'] += [{'text': review.text, 'link': review.link}]
 
     image_data = []
     for image in place.images:
