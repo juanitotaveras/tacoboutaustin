@@ -21,7 +21,7 @@ export default class RestaurantDetails extends Component {
 			}
 
 			else {
-				let restaurant = JSON.parse(responseText)["retaurant"];
+				let restaurant = JSON.parse(responseText)["restaurant"];
 		      	let attractions = JSON.parse(responseText)["close_by_attractions"];
 		        let hotels = JSON.parse(responseText)["close_by_hotels"];
 
@@ -60,7 +60,8 @@ export default class RestaurantDetails extends Component {
 
 	buildMapSrc() {
 		if(redirect == false) {
-			var address = r_details["location"]["lat"] + "," + r_details["location"]["long"];
+			// var address = r_details["location"]["lat"] + "," + r_details["location"]["long"];
+			var address = r_details.address[0] + " " + r_details.address[1];
 			var s = "https://www.google.com/maps/embed/v1/place?q=" + encodeURI(address) + "&key=AIzaSyD7QCCYdGEGvI3J74sDAwqJbaWieKC6V2k";
 		}
 		return s;

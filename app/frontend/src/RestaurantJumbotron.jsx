@@ -155,8 +155,8 @@ export default class RestaurantJumbotron extends Component {
             </div>
             </Col>
           <Col xs="6">
-            {/*<iframe top width="100%" height="400em" frameborder="0" src={this.props.map_src} allowfullscreen>*/}
-          {/*</iframe>*/}
+            <iframe top width="100%" height="400em" frameborder="0" src={this.props.map_src} allowfullscreen>
+          </iframe>
           <h2>Type of food: {this.props.categories}</h2>
           <h3>Phone: {this.props.phone}</h3>
           </Col>
