@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Container, Row, Col, Button, Pagination, PaginationItem, 
-  PaginationLink, Form, FormGroup } from 'reactstrap';
+import { Container, Row, Col, Button,
+  Form, FormGroup } from 'reactstrap';
 import HotelCard from './HotelCard';
 import Header from './Header';
 import { api_url } from './config';

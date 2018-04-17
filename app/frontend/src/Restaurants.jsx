@@ -5,8 +5,8 @@ import RestaurantCard from './RestaurantCard';
 import RestaurantFilter from './RestaurantFilter';
 import Header from './Header';
 import Sort from './Sort';
-import { Container, Row, Col, Button, Pagination, PaginationItem, 
-  PaginationLink, Form, FormGroup, CardColumns } from 'reactstrap';
+import { Container, Row, Col, Button,
+  Form, FormGroup, CardColumns } from 'reactstrap';
 import { api_url } from './config';
 import Paginator from './Paginator';
 
@@ -70,6 +70,7 @@ export default class Restaurants extends Component {
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
           parseResponse(xmlHttp.responseText);
+        console.log("REPONSE " + xmlHttp.responseText);
       }
       xmlHttp.open("GET", url, false) // true for asynchronous
       xmlHttp.send(null);
@@ -139,8 +140,6 @@ export default class Restaurants extends Component {
 
   handlePageClick(pageNum) {
     document.getElementById('jump').scrollIntoView();
-    this.setState({onPage: pageNum});
-
     this.getPage(pageNum, this.state.sorted, this.state.filters);
   }
 
