@@ -4,12 +4,16 @@ import { Card, CardImg, CardText, CardBody,
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './App.css';
-
-
+import TacoFull from './assets/taco_full.png';
 
 export default class HotelCard extends Component {
   render() {
     var h = this.props.hotel;
+
+    var taco_rating = [...Array(Math.floor(h.rating))].map(function(review) {
+      return <img top width="20em" src={TacoFull}/>
+    })
+
     return (
       <div>
         <Card>
@@ -17,7 +21,7 @@ export default class HotelCard extends Component {
           <CardBody>
             <CardTitle className="cardTitleText"><div className="wrap">{h.name}</div></CardTitle>
             <CardSubtitle></CardSubtitle>     
-            <CardText className="cardSubText"><span>Rating: {h.rating}/5</span> <span style={{float: 'right'}}>Zip code: {h.zip_code}</span></CardText>
+            <CardText className="cardSubText"><span>Rating: {taco_rating}</span> <span style={{float: 'right'}}>Zip code: {h.zip_code}</span></CardText>
             <Link to={'/hotels/' + h.id}><Button outline >Check it out!</Button></Link>
           </CardBody>
         </Card>
