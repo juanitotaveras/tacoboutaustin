@@ -32,10 +32,10 @@ export default class Search extends Component {
 		super(props);
 		this.state = {
 			value: '', 
-			onPage: 0,
-			rPage: 0,
-			hPage: 0,
-			aPage: 0,
+			onPage: 1,
+			rPage: 1,
+			hPage: 1,
+			aPage: 1,
 			displayedRestaurants: [],
 			displayedHotels: [],
 			displayedAttractions: [],
@@ -114,7 +114,7 @@ export default class Search extends Component {
   	// TODO: Try to display equal number of results for each
   	// maybe like 7 for each
 
-  	let idx = pageNum * per_page;
+  	let idx = (pageNum-1) * per_page;
 
   	if (!this.state.hasSearched) {
   		if (restaurants.length > 0)
@@ -198,7 +198,7 @@ export default class Search extends Component {
 		this.request(urls[1], this.fillInHotels);
 		this.request(urls[2], this.fillInAttractions);
 
-		this.showSearchItems(0);
+		this.showSearchItems(1);
 	}
 
 	handleSeachInclusive() {
@@ -385,7 +385,7 @@ export default class Search extends Component {
 			}
 			{
 				pageCount > 1 &&
-				 <Paginator pageCount={pageCount} activePage={activePage+1} onPageClicked={this.handlePageClick}/>
+				 <Paginator pageCount={pageCount} activePage={activePage} onPageClicked={this.handlePageClick}/>
 			}
 			</Container>
 			</div>
