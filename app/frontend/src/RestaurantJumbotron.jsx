@@ -11,6 +11,7 @@ import {
   CarouselIndicators,
   CarouselCaption,
   Container } from 'reactstrap';
+import TacoFull from './assets/taco_full.png';
 
 var parsed_opening_hours;
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -117,19 +118,23 @@ export default class RestaurantJumbotron extends Component {
       );
     });
 
-    var reviews = this.props.reviews.map(function(review){
+    var reviews = this.props.reviews.map(function(review) {
       return <p>{review.text}<a href={review.link}>read more!</a></p>
     })
 
-    var more_images = this.props.images.map(function(image){
+    var more_images = this.props.images.map(function(image) {
                 return <Col xs='3'><img top width="100%" src={image} alt="Card image cap" /></Col>;
               })
+
+    var taco_rating = [...Array(Math.floor(this.props.rating))].map(function(review) {
+      return <img top width="30em" src={TacoFull}/>
+    })
 
     return (
     <div>
       <Jumbotron>
         <h1 className="display-3">{this.props.name}</h1>
-        <p className="lead">Rating: {this.props.rating}/5<br/>
+        <p className="lead">Rating: {taco_rating}<br/>
         </p>
           <Row>
           <Col xs="6">
