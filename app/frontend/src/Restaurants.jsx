@@ -5,6 +5,7 @@ import RestaurantCard from './RestaurantCard';
 import RestaurantFilter from './RestaurantFilter';
 import Header from './Header';
 import Sort from './Sort';
+import Paginator from './Paginator';
 import { Container, Row, Col, Button, Pagination, PaginationItem, 
   PaginationLink, Form, FormGroup, CardColumns } from 'reactstrap';
 import { api_url } from './config';
@@ -27,6 +28,7 @@ export class Restaurant {
 export default class Restaurants extends Component {
   constructor(props) {
     super(props);
+    this.handlePageClick = this.handlePageClick.bind(this);
     this.sortPage = this.sortPage.bind(this)
     this.filterPage = this.filterPage.bind(this)
     this.fillInRestaurants = this.fillInRestaurants.bind(this)
@@ -142,7 +144,10 @@ export default class Restaurants extends Component {
 
   render() {
     var page_numbers = [];
-    const pages_count = (res_count%per_page) == 0 ? res_count/per_page : res_count/per_page + 1;
+    var pages_count = Math.floor(res_count/per_page);
+    if (!((res_count%per_page) == 0))
+      pages_count++;
+
     for(var i = 1; i <= pages_count; i++)
       page_numbers.push(i);
 
@@ -176,13 +181,14 @@ export default class Restaurants extends Component {
             }
             </CardColumns>
 
-            <Row>
+            {/*<Row>
               <Col md="4"/>
               <Col xs="12" md="4">
                 <Pagination size="lg">{pages}</Pagination>
                 </Col>
               <Col md="4"/>
-            </Row>
+            </Row>*/} 
+            <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick} />
       	</Container>
       </div>
     );
