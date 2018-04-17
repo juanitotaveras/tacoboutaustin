@@ -12,6 +12,7 @@ import {
   NavLink, UncontrolledDropdown, DropdownToggle, DropdownMenu,
   DropdownItem, Jumbotron, Container, Row, Col, Card, CardImg, 
   CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
+import HeaderBackground from './assets/about_header_background.jpg';
 
 
 const styles = {
@@ -184,7 +185,10 @@ class About extends Component {
  render(props) {
     return (
     	<div className="background" styles={styles}>
-        <Header title="About Us"/>
+        <Header
+          title="About Us"
+          image={HeaderBackground}
+        />
         <br />
 
       <Container>

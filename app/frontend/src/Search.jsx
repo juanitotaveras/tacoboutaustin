@@ -14,6 +14,7 @@ import { api_url } from './config';
 import classnames from 'classnames';
 import Header from './Header';
 import Paginator from './Paginator';
+import HeaderBackground from './assets/search_header_background.jpg';
 
 // var restaurants = [Restaurant('address', 'id', 'image', 'name', 'rating')];
 var restaurants = [];
@@ -370,7 +371,10 @@ export default class Search extends Component {
 	if (this.state.hasSearched) {
 		return(
 			<div className="background">
-        	<Header title="Search Austin"/>
+        	<Header 
+        		title="Search Austin"
+        		image={HeaderBackground}
+        	/>
         	<br />
 			<Container>
 				<Row>	
@@ -393,7 +397,10 @@ export default class Search extends Component {
 	} else {
 		return(							
 			<div className="background">
-        	<Header title="Search Austin"/>
+        	<Header 
+        		title="Search Austin"
+        		image={HeaderBackground}
+        	/>
         	<br />
 
 			<Container>
