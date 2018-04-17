@@ -47,6 +47,7 @@ export default class Paginator extends Component {
       <PaginationLink onClick={() => this.handlePageClick(dest)}>
         {text}
       </PaginationLink>;
+      
     const item = (highlighted) ?
       <div>
         <PaginationItem active>
@@ -114,7 +115,7 @@ export default class Paginator extends Component {
   		<Row>
   			<Col xs="0" sm="2" md="4"/>
   				<Col xs="12" sm="8" md="4">
-			  		<Pagination size="lg" style={{float: "none", margin: "0 auto"}}>
+			  		<Pagination size="lg">
 			  			{this.makeDisplayedPageItems()}
 			  		</Pagination>
 		  		</Col>

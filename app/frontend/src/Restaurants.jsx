@@ -71,7 +71,7 @@ export default class Restaurants extends Component {
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
           parseResponse(xmlHttp.responseText);
-        console.log("REPONSE " + xmlHttp.responseText);
+        // console.log("REPONSE " + xmlHttp.responseText);
       }
       xmlHttp.open("GET", url, false) // true for asynchronous
       xmlHttp.send(null);

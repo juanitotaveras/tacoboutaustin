@@ -33,7 +33,7 @@ export default class Attractions extends Component {
     this.filterPage = this.filterPage.bind(this)
     this.fillInAttractions = this.fillInAttractions.bind(this)
     this.state = {
-      onPage: 0,
+      onPage: 1,
       attractions_display: [],
       sorted: null,
       filters: {
@@ -46,7 +46,7 @@ export default class Attractions extends Component {
   componentWillMount() {
     const url = api_url + "/attractions";
     this.request(url, this.getCount);
-    this.getPage(0, null, null, false);
+    this.getPage(1, null, null, false);
   }
 
   fillInAttractions(responseText) {
@@ -117,7 +117,7 @@ export default class Attractions extends Component {
     }
 
     const count_url = url + apiParams.join("&");
-    const page_url = count_url + "&page=" + pageNum+1;
+    const page_url = count_url + "&page=" + pageNum;
 
     this.request(count_url, this.getCount);
     this.request(page_url, this.fillInAttractions);
@@ -129,11 +129,11 @@ export default class Attractions extends Component {
   }
 
   filterPage(filters) {
-    this.getPage(0, this.state.sorted, filters);
+    this.getPage(1, this.state.sorted, filters);
   }
 
   sortPage(category) {
-    this.getPage(0, category, this.state.filters);
+    this.getPage(1, category, this.state.filters);
   }
 
   handlePageClick(pageNum) {
@@ -142,18 +142,13 @@ export default class Attractions extends Component {
 
 
   render() {
-    var page_numbers = [];
-    const pages_count = (att_count%per_page) == 0 ? att_count/per_page : att_count/per_page + 1;
-    for(var i = 1; i <= pages_count; i++)
-      page_numbers.push(i);
+    var pages_count = Math.floor(att_count/per_page);
+    if (!((att_count%per_page) == 0))
+      pages_count++;
 
     var cards = this.state.attractions_display.map(function(attraction){
             return <Col xs="12" md="4"><AttractionCard attraction={attraction} /></Col>;
           })
-
-    var pages = page_numbers.map((pageNum) => {
-      return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum}</PaginationLink></PaginationItem></li>;
-    })
 
     return (
       <div classname="background">
@@ -186,7 +181,7 @@ export default class Attractions extends Component {
                 }
                 </Col>
             </Row>
-            <Paginator totalPages={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
+            <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
           </Container>
         </div>
     );
