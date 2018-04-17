@@ -14,6 +14,7 @@ import { api_url } from './config';
 import classnames from 'classnames';
 import Header from './Header';
 import Paginator from './Paginator';
+import HeaderBackground from './assets/search_header_background.jpg';
 
 // var restaurants = [Restaurant('address', 'id', 'image', 'name', 'rating')];
 var restaurants = [];
@@ -32,10 +33,10 @@ export default class Search extends Component {
 		super(props);
 		this.state = {
 			value: '', 
-			onPage: 0,
-			rPage: 0,
-			hPage: 0,
-			aPage: 0,
+			onPage: 1,
+			rPage: 1,
+			hPage: 1,
+			aPage: 1,
 			displayedRestaurants: [],
 			displayedHotels: [],
 			displayedAttractions: [],
@@ -114,7 +115,7 @@ export default class Search extends Component {
   	// TODO: Try to display equal number of results for each
   	// maybe like 7 for each
 
-  	let idx = pageNum * per_page;
+  	let idx = (pageNum-1) * per_page;
 
   	if (!this.state.hasSearched) {
   		if (restaurants.length > 0)
@@ -163,17 +164,6 @@ export default class Search extends Component {
 			// add an ' to any terms that end in s
 		searchTerms = searchInput.split(" ")
 
-		// TODO: If user doesn't enter an apostrophe where they should,
-		// the result will not appear.
-
-		// var extraTerms = [];
-		// for (let term of searchTerms) 
-		// 	if (term.substr(-1) == 's' && term.length > 2) 
-		// 		extraTerms.push(term.substring(0, term.length-1) + "'s");
-		
-		// for (let extra of extraTerms) 
-		// 	searchTerms.push(extra);
-
 		var searchRequestText = ""
 		for (var i = 0; i < searchTerms.length; ++i) {
 
@@ -209,7 +199,7 @@ export default class Search extends Component {
 		this.request(urls[1], this.fillInHotels);
 		this.request(urls[2], this.fillInAttractions);
 
-		this.showSearchItems(0);
+		this.showSearchItems(1);
 	}
 
 	handleSeachInclusive() {
@@ -218,8 +208,6 @@ export default class Search extends Component {
 	}
 
 	componentDidMount() {
-
-		
 
 	}
 
@@ -383,7 +371,10 @@ export default class Search extends Component {
 	if (this.state.hasSearched) {
 		return(
 			<div className="background">
-        	<Header title="Search Austin"/>
+        	<Header 
+        		title="Search Austin"
+        		image={HeaderBackground}
+        	/>
         	<br />
 			<Container>
 				<Row>	
@@ -398,7 +389,7 @@ export default class Search extends Component {
 			}
 			{
 				pageCount > 1 &&
-				 <Paginator totalPages={pageCount} activePage={activePage} onPageClicked={this.handlePageClick}/>
+				 <Paginator pageCount={pageCount} activePage={activePage} onPageClicked={this.handlePageClick}/>
 			}
 			</Container>
 			</div>
@@ -406,7 +397,10 @@ export default class Search extends Component {
 	} else {
 		return(							
 			<div className="background">
-        	<Header title="Search Austin"/>
+        	<Header 
+        		title="Search Austin"
+        		image={HeaderBackground}
+        	/>
         	<br />
 
 			<Container>

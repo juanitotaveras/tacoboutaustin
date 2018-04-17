@@ -6,17 +6,7 @@ const NUM_PAGE_ITEMS = 7;
 
 export default class Paginator extends Component {
   constructor(props) {
-    super(props);
-	let allPageItems = [];
-    for (var i = 1; i < this.props.totalPages; ++i) {
-    	allPageItems.push(this.makePageItem(i));
-    } 
-
-    this.state = {
-      allPageItems: allPageItems,
-      displayedPageItems: allPageItems
-    };
-    
+    super(props);     
   }
 
   handlePageClick(dest) {
@@ -48,33 +38,76 @@ export default class Paginator extends Component {
     );
   }
 
+  handlePageClick(dest) {
+    this.props.onPageClicked(dest);
+  }
+
+   makePageItem(text, dest, highlighted=false) {
+    const link = 
+      <PaginationLink onClick={() => this.handlePageClick(dest)}>
+        {text}
+      </PaginationLink>;
+      
+    const item = (highlighted) ?
+      <div>
+        <PaginationItem active>
+          {link}
+        </PaginationItem>
+      </div>
+      :
+      <div>
+        <PaginationItem>
+          {link}
+        </PaginationItem>
+      </div>;
+
+    return (
+      item
+    );
+  }
+
   makeDisplayedPageItems() {
-  	let pageCount = this.state.allPageItems.length;
-  	let activePage = this.props.activePage;
+      let pageCount = this.props.pageCount;
 
-  	var displayedPageItems = []
+      // One indexed
+      let activePage = this.props.activePage;
+      var temp = []
 
-  	if (pageCount <= NUM_PAGE_ITEMS) {
-  		for (var i = 0; i < NUM_PAGE_ITEMS; ++i)
-  			displayedPageItems.push(this.makePageItem(i+1, i, activePage == i));
-  	} else {
-  		if (activePage > (pageCount - NUM_PAGE_ITEMS)) {
-  			displayedPageItems.push(this.makePageItem("First", 0, activePage == 0));
-  			for (var i = pageCount-NUM_PAGE_ITEMS; i < pageCount; ++i)
-  				displayedPageItems.push(this.makePageItem(i+1, i, activePage == i));
-  		} else if (activePage < NUM_PAGE_ITEMS/2) {
-  			for (var i = 0; i < NUM_PAGE_ITEMS; i++)
-  				displayedPageItems.push(this.makePageItem(i+1, i, activePage == i));
-  			displayedPageItems.push(this.makePageItem("Last", pageCount-1, activePage == pageCount-1));
-  		} else {
-  			displayedPageItems.push(this.makePageItem("First", 0, activePage == 0));
-  			for (var i = activePage - Math.floor(NUM_PAGE_ITEMS/2); i < activePage + (NUM_PAGE_ITEMS/2); ++i)
-  				displayedPageItems.push(this.makePageItem(i+1, i, activePage == i));
-  			displayedPageItems.push(this.makePageItem("Last", pageCount-1, activePage == pageCount-1));
+      if (pageCount <= NUM_PAGE_ITEMS) {
+        for (var i = 1; i <= pageCount; ++i)
+          temp.push(this.makePageItem(i, i, activePage == i));
+      } 
 
-  		}
-  	}
-  	return displayedPageItems
+      // More pages than can display
+      else {
+        
+        // On page 1-4
+        if(activePage <= Math.ceil(NUM_PAGE_ITEMS/2)) {
+            for (var i = 1; i < NUM_PAGE_ITEMS; i++) {
+              temp.push(this.makePageItem(i, i, activePage == i));
+            }
+            temp.push(this.makePageItem("Last", pageCount, activePage == pageCount));
+        }
+
+        // On one of the last pages
+        else if(activePage >= pageCount - Math.floor(NUM_PAGE_ITEMS/2)) {
+          temp.push(this.makePageItem("First", 1, activePage == 1));
+          for (var i = pageCount - NUM_PAGE_ITEMS + 1; i <= pageCount; i++) {
+            temp.push(this.makePageItem(i, i, activePage == i));
+          }
+        }
+
+        // In the middle
+        else {
+            temp.push(this.makePageItem("First", 1, false));
+            for (var i = activePage - Math.floor(NUM_PAGE_ITEMS/2)+1; i < activePage + Math.floor(NUM_PAGE_ITEMS/2); ++i) {
+              temp.push(this.makePageItem(i, i, activePage == i));
+            }
+            temp.push(this.makePageItem("Last", pageCount, false));
+          }
+        }        
+
+      return temp;
   }
 
   render() {
@@ -82,7 +115,7 @@ export default class Paginator extends Component {
   		<Row>
   			<Col xs="0" sm="2" md="4"/>
   				<Col xs="12" sm="8" md="4">
-			  		<Pagination size="lg" style={{float: "none", margin: "0 auto"}}>
+			  		<Pagination size="lg">
 			  			{this.makeDisplayedPageItems()}
 			  		</Pagination>
 		  		</Col>

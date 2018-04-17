@@ -11,17 +11,13 @@
 from unittest import main, TestCase
 import requests
 from flask_json_multidict import MultiDict
-from tacoapi import close_places, isOpen, getSearchQuery, getFilterQuery
+from tacoapi import close_places, isOpen, getSearchQuery, getFilterQuery, getSortAndPageQuery
 from models import Hotel, Restaurant, Attraction, Place, Hour, Distance
 from main import app
 
 API_URL = "http://api.tacoboutaustin.me/"
 
 class TestApi(TestCase):
-    def setUp(self):
-		app.config['TESTING'] = True
-		app.config['WTF_CSRF_ENABLED'] = False
-		self.app = app.test_client()
 
     def test_message_restaurant(self):
         response = requests.get(API_URL + "restaurants")
@@ -204,8 +200,7 @@ class TestApi(TestCase):
     
     def test_filter_query_1(self):
         args = MultiDict([('zipcode', '78701')])
-        query = Hotel.query
-        query = getFilterQuery(query, args, Hotel)
+        query = getFilterQuery(Hotel.query, args, Hotel)
         response = query.all()
         for place in response:
             self.assertTrue(isinstance(place, Hotel))
@@ -213,23 +208,197 @@ class TestApi(TestCase):
 
     def test_filter_query_2(self):
         args = MultiDict([('zipcode', '78701')])
-        query = Restaurant.query
-        query = getFilterQuery(query, args, Restaurant)
+        query = getFilterQuery(Restaurant.query, args, Restaurant)
         response = query.all()
         for place in response:
             self.assertTrue(isinstance(place, Restaurant))
             self.assertEqual(place.zipcode, 78701)
     
-    def test_filter_query_1(self):
+    def test_zipcode_filter_query_1(self):
         args = MultiDict([('zipcode', '78701')])
-        query = Attraction.query
-        query = getFilterQuery(query, args, Attraction)
+        query = getFilterQuery(Attraction.query, args, Attraction)
         response = query.all()
         for place in response:
             self.assertTrue(isinstance(place, Attraction))
             self.assertEqual(place.zipcode, 78701)
+    def test_zipcode_filter_query_2(self):
+        args = MultiDict([('zipcode', '78701')])
+        query = getFilterQuery(Hotel.query, args, Hotel)
+        response = query.all()
+        for place in response:
+            self.assertTrue(isinstance(place, Hotel))
+            self.assertEqual(place.zipcode, 78701)
 
+    def test_categories_filter_query_1(self):
+        args = MultiDict([('categories', 'cocktailbars')])
+        query = getFilterQuery(Restaurant.query, args, Restaurant)
+        response = query.all()
+        for place in response:
+            self.assertTrue(isinstance(place, Restaurant))
+            haveCategories = False
+            for assoc in place.categories:
+                haveCategories = haveCategories or assoc.category_id == "cocktailbars"
+            self.assertTrue(haveCategories)
 
+    def test_categories_filter_query_2(self):
+        args = MultiDict([('categories', 'japanese,cocktailbars')])
+        query = getFilterQuery(Restaurant.query, args, Restaurant)
+        response = query.all()
+        for place in response:
+            self.assertTrue(isinstance(place, Restaurant))
+            haveCategories = False
+            for assoc in place.categories:
+                haveCategories = haveCategories or assoc.category_id == "japanese" or assoc.category_id == "cocktailbars"
+            self.assertTrue(haveCategories)
+
+    def test_categories_filter_query_3(self):
+        args = MultiDict([('categories', 'musicvenues')])
+        query = getFilterQuery(Hotel.query, args, Hotel)
+        response = query.all()
+        for place in response:
+            self.assertTrue(isinstance(place, Hotel))
+            haveCategories = False
+            for assoc in place.categories:
+                haveCategories = haveCategories or assoc.category_id == "musicvenues"
+            self.assertTrue(haveCategories)
+
+    def test_categories_filter_query_4(self):
+        args = MultiDict([('categories', 'musicvenues,divebars')])
+        query = getFilterQuery(Hotel.query, args, Hotel)
+        response = query.all()
+        for place in response:
+            self.assertTrue(isinstance(place, Hotel))
+            haveCategories = False
+            for assoc in place.categories:
+                haveCategories = haveCategories or assoc.category_id == "musicvenues" or assoc.category_id == "divebars"
+            self.assertTrue(haveCategories)
+    def test_categories_filter_query_5(self):
+        args = MultiDict([('categories', 'hiking')])
+        query = getFilterQuery(Attraction.query, args, Attraction)
+        response = query.all()
+        for place in response:
+            self.assertTrue(isinstance(place, Attraction))
+            haveCategories = False
+            for assoc in place.categories:
+                haveCategories = haveCategories or assoc.category_id == "hiking"
+            self.assertTrue(haveCategories)
+
+    def test_categories_filter_query_6(self):
+        args = MultiDict([('categories', 'hiking,parks')])
+        query = getFilterQuery(Attraction.query, args, Attraction)
+        response = query.all()
+        for place in response:
+            self.assertTrue(isinstance(place, Attraction))
+            haveCategories = False
+            for assoc in place.categories:
+                haveCategories = haveCategories or assoc.category_id == "hiking" or assoc.category_id == "parks"
+            self.assertTrue(haveCategories)
+
+    def test_rating_filter_query_1(self):
+        args = MultiDict([('rating', '4')])
+        query = getFilterQuery(Hotel.query, args, Hotel)
+        response = query.all()
+        for place in response:
+            self.assertTrue(isinstance(place, Hotel))
+            self.assertTrue(place.rating >= 4)
+    def test_rating_filter_query_2(self):
+        args = MultiDict([('rating', '4')])
+        query = getFilterQuery(Restaurant.query, args, Restaurant)
+        response = query.all()
+        for place in response:
+            self.assertTrue(isinstance(place, Restaurant))
+            self.assertTrue(place.rating >= 4)
+    def test_rating_filter_query_3(self):
+        args = MultiDict([('rating', '4')])
+        query = getFilterQuery(Attraction.query, args, Attraction)
+        response = query.all()
+        for place in response:
+            self.assertTrue(isinstance(place, Attraction))
+            self.assertTrue(place.rating >= 4)
+
+    def test_paging_query_1(self):
+        args = MultiDict([('page', '1')])
+        query = getSortAndPageQuery(Attraction.query, args, Attraction)
+        response = query.all()
+        self.assertTrue(len(response) <= 12)
+        for place in response:
+            self.assertTrue(isinstance(place, Attraction))
+
+    def test_paging_query_2(self):
+        args = MultiDict([('page', '1')])
+        query = getSortAndPageQuery(Hotel.query, args, Hotel)
+        response = query.all()
+        self.assertTrue(len(response) <= 12)
+        for place in response:
+            self.assertTrue(isinstance(place, Hotel))
+
+    def test_paging_query_3(self):
+        args = MultiDict([('page', '1')])
+        query = getSortAndPageQuery(Restaurant.query, args, Restaurant)
+        response = query.all()
+        self.assertTrue(len(response) <= 12)
+        for place in response:
+            self.assertTrue(isinstance(place, Restaurant))
+
+    def test_sorting_query_1(self):
+        args = MultiDict([('order_by', 'rating'), ('order', 'asc')])
+        query = getSortAndPageQuery(Attraction.query, args, Attraction)
+        response = query.all()
+        pre_rating = response[0].rating
+        for place in response:
+            self.assertTrue(isinstance(place, Attraction))
+            self.assertTrue(pre_rating <= place.rating)
+            pre_rating = place.rating
+
+    def test_sorting_query_2(self):
+        args = MultiDict([('order_by', 'name'), ('order', 'desc')])
+        query = getSortAndPageQuery(Attraction.query, args, Attraction)
+        response = query.all()
+        pre_name = response[0].name
+        for place in response:
+            self.assertTrue(isinstance(place, Attraction))
+            self.assertTrue(pre_name >= place.name)
+            pre_name = place.name
+
+    def test_sorting_query_3(self):
+        args = MultiDict([('order_by', 'rating'), ('order', 'asc')])
+        query = getSortAndPageQuery(Hotel.query, args, Hotel)
+        response = query.all()
+        pre_rating = response[0].rating
+        for place in response:
+            self.assertTrue(isinstance(place, Hotel))
+            self.assertTrue(pre_rating <= place.rating)
+            pre_rating = place.rating
+
+    def test_sorting_query_4(self):
+        args = MultiDict([('order_by', 'name'), ('order', 'desc')])
+        query = getSortAndPageQuery(Hotel.query, args, Hotel)
+        response = query.all()
+        pre_name = response[0].name
+        for place in response:
+            self.assertTrue(isinstance(place, Hotel))
+            self.assertTrue(pre_name >= place.name)
+            pre_name = place.name
+
+    def test_sorting_query_5(self):
+        args = MultiDict([('order_by', 'rating'), ('order', 'asc')])
+        query = getSortAndPageQuery(Restaurant.query, args, Restaurant)
+        response = query.all()
+        pre_rating = response[0].rating
+        for place in response:
+            self.assertTrue(isinstance(place, Restaurant))
+            self.assertTrue(pre_rating <= place.rating)
+            pre_rating = place.rating
+
+    def test_sorting_query_6(self):
+        args = MultiDict([('order_by', 'name'), ('order', 'desc')])
+        query = getSortAndPageQuery(Restaurant.query, args, Restaurant)
+        response = query.all()
+        pre_name = response[0].name
+        for place in response:
+            self.assertTrue(isinstance(place, Restaurant))
+            self.assertTrue(pre_name >= place.name)
+            pre_name = place.name
 
 if __name__ == "__main__":
     main()
