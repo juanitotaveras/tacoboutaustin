@@ -35,7 +35,7 @@ export default class RestaurantCard extends Component {
           <CardBody>
             <CardTitle className="cardTitleText"><div className="wrap">{r.name}</div></CardTitle>
             <CardSubtitle>{r.food}</CardSubtitle>
-            <CardText className="cardSubText"><span>Rating: {full_tacos_rating}{half_taco_rating}{gray_taco_rating}</span> <span style={{float: 'right'}}>Zip code: {r.zip_code}</span></CardText>
+            <CardText className="cardSubText"><span>{full_tacos_rating}{half_taco_rating}{gray_taco_rating}</span> <span style={{float: 'right'}}>Zip code: {r.zip_code}</span></CardText>
             <Link to={'/restaurants/' + r.id}><Button outline >Check it out!</Button></Link>
           </CardBody>
         </Card>

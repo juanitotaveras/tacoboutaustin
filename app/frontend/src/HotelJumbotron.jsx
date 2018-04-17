@@ -95,7 +95,7 @@ export default class HotelJumbotron extends Component {
     <div>
       <Jumbotron>
         <h1 className="display-3">{this.props.name}</h1>
-        <p className="lead">Rating: {full_tacos_rating}{half_taco_rating}{gray_taco_rating}<br/>
+        <p className="lead">{full_tacos_rating}{half_taco_rating}{gray_taco_rating}<br/>
         {this.props.address}</p>
         <Row>
           <Col xs="6">

@@ -94,7 +94,7 @@ export default class AttractionJumbotron extends Component {
     <div>
       <Jumbotron>
         <h1 className="display-3">{this.props.name}</h1>
-        <p className="lead">Rating: {full_tacos_rating}{half_taco_rating}{gray_taco_rating}</p>
+        <p className="lead">{full_tacos_rating}{half_taco_rating}{gray_taco_rating}</p>
         <Row>
           <Col xs="6">
           <div>
