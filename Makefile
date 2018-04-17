@@ -20,7 +20,7 @@ clear_env:
 	docker rm taco_back
 
 gui_testing:
-	sudo apt-get install xserver-xephyr
+	sudo apt-get install xserver-xephyr pylint
 	sudo apt-get install xvfb
 	pip install pyvirtualdisplay selenium
 	chmod +x app/frontend/guitests/chromedriver
@@ -70,6 +70,7 @@ uml:
 
 # make selenium - runs selenium tests
 selenium:
+	$(MAKE) gui_testing
 	cd app/frontend/guitests; make travis
 	@echo
 
@@ -81,6 +82,7 @@ frontend:
 # make backend  - runs backend tests
 backend:
 	pip install -r requirements.txt
+	cd app; make travis
 	python app/tests.py
 	@echo
 
