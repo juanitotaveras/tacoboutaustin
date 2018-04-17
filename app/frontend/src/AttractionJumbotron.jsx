@@ -75,7 +75,7 @@ export default class AttractionJumbotron extends Component {
     <div>
       <Jumbotron>
         <h1 className="display-3">{this.props.name}</h1>
-        
+        <p className="lead">Rating: {this.props.rating}/5<br/></p>
         <Row>
           <Col xs="6">
           <div>

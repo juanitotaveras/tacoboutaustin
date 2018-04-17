@@ -8,10 +8,11 @@ export default class Header extends React.Component {
  
   render(props) { 
 
-     let introBgStyle = {
-      background: 'linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(' + 'http://cdn-image.foodandwine.com/sites/default/files/1501607996/opentable-scenic-restaurants-bertrand-at-mister-a-FT-BLOG0818.jpg' + ')',
-      backgroundSize: 'cover'
-  };
+    let introBgStyle = {
+        background:"linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(" + this.props.image + ")",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+    };
 
     return (
       <div>
@@ -34,7 +35,8 @@ export default class Header extends React.Component {
 
 Header.propTypes = {
   title: PropTypes.string,
-  description: PropTypes.string
+  description: PropTypes.string,
+  image: PropTypes.string
 };
 
 

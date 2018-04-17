@@ -8,7 +8,7 @@ import { api_url } from './config';
 import Sort from './Sort';
 import Filter from './Filter';
 import Paginator from './Paginator';
-
+import HeaderBackground from './assets/attractions_header_background.jpg';
 
 var att_count = 0;
 const per_page = 12;
@@ -157,7 +157,11 @@ export default class Attractions extends Component {
 
     return (
       <div classname="background">
-        <Header title="Attractions" description="Attractions description"/>
+        <Header 
+          title="Attractions" 
+          description="Attractions description"
+          image={HeaderBackground}
+          />
         <br />
         <Container>
             <Row>

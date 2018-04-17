@@ -9,6 +9,7 @@ import { Container, Row, Col, Button,
   Form, FormGroup, CardColumns } from 'reactstrap';
 import { api_url } from './config';
 import Paginator from './Paginator';
+import HeaderBackground from './assets/restaurants_header_background.jpg';
 
 var res_count = 0;
 const per_page = 12;
@@ -152,7 +153,11 @@ export default class Restaurants extends Component {
 
     return (
     	<div className="background">
-        <Header title="Restaurants" description="Restaurants description"/>
+        <Header
+          title="Restaurants"
+          description="Restaurants description"
+          image={HeaderBackground}
+        />
         <br />
     		<Container id="jump">
             <Col xs="12" md="2">

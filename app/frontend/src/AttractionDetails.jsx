@@ -85,7 +85,7 @@ export default class AttractionsDetails extends Component {
 
     return (
       <div className="background">
-        <Header title={a_details.name} description={"Rating: " + a_details.rating + "/5"}/>
+        <Header image={a_details.images[0]}/>
         <br />
       <Container>
         {
@@ -97,10 +97,10 @@ export default class AttractionsDetails extends Component {
           <div><Row>
             <Col>
               <AttractionJumbotron
-              
+              name={a_details.name}
               images={a_details.images}
               map_src={map}
-              
+              rating={a_details.rating}
               reviews={a_details.reviews}
               />
             </Col>

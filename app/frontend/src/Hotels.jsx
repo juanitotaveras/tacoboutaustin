@@ -8,6 +8,7 @@ import { api_url } from './config';
 import Sort from './Sort';
 import Filter from './Filter';
 import Paginator from './Paginator';
+import HeaderBackground from './assets/hotels_header_background.jpg';
 
 var hot_count = 0;
 const per_page = 12;
@@ -150,7 +151,11 @@ export default class Hotels extends Component {
 
     return (
       <div className="background">
-        <Header title="Hotels" description="Hotels description"/>
+        <Header 
+          title="Hotels"
+          description="Hotels description"
+          image={HeaderBackground}
+        />
         <br />
 
         <Container>
