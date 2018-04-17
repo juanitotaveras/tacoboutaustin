@@ -5,6 +5,7 @@ import RestaurantCard from './RestaurantCard';
 import AttractionCard from './AttractionCard';
 import { Link, Redirect } from 'react-router-dom';
 import { api_url } from './config'; 
+import Header from './Header';
 
 
 var h_details = {};
@@ -77,6 +78,9 @@ export default class HotelDetails extends Component {
 		var map = this.buildMapSrc();
 
 		return (
+			<div className="background">
+        	<Header title={h_details.name} description={"Rating: " + h_details.rating + "/5"}/>
+        	<br />
 			<Container>
 				{
           			redirect == true &&
@@ -107,6 +111,7 @@ export default class HotelDetails extends Component {
         		}
 				
 			</Container>
+			</div>
 		);
 	}
 

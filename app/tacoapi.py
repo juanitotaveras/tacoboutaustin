@@ -94,6 +94,8 @@ def isOpen(hours, time):
     day = dayDict[time[0]]
     timeComp = time[1].split(":")
     timeGet = int(timeComp[0])*60 + int(timeComp[1])
+    if int(timeComp[0]) < 6:
+        timeGet += 1440
     for open_hour in hours:
         if open_hour.day == day and isBetween(open_hour, timeGet):
             result = True
@@ -147,8 +149,7 @@ def getFilterQuery(query, args, Model):
             query = query.filter(Model.categories.any(category_id = token))
     if zipcode is not None:
         query = query.filter_by(zipcode=zipcode)
-
-    if type == "restaurant":  # special case with restaurant, because restaurant have open hour and categories
+    if Model == Restaurant:  # special case with restaurant, because restaurant have open hour and categories
         time = request.args.get('time', default=None, type=str)
         if time is not None:
             restaraunts = query.all()

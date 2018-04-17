@@ -11,7 +11,7 @@
 from unittest import main, TestCase
 import requests
 from tacoapi import close_places, isOpen
-from models import Hotel, Restaurant, Attraction
+from models import Hotel, Restaurant, Attraction, Place, Hour
 
 API_URL = "http://api.tacoboutaustin.me/"
 
@@ -74,64 +74,63 @@ class TestApi(TestCase):
         self.assertEqual(status, "INVALID_ID")
 
     def test_close_by_1(self):
-        places_data = close_places("restaurant", 2, 78704)
-        self.assertEqual(len(places_data), 2)
-        for place in places_data:
-            self.assertTrue(place, Restaurant)
-            detail = Restaurant.query.filter_by(id = place['id']).first()
-            self.assertEqual(detail.zipcode, 78704)
-
-    def test_close_by_2(self):
-        places_data = close_places("restaurant", 2, 79107)
-        self.assertEqual(len(places_data), 0)
-
-    def test_close_by_3(self):
-        places_data = close_places("hotel", 2, 78704)
+        restaurant_1 = Restaurant.query.filter_by(id = 1).first()
+        places_data = close_places(restaurant_1, "hotel", 2)
         self.assertEqual(len(places_data), 2)
         for place in places_data:
             self.assertTrue(place, Hotel)
-            detail = Hotel.query.filter_by(id = place['id']).first()
-            self.assertEqual(detail.zipcode, 78704)
 
-    def test_close_by_4(self):
-        places_data = close_places("hotel", 2, 79107)
-        self.assertEqual(len(places_data), 0)
-
-    def test_close_by_5(self):
-        places_data = close_places("attraction", 2, 78704)
+    def test_close_by_2(self):
+        restaurant_1 = Restaurant.query.filter_by(id = 1).first()
+        places_data = close_places(restaurant_1, "attraction", 2)
         self.assertEqual(len(places_data), 2)
         for place in places_data:
             self.assertTrue(place, Attraction)
-            detail = Attraction.query.filter_by(id = place['id']).first()
-            self.assertEqual(detail.zipcode, 78704)
 
-    def test_close_by_6(self):
-        places_data = close_places("attraction", 2, 79107)
+    def test_close_by_3(self):
+        restaurant_1 = Restaurant.query.filter_by(id = 1).first()
+        places_data = close_places(restaurant_1, "restaurant", 2)
+        self.assertEqual(len(places_data), 2)
+        for place in places_data:
+            self.assertTrue(place, Restaurant)
+
+
+    def test_close_by_4(self):
+        restaurant_1 = Restaurant.query.filter_by(id = 10).first()
+        places_data = close_places(restaurant_1, "restaurant", 10)
+        self.assertEqual(len(places_data), 10)
+        for place in places_data:
+            self.assertTrue(place, Restaurant)
+
+
+    def test_close_by_5(self):
+        restaurant_1 = Restaurant.query.filter_by(id = 10).first()
+        places_data = close_places(restaurant_1, "restaurant", 0)
         self.assertEqual(len(places_data), 0)
 
     def test_is_open_1(self):
-        hour = "Sunday: 11:00AM - 10:00PM<br>Monday: 11:00AM - 10:00PM<br>Tuesday: 11:00AM - 10:00PM<br>Wednesday: 11:00AM - 10:00PM<br>Thursday: 11:00AM - 11:00PM<br>Friday: 11:00AM - 11:00PM<br>Saturday: 11:00AM - 10:00PM<br>"
-        open_now = isOpen(hour, ("Monday", "2:00", "PM"))
+        restaurant_1 = Restaurant.query.filter_by(id = 1).first()
+        open_now = isOpen(restaurant_1.hours, ("Monday", "14:00"))
         self.assertEqual(open_now, True)
 
     def test_is_open_2(self):
-        hour = "Sunday: 11:00AM - 10:00PM<br>Monday: 11:00AM - 10:00PM<br>Tuesday: 11:00AM - 10:00PM<br>Wednesday: 11:00AM - 10:00PM<br>Thursday: 11:00AM - 11:00PM<br>Friday: 11:00AM - 11:00PM<br>Saturday: 11:00AM - 10:00PM<br>"
-        open_now = isOpen(hour, ("Wednesday", "11:00", "AM"))
+        restaurant_1 = Restaurant.query.filter_by(id = 1).first()
+        open_now = isOpen(restaurant_1.hours, ("Wednesday", "11:00"))
         self.assertEqual(open_now, True)
 
     def test_is_open_3(self):
-        hour = "Sunday: 11:00AM - 10:00PM<br>Monday: 11:00AM - 10:00PM<br>Tuesday: 11:00AM - 10:00PM<br>Wednesday: 11:00AM - 10:00PM<br>Thursday: 11:00AM - 11:00PM<br>Friday: 11:00AM - 11:00PM<br>Saturday: 11:00AM - 10:00PM<br>"
-        open_now = isOpen(hour, ("Wednesday", "11:00", "PM"))
+        restaurant_1 = Restaurant.query.filter_by(id = 1).first()
+        open_now = isOpen(restaurant_1.hours, ("Wednesday", "1:00"))
         self.assertEqual(open_now, False)
 
     def test_is_open_4(self):
-        hour = "Sunday: 11:00AM - 10:00PM<br>Monday: 11:00AM - 10:00PM<br>Tuesday: 11:00AM - 10:00PM<br>Wednesday: 11:00AM - 10:00PM<br>Thursday: 11:00AM - 11:00PM<br>Friday: 11:00AM - 11:00PM<br>Saturday: 11:00AM - 10:00PM<br>"
-        open_now = isOpen(hour, ("Wednesday", "11:00", "PM"))
-        self.assertEqual(open_now, False)
+        restaurant_1 = Restaurant.query.filter_by(id = 41).first()
+        open_now = isOpen(restaurant_1.hours, ("Thursday", "1:00"))
+        self.assertEqual(open_now, True)
 
     def test_is_open_5(self):
-        hour = "Sunday: closed<br>Monday: 11:00AM - 10:00PM<br>Tuesday: 11:00AM - 10:00PM<br>Wednesday: 11:00AM - 10:00PM<br>Thursday: 11:00AM - 11:00PM<br>Friday: 11:00AM - 11:00PM<br>Saturday: 11:00AM - 10:00PM<br>"
-        open_now = isOpen(hour, ("Sunday", "2:00", "PM"))
+        restaurant_1 = Restaurant.query.filter_by(id = 41).first()
+        open_now = isOpen(restaurant_1.hours, ("Thursday", "3:00"))
         self.assertEqual(open_now, False)
 
 

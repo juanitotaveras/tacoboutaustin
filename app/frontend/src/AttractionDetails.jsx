@@ -9,6 +9,7 @@ import RestaurantCard from './RestaurantCard';
 import HotelCard from './HotelCard';
 import { Link, Redirect } from 'react-router-dom';
 import { api_url } from './config';
+import Header from './Header';
 
 var nearby_restaurants = [];
 var nearby_hotels = [];
@@ -83,6 +84,9 @@ export default class AttractionsDetails extends Component {
     var map = this.buildMapSrc();
 
     return (
+      <div className="background">
+        <Header title={a_details.name} description={"Rating: " + a_details.rating + "/5"}/>
+        <br />
       <Container>
         {
           redirect == true &&
@@ -93,10 +97,10 @@ export default class AttractionsDetails extends Component {
           <div><Row>
             <Col>
               <AttractionJumbotron
-              name={a_details.name}
+              
               images={a_details.images}
               map_src={map}
-              rating={a_details.rating}
+              
               reviews={a_details.reviews}
               />
             </Col>
@@ -112,6 +116,7 @@ export default class AttractionsDetails extends Component {
           </Row></div>
         }
       </Container>
+      </div>
     );
   }
 

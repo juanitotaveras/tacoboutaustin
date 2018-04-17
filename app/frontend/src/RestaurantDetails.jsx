@@ -6,6 +6,7 @@ import AttractionCard from './AttractionCard';
 import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import { api_url } from "./config";
+import Header from './Header';
 
 var r_details = {};
 var nearby_hotels = [];
@@ -92,6 +93,9 @@ export default class RestaurantDetails extends Component {
 		var categories = this.parseCategories();
 
 		return (
+			<div className="background">
+        	<Header title={r_details.name} description={"Rating: " + r_details.rating + "/5"}/>
+        	<br />
 			<Container>
 				{
 					redirect == true &&
@@ -125,6 +129,7 @@ export default class RestaurantDetails extends Component {
 				}
 				
 			</Container>
+			</div>
 		);
 	}
 
