@@ -11,6 +11,7 @@ import {
   CarouselIndicators,
   CarouselCaption,
   Container } from 'reactstrap';
+import TacoFull from './assets/taco_full.png';
 
 export default class AttractionJumbotron extends Component {
   constructor(props) {
@@ -71,11 +72,15 @@ export default class AttractionJumbotron extends Component {
                 return <Col xs='3'><img top width="100%" src={image} alt="Card image cap" /></Col>;
     })
 
+    var taco_rating = [...Array(Math.floor(this.props.rating))].map(function(review) {
+      return <img top width="30em" src={TacoFull}/>
+    })
+
     return (
     <div>
       <Jumbotron>
         <h1 className="display-3">{this.props.name}</h1>
-        
+        <p className="lead">Rating: {taco_rating}<br/></p>
         <Row>
           <Col xs="6">
           <div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Input, InputGroup, Button, Container, Row, Jumbotron, Col, Pagination, PaginationItem, 
-	PaginationLink, Form, FormGroup, Label, Nav, NavItem, NavLink,
+import { Input, InputGroup, Button, Container, Row, Jumbotron, Col, 
+	Form, FormGroup, Label, Nav, NavItem, NavLink,
 	TabPane, Card, CardTitle, CardText, TabContent  } from 'reactstrap';
 	import {Restaurant} from './Restaurants';
 // import Restaurants from './Restaurants';
@@ -13,6 +13,7 @@ import './App.css';
 import { api_url } from './config';
 import classnames from 'classnames';
 import Header from './Header';
+import Paginator from './Paginator';
 
 // var restaurants = [Restaurant('address', 'id', 'image', 'name', 'rating')];
 var restaurants = [];
@@ -44,6 +45,7 @@ export default class Search extends Component {
 		this.toggle = this.toggle.bind(this);
 		this.onChange = this.onChange.bind(this);
 		this.onSearch = this.onSearch.bind(this);
+		this.handlePageClick = this.handlePageClick.bind(this);
 
 	}
 
@@ -262,21 +264,23 @@ export default class Search extends Component {
 
 	const page_numbers = [];
 	var arrayLength = 0;
+	var activePage = 0;
 	switch (this.state.activeTab) {
 		case "restaurantsTab":
 			arrayLength = restaurants.length;
+			activePage = this.state.rPage;
 			break;
 		case "attractionsTab":
 			arrayLength = attractions.length;
+			activePage = this.state.aPage;
 			break;
 		case "hotelsTab":
 			arrayLength = hotels.length;
+			activePage = this.state.hPage;
 			break;
 	}
-	for(var i = 0; i <= (arrayLength/per_page) ; i++)
-		page_numbers.push(i);
-
-	// console.log("PAGE COUNT: " + page_numbers.length + " RESPONSES: " + largestArrayLength);
+	let pageCount = Math.floor(arrayLength/per_page);
+	// console.log("PAGE COUNT: " + pageCount);
 	var restaurantCards = this.state.displayedRestaurants.map(function(restaurant) {
 		return <Col xs="12" sm="6" md="3"><RestaurantSearchCard restaurant={restaurant} searchTerms={searchTerms}/></Col>;
 	});
@@ -286,11 +290,6 @@ export default class Search extends Component {
 		<div>
 		<br/>
 		{restaurantCards}
-{/*		{
-			page_numbers.length > 1 &&
-			paginationComponent
-			
-		}*/}
 		</div>
 		</Row>;
 
@@ -305,10 +304,6 @@ export default class Search extends Component {
 		<Row>
 		{hotelCards}
 		</Row>
-{/*		{
-			// page_numbers.length > 1 &&
-			paginationComponent
-		}*/}
 		</div>;
 	const attractionCards = this.state.displayedAttractions.map(function(attraction) {
 		return <Col xs="12" sm="6" md="3"><AttractionSearchCard attraction={attraction} searchTerms={searchTerms}/></Col>;
@@ -320,38 +315,6 @@ export default class Search extends Component {
 		<Row>
 			{attractionCards}
 		</Row>
-{/*		{
-			// page_numbers.length > 1 &&
-			paginationComponent
-		}*/}
-		</div>;
-	var pages = page_numbers.map((pageNum) => {
-		return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum+1}</PaginationLink></PaginationItem></li>;
-	});
-
-	const pagesDiv = 
-	<div>
-	<Row>
-		<Col sm="0"/>
-		{/*<Col>*/}
-		<Col sm="auto">
-			<Pagination size="lg">
-			<PaginationItem disabled>
-			{/*<PaginationLink previous href="#" />*/}
-			</PaginationItem>
-			{pages}
-			</Pagination>
-		</Col>
-		 <Col sm="0"/> 
-		 </Row>
-		 </div>
-
-	const paginationComponent = 
-		<div>
-		{
-			page_numbers.length > 1 &&
-			pagesDiv
-		}
 		</div>;
 
 	const restaurantsNavItem =
@@ -434,9 +397,9 @@ export default class Search extends Component {
 				tabContainer
 			}
 			{
-				paginationComponent
+				pageCount > 1 &&
+				 <Paginator totalPages={pageCount} activePage={activePage} onPageClicked={this.handlePageClick}/>
 			}
-
 			</Container>
 			</div>
 			);

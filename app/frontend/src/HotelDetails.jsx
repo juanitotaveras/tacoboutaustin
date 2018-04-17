@@ -79,7 +79,7 @@ export default class HotelDetails extends Component {
 
 		return (
 			<div className="background">
-        	<Header title={h_details.name} description={"Rating: " + h_details.rating + "/5"}/>
+        	<Header image={h_details.images[0]}/>
         	<br />
 			<Container>
 				{

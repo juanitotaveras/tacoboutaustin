@@ -9,10 +9,6 @@ export default class Paginator extends Component {
     super(props);     
   }
 
-  componentWillMount() {
-    this.makeDisplayedPageItems();
-  }
-
   handlePageClick(dest) {
   	this.props.onPageClicked(dest);
   }

@@ -5,10 +5,11 @@ import RestaurantCard from './RestaurantCard';
 import RestaurantFilter from './RestaurantFilter';
 import Header from './Header';
 import Sort from './Sort';
-import Paginator from './Paginator';
-import { Container, Row, Col, Button, Pagination, PaginationItem, 
-  PaginationLink, Form, FormGroup, CardColumns } from 'reactstrap';
+import { Container, Row, Col, Button,
+  Form, FormGroup, CardColumns } from 'reactstrap';
 import { api_url } from './config';
+import Paginator from './Paginator';
+import HeaderBackground from './assets/restaurants_header_background.jpg';
 
 var res_count = 0;
 const per_page = 12;
@@ -70,6 +71,7 @@ export default class Restaurants extends Component {
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
           parseResponse(xmlHttp.responseText);
+        console.log("REPONSE " + xmlHttp.responseText);
       }
       xmlHttp.open("GET", url, false) // true for asynchronous
       xmlHttp.send(null);
@@ -143,25 +145,21 @@ export default class Restaurants extends Component {
   }
 
   render() {
-    var page_numbers = [];
     var pages_count = Math.floor(res_count/per_page);
     if (!((res_count%per_page) == 0))
       pages_count++;
-
-    for(var i = 1; i <= pages_count; i++)
-      page_numbers.push(i);
 
     var cards = this.state.restaurants_display.map(function(restaurant) {
             return <RestaurantCard restaurant={restaurant} />;
           })
 
-    var pages = page_numbers.map((pageNum) => {
-      return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum}</PaginationLink></PaginationItem></li>;
-    })
-
     return (
     	<div className="background">
-        <Header title="Restaurants" description="Restaurants description"/>
+        <Header
+          title="Restaurants"
+          description="Restaurants description"
+          image={HeaderBackground}
+        />
         <br />
     		<Container id="jump">
             <Col xs="12" md="2">
@@ -169,7 +167,7 @@ export default class Restaurants extends Component {
               <br />
               <Sort handler={this.sortPage}/>
             </Col>
-
+            <Row>
             <CardColumns>
             {
               res_count > 0 &&
@@ -180,14 +178,8 @@ export default class Restaurants extends Component {
               <h1>No results found.</h1>
             }
             </CardColumns>
+            </Row>
 
-            {/*<Row>
-              <Col md="4"/>
-              <Col xs="12" md="4">
-                <Pagination size="lg">{pages}</Pagination>
-                </Col>
-              <Col md="4"/>
-            </Row>*/} 
             <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick} />
       	</Container>
       </div>

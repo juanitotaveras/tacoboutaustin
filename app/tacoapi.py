@@ -138,8 +138,8 @@ def getSearchQuery(args, Model):
 
 def getFilterQuery(query, args, Model):
     rating = args.get('rating', default=None, type=str)
-    zipcode = request.args.get('zipcode', default=None, type=str)
-    categories = request.args.get('categories', default=None, type=str)
+    zipcode = args.get('zipcode', default=None, type=str)
+    categories = args.get('categories', default=None, type=str)
 
     if rating is not None:
         query = query.filter(Model.rating >= float(rating))
@@ -150,7 +150,7 @@ def getFilterQuery(query, args, Model):
     if zipcode is not None:
         query = query.filter_by(zipcode=zipcode)
     if Model == Restaurant:  # special case with restaurant, because restaurant have open hour and categories
-        time = request.args.get('time', default=None, type=str)
+        time = args.get('time', default=None, type=str)
         if time is not None:
             restaraunts = query.all()
             open_restaurants = []
@@ -299,3 +299,38 @@ def get_attraction(id):
     attraction_data, type1, type1_place, type2, type2_place = getOne(id, "attraction")
     
     return jsonify({'status': "OK", 'attraction': attraction_data, type1: type1_place, type2: type2_place})
+
+@app.route('/categories')
+def get_categories():
+    query_string = "SELECT category.*, COUNT(place.id) as Count FROM category inner join association on category.id = association.category_id inner join place on place.id = association.place_id"
+    type = request.args.get('type', default=None, type=str)
+    if type is not None:
+        query_string = query_string + " WHERE place.type = \"" + type + "\""  
+    query = text(query_string + " group by category.id")
+    categories = db.session.execute(query)
+    output = []
+    for category in categories:
+        category_data = {}
+        category_data['value'] = category.id
+        category_data['label'] = category.name
+        category_data['number'] = category.Count
+        output.append(category_data)
+    return jsonify({'status': "OK", 'categories': output, 'total': len(output)})
+
+@app.route('/zipcodes')
+def get_zipcodes():
+    type = request.args.get('type', default=None, type=str)
+    query_string = "SELECT zipcode.*, COUNT(place.id) as Count FROM zipcode inner join place on place.zipcode = zipcode.value"
+    if type is not None:
+        query_string = query_string + " WHERE place.type = \"" + type + "\""  
+    query = text(query_string + " GROUP BY zipcode.value")
+    zipcodes = db.session.execute(query)
+
+    output = []
+    for zipcode in zipcodes:
+        zipcode_data = {}
+        zipcode_data['value'] = zipcode.value
+        zipcode_data['label'] = str(zipcode.value)
+        zipcode_data['number'] = zipcode.Count
+        output.append(zipcode_data)
+    return jsonify({'status': "OK", 'list': output, 'total': len(output)})
