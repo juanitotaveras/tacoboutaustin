@@ -138,8 +138,8 @@ def getSearchQuery(args, Model):
 
 def getFilterQuery(query, args, Model):
     rating = args.get('rating', default=None, type=str)
-    zipcode = request.args.get('zipcode', default=None, type=str)
-    categories = request.args.get('categories', default=None, type=str)
+    zipcode = args.get('zipcode', default=None, type=str)
+    categories = args.get('categories', default=None, type=str)
 
     if rating is not None:
         query = query.filter(Model.rating >= float(rating))
@@ -150,7 +150,7 @@ def getFilterQuery(query, args, Model):
     if zipcode is not None:
         query = query.filter_by(zipcode=zipcode)
     if Model == Restaurant:  # special case with restaurant, because restaurant have open hour and categories
-        time = request.args.get('time', default=None, type=str)
+        time = args.get('time', default=None, type=str)
         if time is not None:
             restaraunts = query.all()
             open_restaurants = []
