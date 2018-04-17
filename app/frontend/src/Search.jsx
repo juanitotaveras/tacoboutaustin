@@ -13,6 +13,7 @@ import './App.css';
 import { api_url } from './config';
 import classnames from 'classnames';
 import Header from './Header';
+import Paginator from './Paginator';
 
 // var restaurants = [Restaurant('address', 'id', 'image', 'name', 'rating')];
 var restaurants = [];
@@ -44,6 +45,7 @@ export default class Search extends Component {
 		this.toggle = this.toggle.bind(this);
 		this.onChange = this.onChange.bind(this);
 		this.onSearch = this.onSearch.bind(this);
+		this.handlePageClick = this.handlePageClick.bind(this);
 
 	}
 
@@ -436,7 +438,7 @@ export default class Search extends Component {
 			{
 				paginationComponent
 			}
-
+            <Paginator totalPages={page_numbers.length} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
 			</Container>
 			</div>
 			);

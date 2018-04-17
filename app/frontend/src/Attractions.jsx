@@ -7,6 +7,7 @@ import Header from './Header';
 import { api_url } from './config';
 import Sort from './Sort';
 import Filter from './Filter';
+import Paginator from './Paginator';
 
 
 var att_count = 0;
@@ -27,11 +28,12 @@ export class Attraction {
 export default class Attractions extends Component {
   constructor(props) {
     super(props);
+    this.handlePageClick = this.handlePageClick.bind(this);
     this.sortPage = this.sortPage.bind(this)
     this.filterPage = this.filterPage.bind(this)
     this.fillInAttractions = this.fillInAttractions.bind(this)
     this.state = {
-      onPage: 1,
+      onPage: 0,
       attractions_display: [],
       sorted: null,
       filters: {
@@ -44,7 +46,7 @@ export default class Attractions extends Component {
   componentWillMount() {
     const url = api_url + "/attractions";
     this.request(url, this.getCount);
-    this.getPage(1, null, null, false);
+    this.getPage(0, null, null, false);
   }
 
   fillInAttractions(responseText) {
@@ -115,7 +117,7 @@ export default class Attractions extends Component {
     }
 
     const count_url = url + apiParams.join("&");
-    const page_url = count_url + "&page=" + pageNum;
+    const page_url = count_url + "&page=" + pageNum+1;
 
     this.request(count_url, this.getCount);
     this.request(page_url, this.fillInAttractions);
@@ -127,11 +129,11 @@ export default class Attractions extends Component {
   }
 
   filterPage(filters) {
-    this.getPage(1, this.state.sorted, filters);
+    this.getPage(0, this.state.sorted, filters);
   }
 
   sortPage(category) {
-    this.getPage(1, category, this.state.filters);
+    this.getPage(0, category, this.state.filters);
   }
 
   handlePageClick(pageNum) {
@@ -180,13 +182,7 @@ export default class Attractions extends Component {
                 }
                 </Col>
             </Row>
-            <Row>
-              <Col md="4"/>
-              <Col xs="12" md="4">
-                <Pagination size="lg">{pages}</Pagination>
-                </Col>
-              <Col md="4"/>
-            </Row>
+            <Paginator totalPages={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
           </Container>
         </div>
     );

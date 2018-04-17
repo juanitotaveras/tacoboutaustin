@@ -7,6 +7,7 @@ import Header from './Header';
 import { api_url } from './config';
 import Sort from './Sort';
 import Filter from './Filter';
+import Paginator from './Paginator';
 
 var hot_count = 0;
 const per_page = 12;
@@ -26,11 +27,12 @@ export class Hotel {
 export default class Hotels extends Component {
   constructor(props) {
     super(props);
+    this.handlePageClick = this.handlePageClick.bind(this);
     this.sortPage = this.sortPage.bind(this)
     this.filterPage = this.filterPage.bind(this)
     this.fillInHotels = this.fillInHotels.bind(this)
     this.state = {
-      onPage: 1,
+      onPage: 0,
       attractions_display: [],
       sorted: null,
       filters: {
@@ -43,7 +45,7 @@ export default class Hotels extends Component {
   componentWillMount() {
     const url = api_url + "/hotels";
     this.request(url, this.getCount);
-    this.getPage(1, null, null, false);
+    this.getPage(0, null, null, false);
   }
 
   fillInHotels(responseText) {
@@ -114,7 +116,7 @@ export default class Hotels extends Component {
     }
 
     const count_url = url + apiParams.join("&");
-    const page_url = count_url + "&page=" + pageNum;
+    const page_url = count_url + "&page=" + pageNum+1;
 
     this.request(count_url, this.getCount);
     this.request(page_url, this.fillInHotels);
@@ -126,11 +128,11 @@ export default class Hotels extends Component {
   }
 
   filterPage(filters) {
-    this.getPage(1, this.state.sorted, filters);
+    this.getPage(0, this.state.sorted, filters);
   }
 
   sortPage(category) {
-    this.getPage(1, category, this.state.filters);
+    this.getPage(0, category, this.state.filters);
   }
 
   handlePageClick(pageNum) {
@@ -138,18 +140,12 @@ export default class Hotels extends Component {
   }
 
   render() {
-    var page_numbers = [];
+
     const pages_count = (hot_count%per_page) == 0 ? hot_count/per_page : hot_count/per_page + 1;
-    for(var i = 1; i <= pages_count; i++)
-      page_numbers.push(i);
 
     var cards = this.state.hotels_display.map(function(hotel){
             return <Col xs="12" md="4"><HotelCard hotel={hotel} /></Col>;
           })
-
-    var pages = page_numbers.map((pageNum) => {
-      return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum}</PaginationLink></PaginationItem></li>;
-    })
 
 
     return (
@@ -179,13 +175,7 @@ export default class Hotels extends Component {
                 }
                 </Col>
             </Row>
-            <Row>
-              <Col md="4"/>
-              <Col xs="12" md="4">
-                <Pagination size="lg">{pages}</Pagination>
-                </Col>
-              <Col md="4"/>
-            </Row>
+            <Paginator totalPages={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
           </Container>
         </div>
     );

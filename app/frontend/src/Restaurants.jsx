@@ -8,6 +8,7 @@ import Sort from './Sort';
 import { Container, Row, Col, Button, Pagination, PaginationItem, 
   PaginationLink, Form, FormGroup, CardColumns } from 'reactstrap';
 import { api_url } from './config';
+import Paginator from './Paginator';
 
 var res_count = 0;
 const per_page = 12;
@@ -27,11 +28,12 @@ export class Restaurant {
 export default class Restaurants extends Component {
   constructor(props) {
     super(props);
+    this.handlePageClick = this.handlePageClick.bind(this);
     this.sortPage = this.sortPage.bind(this)
     this.filterPage = this.filterPage.bind(this)
     this.fillInRestaurants = this.fillInRestaurants.bind(this)
     this.state = {
-      onPage: 1,
+      onPage: 0,
       restaurants_display: [],
       sorted: null,
       filters: {
@@ -45,7 +47,7 @@ export default class Restaurants extends Component {
   componentWillMount() {
     const url = api_url + "/restaurants";
     this.request(url, this.getCount);
-    this.getPage(1, null, null, false);
+    this.getPage(0, null, null, false);
   }
 
   fillInRestaurants(responseText) {
@@ -115,7 +117,7 @@ export default class Restaurants extends Component {
     }
 
     const count_url = url + apiParams.join("&");
-    const page_url = count_url + "&page=" + pageNum;
+    const page_url = count_url + "&page=" + pageNum+1;
 
     this.request(count_url, this.getCount);
     this.request(page_url, this.fillInRestaurants);
@@ -128,31 +130,26 @@ export default class Restaurants extends Component {
 
 
   filterPage(filters) {
-    this.getPage(1, this.state.sorted, filters);
+    this.getPage(0, this.state.sorted, filters);
   }
 
   sortPage(category) {
-    this.getPage(1, category, this.state.filters);
+    this.getPage(0, category, this.state.filters);
   }
 
   handlePageClick(pageNum) {
     document.getElementById('jump').scrollIntoView();
+    this.setState({onPage: pageNum});
+
     this.getPage(pageNum, this.state.sorted, this.state.filters);
   }
 
   render() {
-    var page_numbers = [];
     const pages_count = (res_count%per_page) == 0 ? res_count/per_page : res_count/per_page + 1;
-    for(var i = 1; i <= pages_count; i++)
-      page_numbers.push(i);
 
     var cards = this.state.restaurants_display.map(function(restaurant) {
             return <RestaurantCard restaurant={restaurant} />;
           })
-
-    var pages = page_numbers.map((pageNum) => {
-      return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum}</PaginationLink></PaginationItem></li>;
-    })
 
     return (
     	<div className="background">
@@ -164,7 +161,7 @@ export default class Restaurants extends Component {
               <br />
               <Sort handler={this.sortPage}/>
             </Col>
-
+            <Row>
             <CardColumns>
             {
               res_count > 0 &&
@@ -175,15 +172,16 @@ export default class Restaurants extends Component {
               <h1>No results found.</h1>
             }
             </CardColumns>
-
-            <Row>
-              <Col md="4"/>
-              <Col xs="12" md="4">
-                <Pagination size="lg">{pages}</Pagination>
-                </Col>
-              <Col md="4"/>
             </Row>
-      	</Container>
+
+              {/*<Col md="4"/>*/}
+              {/*<Col xs="12" md="4">*/}
+                {/*<Pagination size="lg">{pages}</Pagination>*/}
+
+                <Paginator totalPages={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
+        </Container>
+                {/*</Col>*/}
+              {/*<Col md="4"/>*/}
       </div>
     );
   }
