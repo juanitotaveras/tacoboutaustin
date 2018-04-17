@@ -148,7 +148,8 @@ def getFilterQuery(query, args, Model):
         for token in categoriesTokens:
             query = query.filter(Model.categories.any(category_id = token))
     if zipcode is not None:
-        query = query.filter_by(zipcode=zipcode)
+        zipcodesTokens = zipcode.split(',')
+        query = query.filter(Model.zipcode.in_(zipcodesTokens))
     if Model == Restaurant:  # special case with restaurant, because restaurant have open hour and categories
         time = args.get('time', default=None, type=str)
         if time is not None:
