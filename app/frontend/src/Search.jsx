@@ -163,17 +163,6 @@ export default class Search extends Component {
 			// add an ' to any terms that end in s
 		searchTerms = searchInput.split(" ")
 
-		// TODO: If user doesn't enter an apostrophe where they should,
-		// the result will not appear.
-
-		// var extraTerms = [];
-		// for (let term of searchTerms) 
-		// 	if (term.substr(-1) == 's' && term.length > 2) 
-		// 		extraTerms.push(term.substring(0, term.length-1) + "'s");
-		
-		// for (let extra of extraTerms) 
-		// 	searchTerms.push(extra);
-
 		var searchRequestText = ""
 		for (var i = 0; i < searchTerms.length; ++i) {
 
@@ -218,8 +207,6 @@ export default class Search extends Component {
 	}
 
 	componentDidMount() {
-
-		
 
 	}
 
@@ -398,7 +385,7 @@ export default class Search extends Component {
 			}
 			{
 				pageCount > 1 &&
-				 <Paginator totalPages={pageCount} activePage={activePage} onPageClicked={this.handlePageClick}/>
+				 <Paginator pageCount={pageCount} activePage={activePage+1} onPageClicked={this.handlePageClick}/>
 			}
 			</Container>
 			</div>

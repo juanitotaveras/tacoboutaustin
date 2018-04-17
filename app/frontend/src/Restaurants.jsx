@@ -9,6 +9,7 @@ import { Container, Row, Col, Button,
   Form, FormGroup, CardColumns } from 'reactstrap';
 import { api_url } from './config';
 import Paginator from './Paginator';
+import HeaderBackground from './assets/restaurants_header_background.jpg';
 
 var res_count = 0;
 const per_page = 12;
@@ -33,7 +34,7 @@ export default class Restaurants extends Component {
     this.filterPage = this.filterPage.bind(this)
     this.fillInRestaurants = this.fillInRestaurants.bind(this)
     this.state = {
-      onPage: 0,
+      onPage: 1,
       restaurants_display: [],
       sorted: null,
       filters: {
@@ -47,7 +48,7 @@ export default class Restaurants extends Component {
   componentWillMount() {
     const url = api_url + "/restaurants";
     this.request(url, this.getCount);
-    this.getPage(0, null, null, false);
+    this.getPage(1, null, null, false);
   }
 
   fillInRestaurants(responseText) {
@@ -70,7 +71,7 @@ export default class Restaurants extends Component {
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
           parseResponse(xmlHttp.responseText);
-        console.log("REPONSE " + xmlHttp.responseText);
+        // console.log("REPONSE " + xmlHttp.responseText);
       }
       xmlHttp.open("GET", url, false) // true for asynchronous
       xmlHttp.send(null);
@@ -118,7 +119,7 @@ export default class Restaurants extends Component {
     }
 
     const count_url = url + apiParams.join("&");
-    const page_url = count_url + "&page=" + pageNum+1;
+    const page_url = count_url + "&page=" + pageNum;
 
     this.request(count_url, this.getCount);
     this.request(page_url, this.fillInRestaurants);
@@ -131,11 +132,11 @@ export default class Restaurants extends Component {
 
 
   filterPage(filters) {
-    this.getPage(0, this.state.sorted, filters);
+    this.getPage(1, this.state.sorted, filters);
   }
 
   sortPage(category) {
-    this.getPage(0, category, this.state.filters);
+    this.getPage(1, category, this.state.filters);
   }
 
   handlePageClick(pageNum) {
@@ -144,7 +145,9 @@ export default class Restaurants extends Component {
   }
 
   render() {
-    const pages_count = (res_count%per_page) == 0 ? res_count/per_page : res_count/per_page + 1;
+    var pages_count = Math.floor(res_count/per_page);
+    if (!((res_count%per_page) == 0))
+      pages_count++;
 
     var cards = this.state.restaurants_display.map(function(restaurant) {
             return <RestaurantCard restaurant={restaurant} />;
@@ -152,7 +155,11 @@ export default class Restaurants extends Component {
 
     return (
     	<div className="background">
-        <Header title="Restaurants" description="Restaurants description"/>
+        <Header
+          title="Restaurants"
+          description="Restaurants description"
+          image={HeaderBackground}
+        />
         <br />
     		<Container id="jump">
             <Col xs="12" md="2">
@@ -173,14 +180,8 @@ export default class Restaurants extends Component {
             </CardColumns>
             </Row>
 
-              {/*<Col md="4"/>*/}
-              {/*<Col xs="12" md="4">*/}
-                {/*<Pagination size="lg">{pages}</Pagination>*/}
-
-                <Paginator totalPages={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
-        </Container>
-                {/*</Col>*/}
-              {/*<Col md="4"/>*/}
+            <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick} />
+      	</Container>
       </div>
     );
   }

@@ -81,7 +81,8 @@ frontend:
 # make backend  - runs backend tests
 backend:
 	pip install -r requirements.txt
-	python backend/tests.py
+	python app/tests.py
+	@echo
 
 # make website  - prints link to a website
 website:

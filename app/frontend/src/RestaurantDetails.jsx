@@ -94,7 +94,7 @@ export default class RestaurantDetails extends Component {
 
 		return (
 			<div className="background">
-        	<Header title={r_details.name} description={"Rating: " + r_details.rating + "/5"}/>
+        	<Header image={r_details.images[0]}/>
         	<br />
 			<Container>
 				{
