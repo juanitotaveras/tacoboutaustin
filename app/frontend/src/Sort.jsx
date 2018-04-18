@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Form, Row, Button, Col } from 'reactstrap';
+import { Container, Form, Row, Button, Col, FormGroup } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
@@ -8,34 +8,58 @@ import 'react-select/dist/react-select.css';
 var sort_options = [
 {
   label: "Rating (descending)",
-  value: 0
+  value: "rating_desc"
 },
 {
   label: "Rating (ascending)",
-  value: 1
+  value: "rating_asc"
 },
 {
   label: "Alphabetical (ascending)",
-  value: 2
+  value: "name_asc"
 },
 {
   label: "Alphabetical (descending)",
-  value: 3
+  value: "name_desc"
+}, 
+{
+  label: "No Sorting",
+  value: ''
 }
 ];
+
 export default class Sort extends Component {
+
+  constructor(props) {
+    super(props);
+    this.handleSortChange = this.handleSortChange.bind(this);
+    this.state = {
+      sortType: ''
+    };
+  }
+
+  handleSortChange = (sortType) => {
+    if(sortType != null) {
+      this.setState({ sortType: sortType.value });
+      this.props.handler(sortType.value);
+    } else {
+      this.setState({ sortType: '' });
+      this.props.handler('');
+    }
+  }
 
 	render() {
 		return(
 		 <Container>
           <Form>
               <Row><legend>Sort by:</legend>
-                <Col xs="12">
+                  <Col>
                   <Select 
                   options={sort_options}
-
-                />
-              </Col></Row>
+                  value={this.state.sortType}
+                  onChange={this.handleSortChange}
+                /></Col>
+              </Row>
           </Form>
         </Container>
 		);

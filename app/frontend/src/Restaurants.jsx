@@ -92,15 +92,23 @@ export default class Restaurants extends Component {
     var url = api_url + "/restaurants?";
 
     // Sorting
-    if(sortParam != null)
+    if(sortParam != '')
     {
-      if (sortParam == "name") {
+      if (sortParam == "name_asc") {
         apiParams.push("order_by=name");
         apiParams.push("order=asc");
       }
-      else {
+      else if(sortParam == "name_desc") {
+        apiParams.push("order_by=name");
+        apiParams.push("order=desc");
+      } 
+      else if(sortParam == "rating_desc") {
         apiParams.push("order_by=rating");
         apiParams.push("order=desc");
+      }
+      else if(sortParam == "rating_asc") {
+        apiParams.push("order_by=rating");
+        apiParams.push("order=asc");
       }
     }
 
