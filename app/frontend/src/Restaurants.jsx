@@ -109,12 +109,15 @@ export default class Restaurants extends Component {
       if(fils.rating != 0) {
         apiParams.push("rating=" + fils.rating);
       }
-      if(fils.zipcode != 0) {
-        apiParams.push("zipcode=" + fils.zipcode);
+      if(fils.selectedZipcodes != '') {
+        apiParams.push("zipcode=" + fils.selectedZipcodes);
       }
       if(fils.open == true) {
         var timeString = this.getDateString();
         apiParams.push("time=" + timeString);
+      }
+      if(fils.selectedCategories != '') {
+        apiParams.push("categories=" + fils.selectedCategories);
       }
     }
 

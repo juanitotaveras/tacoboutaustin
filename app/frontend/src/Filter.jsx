@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Form, Row, FormGroup, Label, Input, Button, Col } from 'reactstrap';
 import PropTypes from "prop-types";
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
+var categories = [];
 export default class Filter extends Component {
 
   constructor(props) {
@@ -61,6 +64,17 @@ export default class Filter extends Component {
       } 
   }
 
+  request(url, parseResponse) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          parseResponse(xmlHttp.responseText);
+        // console.log("REPONSE " + xmlHttp.responseText);
+      }
+      xmlHttp.open("GET", url, false) // true for asynchronous
+      xmlHttp.send(null);
+  }
+
 	render() {
 		return(
 			<Container>
@@ -89,6 +103,14 @@ export default class Filter extends Component {
                 </Col>
 
                 <Col xs="12">
+                    <Label for="categoryFilter">Filter by category</Label>
+                    <Select 
+                      options={categories}
+                      value="HELLO"
+                    />
+                </Col>
+
+                <Col xs="12">
                   <Button outline color="primary" onClick={this.gatherFilters}>Apply filters</Button>
                 </Col>
                 <Col xs="12">
@@ -103,5 +125,6 @@ export default class Filter extends Component {
 }
 
 Filter.propTypes = {
-    handler: PropTypes.function
+    handler: PropTypes.function,
+    categories: PropTypes.array
   }

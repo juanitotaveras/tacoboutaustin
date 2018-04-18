@@ -1,21 +1,41 @@
 import React, { Component } from 'react';
-import { Container, Form, Row, Button } from 'reactstrap';
+import { Container, Form, Row, Button, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 
+var sort_options = [
+{
+  label: "Rating (descending)",
+  value: 0
+},
+{
+  label: "Rating (ascending)",
+  value: 1
+},
+{
+  label: "Alphabetical (ascending)",
+  value: 2
+},
+{
+  label: "Alphabetical (descending)",
+  value: 3
+}
+];
 export default class Sort extends Component {
 
 	render() {
 		return(
 		 <Container>
           <Form>
-              <Row><legend>Sort by:</legend></Row>
-              <Row><Button outline color="primary"
-              onClick= {() => this.props.handler("rating")}>Highest Rating</Button>{' '}</Row>
-              <Row><Button outline color="primary"
-              onClick = {() => this.props.handler("name")}>Alphabetical (ascending)</Button>{' '}</Row>
-              <Row><Button outline color="primary"
-              onClick = {() => this.props.handler(null)}>Clear sort</Button>{' '}</Row>
+              <Row><legend>Sort by:</legend>
+                <Col xs="12">
+                  <Select 
+                  options={sort_options}
+
+                />
+              </Col></Row>
           </Form>
         </Container>
 		);
