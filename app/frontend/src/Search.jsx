@@ -115,7 +115,11 @@ export default class Search extends Component {
   	// TODO: Try to display equal number of results for each
   	// maybe like 7 for each
 
-  	let idx = (pageNum-1) * per_page;
+  	// let idx = (pageNum-1) * per_page;
+  	console.log("SIZES OF ARRAYS: res" + restaurants.length + " att: " + attractions.length + " hot: " + hotels.length );
+  	let p = pageNum -1;
+
+  	var activeTabName = "";
 
   	if (!this.state.hasSearched) {
   		if (restaurants.length > 0)
@@ -126,18 +130,20 @@ export default class Search extends Component {
   			this.toggle("hotelsTab");
   	}
 
-  	var rIdx = this.state.rPage * per_page;
-  	var aIdx = this.state.aPage * per_page;
-  	var hIdx = this.state.hPage * per_page;
+  	var rIdx = (this.state.rPage-1) * per_page;
+  	var aIdx = (this.state.aPage-1) * per_page;
+  	var hIdx = (this.state.hPage-1) * per_page;
+  	console.log("IDX ON SHOWSEARCHITEMS:  pageNum: " + pageNum + " rIDX: " + rIdx);
+
 	switch (this.state.activeTab) {
 		case "restaurantsTab":
-			rIdx = pageNum * per_page;
+			rIdx = p * per_page;
 			break;
 		case "attractionsTab":
-			aIdx = pageNum * per_page;
+			aIdx = p * per_page;
 			break;
 		case "hotelsTab":
-			hIdx = pageNum * per_page;
+			hIdx = p * per_page;
 			break;
 	}
 
@@ -154,10 +160,8 @@ export default class Search extends Component {
 
   enterPressed(event) {
   	var code = event.keyCode || event.which;
-	    if(code === 13) { //13 is the enter keycode
-	        //Do stuff in here
+	    if(code === 13)  //13 is the enter keycode
 	        this.onSearch(event);
-	    } 
 	}
 
 	createSearchString(searchInput) {
@@ -267,8 +271,10 @@ export default class Search extends Component {
 			activePage = this.state.hPage;
 			break;
 	}
-	let pageCount = Math.floor(arrayLength/per_page);
-	// console.log("PAGE COUNT: " + pageCount);
+	let pageCount = Math.ceil(arrayLength/per_page);
+	console.log("resturants length: " + restaurants.length);
+	console.log("active Tab: " + this.state.activeTab);
+	console.log("PAGE COUNT: " + pageCount + " arrayLength: " + arrayLength + " per page: " + per_page + " displayedRestaurants.length " + this.state.displayedRestaurants.length);
 	var restaurantCards = this.state.displayedRestaurants.map(function(restaurant) {
 		return <Col xs="12" sm="6" md="3"><RestaurantSearchCard restaurant={restaurant} searchTerms={searchTerms}/></Col>;
 	});

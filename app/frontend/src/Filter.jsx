@@ -108,7 +108,7 @@ export default class Filter extends Component {
           <Row>
               <Form>
                 <Col xs="12">
-                  <legend>Filter by:</legend>
+                  <legend><span className="cardTitleText">Filter by:</span></legend>
                 </Col>
                 <Col xs="12">
 
@@ -123,7 +123,7 @@ export default class Filter extends Component {
 
                <Col xs="12">
                 <FormGroup>
-                  <Label for="zipcodeFilter">Filter by zipcode</Label>
+                  <Label for="zipcodeFilter" className="cardSubText">Filter by zipcode</Label>
                   <Select 
                     name="zipcodeFilter"
                     options={zipcodes}

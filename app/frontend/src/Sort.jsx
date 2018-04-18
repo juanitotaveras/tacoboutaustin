@@ -52,7 +52,7 @@ export default class Sort extends Component {
 		return(
 		 <Container>
           <Form>
-              <Row><legend>Sort by:</legend>
+              <Row><legend> <span className="cardTitleText">Sort by:</span></legend>
                   <Col>
                   <Select 
                   options={sort_options}
