@@ -14,6 +14,7 @@ import classnames from 'classnames';
 import Header from './Header';
 import Paginator from './Paginator';
 import HeaderBackground from './assets/search_header_background.jpg';
+import TacoAnimation from './assets/taco_loading.gif';
 
 var restaurants = [];
 var hotels = [];
@@ -40,13 +41,14 @@ export default class Search extends Component {
 			displayedAtt: [],
 			displayedHot: [],
 			hasSearched: false,
-			activeTab: RES_TAB
+			activeTab: RES_TAB,
+			loading: true
 		};
 		this.toggle = this.toggle.bind(this);
 		this.onChangeSearchBoxText = this.onChangeSearchBoxText.bind(this);
 		this.onSearch = this.onSearch.bind(this);
 		this.handlePageClick = this.handlePageClick.bind(this);
-
+		this.doneLoading = this.doneLoading.bind(this);
 	}
 
 	handlePageClick(pageNum) {
@@ -67,40 +69,41 @@ export default class Search extends Component {
 				});
 				break;
 		}
-		this.setState({
-			done_loading: false
-		});
 
 		this.showSearchItems(pageNum);
 	}
 
-	fillInRestaurants(responseText) {
+	fillInRestaurants(responseText, doneLoading) {
 		let restaurants_parsed = JSON.parse(responseText)["list"];
 		for (let r of restaurants_parsed) 
 			restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"], r["zip_code"]));
 	}
 
-	fillInHotels(responseText) {
+	fillInHotels(responseText, doneLoading) {
 		let hotels_parsed = JSON.parse(responseText)["list"];
 		for (let h of hotels_parsed) 
 			hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"], h["zip_code"]));
 	}
 
-	fillInAttractions(responseText) {
+	fillInAttractions(responseText, doneLoading) {
 		let attractions_parsed = JSON.parse(responseText)["list"];
 		for (let a of attractions_parsed) 
 			attractions.push(new Attraction(a["address"], a["id"], a["image"], a["name"], a["rating"], a["zip_code"]));
+		// this is where we will finishing getting requests
+		
+		// this.setState({loading: false});
+		doneLoading();
 	} 
 
 
-	request(url, parseResponse) {
-		console.log("URL: " + url);
+	request(url, parseResponse, doneLoading) {
+		// console.log("URL: " + url);
 		var xmlHttp = new XMLHttpRequest();
 		xmlHttp.onreadystatechange = function() {
 			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-				parseResponse(xmlHttp.responseText);
+				parseResponse(xmlHttp.responseText, doneLoading);
 		}
-		xmlHttp.open("GET", url, false) // true for asynchronous
+		xmlHttp.open("GET", url, true) // true for asynchronous
 		xmlHttp.send(null);
   	}
 
@@ -157,7 +160,8 @@ export default class Search extends Component {
 			displayedRes: rArray,
 			displayedAtt: aArray,
 			displayedHot: hArray,
-			hasSearched: true
+			hasSearched: true,
+			loading: false
 		});
 	}
 
@@ -185,6 +189,7 @@ export default class Search extends Component {
 
 	onSearch(event) {
 		event.preventDefault();
+		this.setState({loading: true});
 
 		if (this.state.hasSearched) {
 			// clear current results
@@ -201,18 +206,9 @@ export default class Search extends Component {
 			searchText += "&search_type=and"
 
 		const urls = ["/restaurants", "/hotels", "/attractions"].map((elem) => api_url + elem + searchText);
-		this.request(urls[0], this.fillInRestaurants);
-		this.request(urls[1], this.fillInHotels);
-		this.request(urls[2], this.fillInAttractions);
-
-		if (restaurants.length > 0)
-			this.toggle(RES_TAB);
-		else if (attractions.length > 0)
-			this.toggle(ATT_TAB);
-		else if (hotels.length > 0)
-			this.toggle(HOT_TAB);
-
-		this.showSearchItems(1);
+		this.request(urls[0], this.fillInRestaurants, this.doneLoading);
+		this.request(urls[1], this.fillInHotels, this.doneLoading);
+		this.request(urls[2], this.fillInAttractions, this.doneLoading);
 	}
 
 	handleSeachInclusive() {
@@ -236,7 +232,23 @@ export default class Search extends Component {
 	    }
 	 }
 
+	 doneLoading() {
+
+		if (restaurants.length > 0)
+			this.toggle(RES_TAB);
+		else if (attractions.length > 0)
+			this.toggle(ATT_TAB);
+		else if (hotels.length > 0)
+			this.toggle(HOT_TAB);
+
+		this.showSearchItems(1);
+	 }
+
 	render() {
+		const loadingImage =
+			<div className="text-center" height="50%">
+				<img src={TacoAnimation} alt="Loading Image" width="30%" height="auto" style={{float: 'center'}}/>
+			</div>;
 		const searchBox = 
 			<Row>
 				<br/>
@@ -395,10 +407,14 @@ export default class Search extends Component {
 				<Container>
 				{searchBox}
 				{
+					this.state.loading ?
+					loadingImage :
+					(
 					this.noResultsFound() ?
 					noResultsComponent
 					:
 					tabContainer
+					)
 				}
 				{
 					pageCount > 1 &&
