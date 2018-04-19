@@ -271,7 +271,7 @@ export default class Search extends Component {
 	render() {
 		const loadingImage =
 			<div className="text-center" height="50%">
-				<img src={TacoAnimation} alt="Loading Image" width="30%" height="auto" style={{float: 'center'}}/>
+				<img src={TacoAnimation} alt="Loading Image" width="10%" height="auto" style={{float: 'center'}}/>
 			</div>;
 		const searchBox = 
 			<Row>
