@@ -48,8 +48,13 @@
   font-size: 1.2em;
 }
 
+.medText {
+  font-size: 1.3em;
+}
+
 .cardDiv {
   margin-bottom: 1em;
+  border: 1px solid gray;
 }
 
 @keyframes App-logo-spin {
