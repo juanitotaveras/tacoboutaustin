@@ -147,9 +147,16 @@ export default class RestaurantJumbotron extends Component {
     return (
     <div>
       <Jumbotron>
-        <h1 className="display-3">{this.props.name}</h1>
-        <p className="lead">{full_tacos_rating}{half_taco_rating}{gray_taco_rating}<br/>
-        </p>
+        <Row>
+          <Col><h1 className="display-3">{this.props.name}</h1></Col>
+        </Row>
+        <Row>
+          <Col><p className="lead">{full_tacos_rating}{half_taco_rating}{gray_taco_rating}<br/></p>
+          </Col>
+          <Col><h2>{this.props.categories}</h2>
+            <h3>Phone: {this.props.phone}</h3>
+          </Col>
+        </Row>
           <Row>
           <Col xs="6">
           <div>
@@ -174,10 +181,10 @@ export default class RestaurantJumbotron extends Component {
             </div>
             </Col>
           <Col xs="6">
+            
             <iframe top width="100%" height="400em" frameborder="0" src={this.props.map_src} allowfullscreen>
           </iframe>
-          <h2>Type of food: {this.props.categories}</h2>
-          <h3>Phone: {this.props.phone}</h3>
+          
           </Col>
         </Row>
         <p></p>

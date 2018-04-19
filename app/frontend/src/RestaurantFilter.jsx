@@ -5,6 +5,7 @@ import 'react-select/dist/react-select.css';
 import Select from 'react-select';
 import PropTypes from "prop-types";
 import { api_url } from './config.js';
+import "./filter.css";
 
 var categories = [];
 var zipcodes = [];
@@ -161,10 +162,10 @@ export default class RestaurantFilter extends Component {
               <br />
 
              <Col xs="12">
-                <Button outline color="primary" onClick={this.gatherFilters}>Apply filters</Button>
+                <Button outline color="info" className="button-margin" onClick={this.gatherFilters}>Apply filters</Button>
               </Col>
               <Col xs="12">
-                <Button outline color="primary" onClick={this.unapplyFilters}>Clear all filters</Button>
+                <Button outline color="info" onClick={this.unapplyFilters}>Clear all filters</Button>
               </Col>
           </Form>
         </Row>

@@ -150,10 +150,10 @@ export default class Filter extends Component {
                 <br />
 
                 <Col xs="12">
-                  <Button outline color="primary" onClick={this.gatherFilters}>Apply filters</Button>
+                  <Button outline color="info" className="button-margin" onClick={this.gatherFilters}>Apply filters</Button>
                 </Col>
                 <Col xs="12">
-                  <Button outline color="primary" onClick={this.unapplyFilters}>Clear all filters</Button>
+                  <Button outline color="info" onClick={this.unapplyFilters}>Clear all filters</Button>
                 </Col>
               </Form>
           </Row>
