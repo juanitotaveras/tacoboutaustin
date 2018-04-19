@@ -33,8 +33,8 @@ export default class Filter extends Component {
   }
 
   componentWillMount() {
-    const categories_url = (this.props.type == "Attraction") ? api_url + "/categories?type=attraction" : api_url + "/categories?type=hotel"
-    const zipcodes_url = (this.props.type == "Attraction") ? api_url + "/zipcodes?type=attraction" : api_url + "/zipcodes?type=hotel"
+    const categories_url = (this.props.type == "Attractions") ? api_url + "/categories?type=attraction" : api_url + "/categories?type=hotel"
+    const zipcodes_url = (this.props.type == "Attractions") ? api_url + "/zipcodes?type=attraction" : api_url + "/zipcodes?type=hotel"
     this.request(categories_url, this.parseCategories);
     this.request(zipcodes_url, this.parseZipcodes);
   }
