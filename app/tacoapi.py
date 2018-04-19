@@ -215,6 +215,7 @@ def getList(args, type):
     return output
 
 def getOne(id, type):
+    global numberOfClosePlace
     Model = getModel(type)
     place = Model.query.filter(getIdType(Model, type) == id).first()
     if place == None:
