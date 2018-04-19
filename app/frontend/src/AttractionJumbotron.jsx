@@ -139,9 +139,6 @@ export default class AttractionJumbotron extends Component {
         <p><b>Reviews</b><br/>
         <blockquote><q>{all_reviews}</q></blockquote></p>
         <br/>
-        {/*<p className="lead">*/}
-          {/*<Button color="primary">Learn More</Button>*/}
-        {/*</p>*/}
       </Jumbotron>
     </div>
   )};
