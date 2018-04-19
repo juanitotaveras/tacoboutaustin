@@ -12,11 +12,11 @@ const wrapper = mount(<Filter />);
 
 describe('Filter Component', () => {
   it('has a filter by rating label', () => {
-    expect(wrapper.contains(<Label for="ratingFilter">Rating of at least:</Label>)).to.equal(true);
+    expect(wrapper.contains(<Label for="ratingFilter" className="medText">Rating of at least:</Label>)).to.equal(true);
   }),
 
   it('has a filter by zipcode label', () => {
-    expect(wrapper.contains(<Label for="zipcodeFilter">Filter by zipcode</Label>)).to.equal(true);
+    expect(wrapper.contains(<Label for="zipcodeFilter" className="cardSubText">Filter by zipcode</Label>)).to.equal(true);
   }),
 
   it('has an apply filters button', () => {

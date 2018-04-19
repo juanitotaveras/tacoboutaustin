@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import tacoLogo from './assets/taco_logo.png';
+import "./css/Nav.css"
 import {
   Collapse,
   Navbar,
@@ -39,11 +40,12 @@ export default class NavigationBar extends React.Component {
   render(props) { 
     return (
       <div>
-        <Navbar color="dark" light expand="md">
-          <NavbarBrand href="/"><div><img src={tacoLogo} height="60em" width="95em" /></div></NavbarBrand>
+        <Navbar className="nav to-the-top" light expand="md">
+          <NavbarBrand href="/"><div><img src={tacoLogo} height="90em" width="130em" /></div></NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="navbar text-white container-fluid" navbar>
+          <Container>
+            <Nav className="navbar text-white nav-items" navbar>
                  <NavItem>
                    <NavLink href="/restaurants"><h3 className="text-white">Restaurants</h3></NavLink>
                  </NavItem>
@@ -57,9 +59,14 @@ export default class NavigationBar extends React.Component {
                    <NavLink href="/about"><h3 className="text-white">About</h3></NavLink>
                  </NavItem>
                  <NavItem>
+                    {/*<InputGroup className="nav-search"> 
+                      <Input placeholder="Search something"/>
+                    </InputGroup>*/}
                    <NavLink href="/search"><h3 className="text-white">Search</h3></NavLink>
                  </NavItem>
+
             </Nav>
+            </Container>
           </Collapse>
         </Navbar>
       </div>

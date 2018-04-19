@@ -9,114 +9,102 @@
 # --------------------------------------
 
 from helper_methods import *
+from math import radians, cos, sin, asin, sqrt
 
 def fix_sixth_street():
-    attraction = Attraction.query.filter_by(id='0').first()
-    attraction.address1 = "W 6th St"
-    attraction.address2 = "Austin, TX 78703"
-    attraction.zipcode = 78703
+    attraction = Attraction.query.filter_by(name='Sixth street').first()
+    attraction.addAddress(["W 6th St", "Austin, TX 78703"], 78703)
     db.session.commit()
 
 def fix_hotels():
     hotel = Hotel.query.filter_by(name ="Pecan Grove Rv Park").first()
-    hotel.images.image1 = "http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveEntrance.jpg"
-    hotel.cover_image = "http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveEntrance.jpg"
-    hotel.images.image2 = "http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveDrive.jpg"
+    hotel.addImage("http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveEntrance.jpg")
+    hotel.addCover("http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveEntrance.jpg")
+    hotel.addImage("http://www.freedomintow.com/wp-content/uploads/2015/07/PecanGroveDrive.jpg")
     
     hotel = Hotel.query.filter_by(address1 = "109 E 7th St").first()
     hotel.name = "Aloft Austin Downtown"
-    
+
     hotel = Hotel.query.filter_by(name = "Mehl's Motel").first()
-    hotel.images.image1 = "http://2.bp.blogspot.com/_YUD_TKP5xJk/TE3qHiCAGQI/AAAAAAAAADE/XNsebuQEf_Y/s1600/DSC08018.JPG"
-    hotel.cover_image = "http://2.bp.blogspot.com/_YUD_TKP5xJk/TE3qHiCAGQI/AAAAAAAAADE/XNsebuQEf_Y/s1600/DSC08018.JPG"
+    hotel.addImage("http://2.bp.blogspot.com/_YUD_TKP5xJk/TE3qHiCAGQI/AAAAAAAAADE/XNsebuQEf_Y/s1600/DSC08018.JPG")
+    hotel.addCover("http://2.bp.blogspot.com/_YUD_TKP5xJk/TE3qHiCAGQI/AAAAAAAAADE/XNsebuQEf_Y/s1600/DSC08018.JPG")
 
     hotel = Hotel.query.filter_by(name = "Austin Folk House").first()
-    hotel.images.image1 = "https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg"
-    hotel.cover_image = "https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg"
-
-    hotel = Hotel.query.filter_by(name = "Studio 6 Austin").first()
-    if hotel is not None:
-        db.session.delete(hotel)
-
-    hotel = Hotel.query.filter_by(name = "Archer Hotel Austin").first()
-    if hotel is not None:
-        db.session.delete(hotel)
-
-    hotel = Hotel.query.filter_by(name = "Omni Austin Hotel Downtown").first()
-    if hotel is not None:
-        db.session.delete(hotel)
-   
-    db.session.commit()
-
-def fix_attractions():
-    attraction = Attraction.query.filter_by(name = "HandleBar").first()
-    if attraction is not None:
-        db.session.delete(attraction)
+    hotel.addImage("https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg")
+    hotel.addCover("https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg")
     
-    attraction = Attraction.query.filter_by(name = "Backbeat").first()
-    if attraction is not None:
-        db.session.delete(attraction)
-    db.session.commit()
+    hotel = Hotel.query.filter_by(name="Austin Village Motor Inn").first()
+    hotel.cover_image = None
+    for image in hotel.images:
+        db.session.delete(image)
+    
+    hotel = Hotel.query.filter_by(name="Americas Best Value Inn").filter_by(zipcode=76504).first()
+    hotel.cover_image = None
+    for image in hotel.images:
+        db.session.delete(image)
 
-def delete_restaurant(restaurant):
-    associations = Association.query.filter_by(restaurant_id = restaurant.id).all()
-    for association in associations:
-        db.session.delete(association)
-    db.session.delete(restaurant)
+    hotel = Hotel.query.filter_by(name="Ammericas Best Value Inn").filter_by(zipcode=76504).first()
+    hotel.cover_image = None
+    for image in hotel.images:
+        db.session.delete(image)
+
+
+    hotel = Hotel.query.filter_by(name="Red Roof").first()
+    hotel.cover_image = None
+    for image in hotel.images:
+        db.session.delete(image)
+
+    hotel = Hotel.query.filter_by(name="Budget Lodge").first()
+    hotel.cover_image = None
+    for image in hotel.images:
+        db.session.delete(image)
+
+    db.session.commit()
 
 def fix_zip_code():
-    restaurants = Restaurant.query.all()
-    hotels = Hotel.query.all()
-    attractions = Attraction.query.all()
+    for zipcode in Zipcode.query.all():
+        count = Place.query.filter_by(zipcode = zipcode.value).count()
+        if count < 1:
+            db.session.delete(zipcode)
+            db.session.commit()
+def fix_categories():
+    for category in Category.query.all():
+        if len(category.places) == 0:
+            db.session.delete(category)
+            db.session.commit()
 
-    for restaurant in restaurants:
-        zipcode = restaurant.zipcode
-        
-        same_zipcode_hotels = Hotel.query.filter_by(zipcode=zipcode).all()
-        same_zipcode_attractions = Attraction.query.filter_by(zipcode=zipcode).all()
-        if len(same_zipcode_hotels) < 2 or len(same_zipcode_attractions) < 2:
-            same_zipcode_restaurants = Restaurant.query.filter_by(zipcode=zipcode).all()
-            for res in same_zipcode_restaurants:
-                delete_restaurant(res)
-            for hot in same_zipcode_hotels:
-                db.session.delete(hot)
-            for att in same_zipcode_attractions:
-                db.session.delete(att)
-            db.session.commit()
-    
-    for attraction in attractions:
-        zipcode = attraction.zipcode   
-        same_zipcode_restaurants = Restaurant.query.filter_by(zipcode=zipcode).all()
-        same_zipcode_hotels = Hotel.query.filter_by(zipcode=zipcode).all()
-        
-        if len(same_zipcode_restaurants) < 2 or len(same_zipcode_hotels) < 2:
-            same_zipcode_attractions = Attraction.query.filter_by(zipcode=zipcode).all()
-            for res in same_zipcode_restaurants:
-                delete_restaurant(res)
-            for hot in same_zipcode_hotels:
-                db.session.delete(hot)
-            for att in same_zipcode_attractions:
-                db.session.delete(att)
-            db.session.commit()
-            
-    for hotel in hotels:
-        zipcode = hotel.zipcode
-        same_zipcode_restaurants = Restaurant.query.filter_by(zipcode=zipcode).all()
-        same_zipcode_attractions = Attraction.query.filter_by(zipcode=zipcode).all()
-        
-        if len(same_zipcode_restaurants) < 2 or len(same_zipcode_attractions) < 2:
-            same_zipcode_hotels = Hotel.query.filter_by(zipcode=zipcode).all()
-            for res in same_zipcode_restaurants:
-                delete_restaurant(res)
-            for hot in same_zipcode_hotels:
-                db.session.delete(hot)
-            for att in same_zipcode_attractions:
-                db.session.delete(att)
-            db.session.commit()
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a))
+    miles = 3963*c # radius of the earth ~ 3963 miles
+    return miles
+
+def init_distances():
+    places = Place.query.all()
+    for place in places:
+        other_places = Place.query.filter(Place.id != place.id)
+        for other_place in other_places:
+            place.addDistance(other_place, haversine(place.longtitude, place.latitude, other_place.longtitude, other_place.latitude))
+        db.session.commit()
+
+def fix_all():
+    print("Start fixing data")
+    fix_sixth_street()
+    fix_hotels()
+    fix_categories()
+    fix_zip_code()
+    print("finish fixing data, start initialize distances table")
+    init_distances()
 
 if __name__ == "__main__":
-    #fix_sixth_street()
-    fix_zip_code()
-    fix_hotels()
-    fix_attractions()
+    fix_all()
     db.session.commit()

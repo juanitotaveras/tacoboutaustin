@@ -1,0 +1,15 @@
+.c-caption {
+    position: absolute !important;
+    left: 0 !important;
+    top: 35% !important;
+    width: 80% !important;
+    margin-left: 10% !important;
+}
+
+.c-caption h1 {
+    font-size: 100rem;
+}
+.c-caption p {
+    font-size: 5rem;
+    font-weight: bold;
+}

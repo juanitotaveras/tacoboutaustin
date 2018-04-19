@@ -21,7 +21,13 @@ This will run the api on localhost:80 and the frontend on localhost:3000
 `make clear_env`
 
 # Testing
-Check out our travis ci at https://travis-ci.org/juanitotaveras/tacoboutaustin
+To run frontend tests, from the root folder run `make frontend`
+
+To run backend tests, from the root folder run `make backend`
+
+To run selenium tests, from the root folder run `make gui_testing` and then `make selenium`
+
+To run api tests, from the root folder run `newman run Postman.json`
 
 # API Documentation
 https://tienlatien252.gitbooks.io/tacoboutaustin/content/

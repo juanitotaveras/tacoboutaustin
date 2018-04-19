@@ -32,16 +32,16 @@ const wrapper = shallow(<AttractionJumbotron
 	name={"Attraction Name"} 
 	rating={4}
 	images= {images}
-	reviews={reviews} />);
+	reviews={reviews}
+  categories="Landmarks & Historical Buildings" />);
 
 describe('AttractionJumbotron Component', () => {
   it('renders the name', () => {
     expect(wrapper.find('h1').text()).to.equal('Attraction Name')
   }),
 
-  it('renders the rating', () => {
-    expect(wrapper.contains(<p className="lead">Rating: 4/5<br/>
-        </p>)).to.equal(true)
+  it('renders the categories', () => {
+    expect(wrapper.contains(<h2>Categories: Landmarks & Historical Buildings</h2>)).to.equal(true)
   }),
 
   it('renders the reviews', () => {

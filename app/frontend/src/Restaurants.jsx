@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import search from './assets/search.png';
-import './App.css';
 import RestaurantCard from './RestaurantCard';
 import RestaurantFilter from './RestaurantFilter';
+import Header from './Header';
 import Sort from './Sort';
-import { Container, Row, Col, Button, Pagination, PaginationItem, 
-  PaginationLink, Form, FormGroup } from 'reactstrap';
+import { Container, Row, Col, Button,
+  Form, FormGroup, CardColumns } from 'reactstrap';
 import { api_url } from './config';
+import Paginator from './Paginator';
+import HeaderBackground from './assets/restaurants_header_background.jpg';
+import TacoAnimation from './assets/taco_loading.gif';
 
-var res_count = 0;
+var resCount = 0;
 const per_page = 12;
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -26,49 +29,71 @@ export class Restaurant {
 export default class Restaurants extends Component {
   constructor(props) {
     super(props);
-    this.sortPage = this.sortPage.bind(this)
-    this.filterPage = this.filterPage.bind(this)
-    this.fillInRestaurants = this.fillInRestaurants.bind(this)
+    this.handlePageClick = this.handlePageClick.bind(this);
+    this.sortPage = this.sortPage.bind(this);
+    this.filterPage = this.filterPage.bind(this);
+    this.fillInRestaurants = this.fillInRestaurants.bind(this);
+    this.doneLoading = this.doneLoading.bind(this);
+    this.requestCount = this.requestCount.bind(this);
+    this.requestPages = this.requestPages.bind(this);
+    this.getCount = this.getCount.bind(this);
+
     this.state = {
       onPage: 1,
-      restaurants_display: [],
+      restaurantsDisplay: [],
       sorted: null,
       filters: {
         rating: 0,
         zipcode: 0,
         open: false
-      }
+      },
+      loading: false,
     };
   }
 
   componentWillMount() {
     const url = api_url + "/restaurants";
-    this.request(url, this.getCount);
     this.getPage(1, null, null, false);
   }
 
+  componentDidMount() {
+
+  }
+
   fillInRestaurants(responseText) {
-      var temp_restaurants = [];
-      let restaurants_parsed = JSON.parse(responseText)["list"];
-      for (let r of restaurants_parsed) {
-        temp_restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"], r["zip_code"]));
+      var tempRestaurants = [];
+      let resParsed = JSON.parse(responseText)["list"];
+      for (let r of resParsed) {
+        tempRestaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"], r["zip_code"]));
       }
       this.setState({
-        restaurants_display: temp_restaurants
+        restaurantsDisplay: tempRestaurants
       });
+      this.doneLoading();
   }
 
-  getCount(responseText) {
-      res_count = JSON.parse(responseText)["total"];
-  }
+  getCount(responseText, page_url) {
+      resCount = JSON.parse(responseText)["total"];
+      this.requestPages(page_url, this.fillInRestaurants);
+    }
 
-  request(url, parseResponse) {
+  requestCount(count_url, page_url, getCount) {
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-          parseResponse(xmlHttp.responseText);
+          getCount(xmlHttp.responseText, page_url);
       }
-      xmlHttp.open("GET", url, false) // true for asynchronous
+      xmlHttp.open("GET", count_url, true) // true for asynchronous
+      xmlHttp.send(null);
+  }
+
+  requestPages(page_url, fillInRestaurants) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          fillInRestaurants(xmlHttp.responseText);
+      }
+      xmlHttp.open("GET", page_url, true) // true for asynchronous
       xmlHttp.send(null);
   }
 
@@ -77,31 +102,36 @@ export default class Restaurants extends Component {
     var hour = d.getHours();
     var day = d.getDay(); 
     var timeString = days[day] + ",";
-    if(hour / 12 >= 1) {
-      timeString += hour == 12 ? 12 : hour % 12;
-      timeString += ":00,PM";
-    } else {
-      timeString += hour + ":00,AM";
-    }
-
+    timeString += hour + ":00"
     return timeString;
   }
 
 
   getPage(pageNum, sortParam, fils) {
+    this.setState({
+      loading: true,
+    })
     var apiParams = [];
     var url = api_url + "/restaurants?";
 
     // Sorting
-    if(sortParam != null)
+    if(sortParam != '')
     {
-      if (sortParam == "name") {
+      if (sortParam == "name_asc") {
         apiParams.push("order_by=name");
         apiParams.push("order=asc");
       }
-      else {
+      else if(sortParam == "name_desc") {
+        apiParams.push("order_by=name");
+        apiParams.push("order=desc");
+      } 
+      else if(sortParam == "rating_desc") {
         apiParams.push("order_by=rating");
         apiParams.push("order=desc");
+      }
+      else if(sortParam == "rating_asc") {
+        apiParams.push("order_by=rating");
+        apiParams.push("order=asc");
       }
     }
 
@@ -110,20 +140,22 @@ export default class Restaurants extends Component {
       if(fils.rating != 0) {
         apiParams.push("rating=" + fils.rating);
       }
-      if(fils.zipcode != 0) {
-        apiParams.push("zipcode=" + fils.zipcode);
+      if(fils.selectedZipcodes != '') {
+        apiParams.push("zipcode=" + fils.selectedZipcodes);
       }
       if(fils.open == true) {
         var timeString = this.getDateString();
         apiParams.push("time=" + timeString);
+      }
+      if(fils.selectedCategories != '') {
+        apiParams.push("categories=" + fils.selectedCategories);
       }
     }
 
     const count_url = url + apiParams.join("&");
     const page_url = count_url + "&page=" + pageNum;
 
-    this.request(count_url, this.getCount);
-    this.request(page_url, this.fillInRestaurants);
+    this.requestCount(count_url, page_url, this.getCount);
     this.setState({
       onPage: pageNum,
       sorted: sortParam,
@@ -131,6 +163,10 @@ export default class Restaurants extends Component {
     });
   }
 
+
+  doneLoading() {
+    this.setState({loading: false});
+  }
 
   filterPage(filters) {
     this.getPage(1, this.state.sorted, filters);
@@ -141,51 +177,60 @@ export default class Restaurants extends Component {
   }
 
   handlePageClick(pageNum) {
+    document.getElementById('jump').scrollIntoView();
     this.getPage(pageNum, this.state.sorted, this.state.filters);
   }
 
   render() {
-    var page_numbers = [];
-    const pages_count = (res_count%per_page) == 0 ? res_count/per_page : res_count/per_page + 1;
-    for(var i = 1; i <= pages_count; i++)
-      page_numbers.push(i);
+    const loadingImage =
+      <div className="text-center">
+        <img src={TacoAnimation} alt="Loading Image" width="10%" height="auto" style={{float: 'center'}}/>
+      </div>;
+    var pages_count = Math.floor(resCount/per_page);
+    if (!((resCount%per_page) == 0))
+      pages_count++;
 
-    var cards = this.state.restaurants_display.map(function(restaurant) {
-            return <Col xs="6" sm="4"><RestaurantCard restaurant={restaurant} /></Col>;
+    var cards = this.state.restaurantsDisplay.map(function(restaurant) {
+            return <Col xs="12" md="4"><RestaurantCard restaurant={restaurant} /></Col>;
           })
 
-    var pages = page_numbers.map((pageNum) => {
-      return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum}</PaginationLink></PaginationItem></li>;
-    })
-
-    return (
-    	<div>
-    		<Container>
+    const container =
+            <Container id="jump">
             <Row>
-                <Col><h1>Restaurants</h1></Col>
-      			</Row>
-            <Row>
-                <Col xs="2">
+                <Col xs="12" md="2">
                   <RestaurantFilter handler={this.filterPage}/>
                   <br />
                   <Sort handler={this.sortPage}/>
                 </Col>
-                <Col><Container>
+
+                <Col xs="12" md="10">
                 {
-                  res_count > 0 &&
+                  resCount > 0 &&
                   cards
                 }
                 {
-                  res_count == 0 &&
+                  resCount == 0 &&
                   <h1>No results found.</h1>
                 }
-                </Container></Col>
+                </Col>
             </Row>
-            <Row>
-                <Col sm="5"></Col>
-                <Col><Pagination size="lg">{pages}</Pagination></Col>
-            </Row>
-      	</Container>
+            <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick} />
+        </Container>;
+
+    return (
+      <div className="background">
+        <Header
+          title="World-class Restaurants"
+          description="From mouth-watering barbeque to spicy Tex-Mex, our wide selection is bound to make your belly happy."
+          image={HeaderBackground}
+        />
+        <br />
+        {
+          this.state.loading ?
+          loadingImage
+          :
+          container
+        }
       </div>
     );
   }

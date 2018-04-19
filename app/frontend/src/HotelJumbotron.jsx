@@ -11,6 +11,7 @@ import {
   CarouselIndicators,
   CarouselCaption,
   Container } from 'reactstrap';
+import LargeTacoRating from './LargeTacoRating';
 
 export default class HotelJumbotron extends Component {
 
@@ -75,9 +76,19 @@ export default class HotelJumbotron extends Component {
     return (
     <div>
       <Jumbotron>
-        <h1 className="display-3">{this.props.name}</h1>
-        <p className="lead">Rating: {this.props.rating}/5<br/>
-        {this.props.address}</p>
+        <Row>
+          <Col><h1 className="display-3">{this.props.name}</h1></Col>
+        </Row>
+        <Row>
+          <Col><p className="lead"><LargeTacoRating rating={this.props.rating}/><br/></p>
+          </Col>
+          <Col><h2>Categories: {this.props.categories}</h2>
+            {
+              this.props.phone != "" &&
+              <h3>Phone: {this.props.phone}</h3>
+            }
+          </Col>
+        </Row>
         <Row>
           <Col xs="6">
           <div>
@@ -108,7 +119,8 @@ export default class HotelJumbotron extends Component {
         </Row>
         <p></p>
         <hr className="my-2" />
-        <p><b>Reviews</b><br/>
+        <h2><b>Reviews</b></h2><br/><br/>
+        <p>
         <blockquote><q>{all_reviews}</q></blockquote></p>
         <br/>
         {/*<p className="lead">
@@ -125,5 +137,7 @@ HotelJumbotron.propTypes = {
   images: PropTypes.object,
   map_src: PropTypes.string,
   reviews: PropTypes.object,
-  amenities: PropTypes.string
+  amenities: PropTypes.string,
+  phone: PropTypes.string,
+  categories: PropTypes.string
 };

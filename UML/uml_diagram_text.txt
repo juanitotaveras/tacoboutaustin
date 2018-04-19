@@ -1,23 +1,23 @@
 @startuml
 
-Hotel "1" -o "*" Restaurant
-Hotel "1" -o "*" Attraction
-Hotel "1" --* "1" Images : images
-Hotel "1" --* "*" Review : reviews
+Hotel "1" -o "1" Place
+Attraction "1" -o "1" Place
+Restaurant "1" -o "1" Place
 
-Restaurant "1" -o "*" Hotel
-Restaurant "1" -o "*" Attraction
-Restaurant "1" --* "1" Images : images
-Restaurant "1" --* "*" Review : reviews
+Place "1" --* "1" Images : images
+Place "1" --* "*" Review : reviews
+Place "*" --* "1" Zipcode : zip_code
+Place "1" --* "*" Association : categories 
+Place "1" --* "*" Distance : distances
 
-Attraction "1" -o "*" Restaurant
-Attraction "1" -o "*" Hotel
-Attraction "1" --* "1" Images : images
-Attraction "1" --* "*" Review : reviews
+Association "*" --* "1" Category: category
+Distance "*" --* "1" Place
+Restaurant "1" --* "*" Hour: hours
 
-class Hotel {
+class Place {
   {field}id : Integer
   {field}name : String(80)
+  {field}type : String(20)
   {field}cover_image : String(200)
   {field}longitude : Float
   {field}latitude : Float
@@ -29,61 +29,70 @@ class Hotel {
 
   addReview(text: String, link: String, index: Integer)
   addImage(images: [Image])
+  addCover(cover: String)
+  addCategories(categories: List)
+  addDistance(place: [Place], distance: Float)
   addAddress(address: [Address], zipcode: Integer)
+}
+
+class Hotel {
+  {field}id : Integer
+  {field}hotel_id : Integer
 }
 
 class Restaurant {
   {field}id : Integer
-  {field}name : String(80)
-  {field}cover_image : String(200)
-  {field}longitude : Float
-  {field}latitude : Float
-  {field}rating : Float
-  {field}address1 : String(100) 
-  {field}address2 : String(100) 
-  {field}open_hour : String(200)
-  {field}phone : String(20)
-  {field}zipcode : Integer
-  {field}zipcode : Categories
+  {field}restaurant_id : Integer
 
-  addReview(text: String, link: String, index: Integer)
-  addImage(images: [Image])
-  addAddress(address: [Address], zipcode: Integer)
+  addHour(time: Dictionary)
 }
 
 class Attraction {
   {field}id : Integer
-  {field}name : String(80)
-  {field}cover_image : String(200)
-  {field}longitude : Float
-  {field}latitude : Float
-  {field}rating : Float
-  {field}address1 : String(100) 
-  {field}address2 : String(100) 
-  {field}phone : String(20)
-  {field}zipcode : Integer
-
-  addReview(text: String, link: String, index: Integer)
-  addImage(images: [Image])
-  addAddress(address: [Address], zipcode: Integer)
+  {field}attraction_id : Integer
 }
 
 class Images {
   {field}id : Integer
-  {field}image1 : String(200)
-  {field}image2 : String(200)
-  {field}image3 : String(200)
-  {field}hotel_id : Integer
-  {field}restaurant_id : Integer
-  {field}attraction_id : Integer  
+  {field}image_url : String(200)
+  {field}place_id : Integer 
 }
 
 class Review {
   {field}id : Integer
   {field}text : String(200)
   {field}link : String(200)
-  {field}hotel_id : Integer
+  {field}place_id : Integer
+}
+
+class Hour {
   {field}restaurant_id : Integer
-  {field}attraction_id : Integer
+  {field}day : Integer
+  {field}open_time : String(4)
+  {field}close_time : String(4)
+}
+
+class Distance {
+  id: Integer
+  second_place_id: Integer
+  distance: Float
+}
+
+class Category {
+  id: String(100)
+  name: String(200)
+
+  get_or_create(id: String, name: String)
+}
+
+class Association {
+  category_id: String(100)
+  place_id: Integer
+}
+
+class Zipcode {
+  value: Integer
+
+  get_or_create(value: Integer)
 }
 @enduml
