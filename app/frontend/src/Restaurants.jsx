@@ -34,8 +34,6 @@ export default class Restaurants extends Component {
     this.filterPage = this.filterPage.bind(this);
     this.fillInRestaurants = this.fillInRestaurants.bind(this);
     this.doneLoading = this.doneLoading.bind(this);
-    this.countDoneLoading = this.countDoneLoading.bind(this);
-    this.pagesDoneLoading = this.pagesDoneLoading.bind(this);
 
     this.state = {
       onPage: 1,
@@ -47,14 +45,12 @@ export default class Restaurants extends Component {
         open: false
       },
       loading: false,
-      countLoading: false,
       pagesLoading: false
     };
   }
 
   componentWillMount() {
     const url = api_url + "/restaurants";
-    this.requestSync(url, this.getCount);
     this.getPage(1, null, null, false);
   }
 
@@ -63,6 +59,8 @@ export default class Restaurants extends Component {
   }
 
   fillInRestaurants(responseText, doneLoading) {
+      resCount = JSON.parse(responseText)["total"];
+      console.log("res count: " + resCount);
       var tempRestaurants = [];
       let resParsed = JSON.parse(responseText)["list"];
       for (let r of resParsed) {
@@ -72,22 +70,6 @@ export default class Restaurants extends Component {
         restaurantsDisplay: tempRestaurants
       });
       doneLoading();
-  }
-
-  getCount(responseText/*, doneLoading*/) {
-      resCount = JSON.parse(responseText)["total"];
-      // doneLoading();
-  }
-
-  requestSync(url, parseResponse) {
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-          parseResponse(xmlHttp.responseText);
-        // console.log("REPONSE " + xmlHttp.responseText);
-      }
-      xmlHttp.open("GET", url, false) // true for asynchronous
-      xmlHttp.send(null);
   }
 
   request(url, parseResponse, doneLoading) {
@@ -113,9 +95,7 @@ export default class Restaurants extends Component {
 
   getPage(pageNum, sortParam, fils) {
     this.setState({
-      // loading: true,
-      pagesLoading: true,
-      countLoading: true
+      loading: true
     })
     var apiParams = [];
     var url = api_url + "/restaurants?";
@@ -161,8 +141,7 @@ export default class Restaurants extends Component {
     const count_url = url + apiParams.join("&");
     const page_url = count_url + "&page=" + pageNum;
 
-    this.requestSync(count_url, this.getCount);
-    this.request(page_url, this.fillInRestaurants, this.pagesDoneLoading);
+    this.request(page_url, this.fillInRestaurants, this.doneLoading);
     this.setState({
       onPage: pageNum,
       sorted: sortParam,
@@ -170,18 +149,8 @@ export default class Restaurants extends Component {
     });
   }
 
-  countDoneLoading() {
-    this.setState({countLoading: false});
-  }
-
-  pagesDoneLoading() {
-    console.log("PAGES DONE LOADING");
-    this.setState({pagesLoading: false});
-  }
-
   doneLoading() {
-    if (!this.state.pagesLoading /*&& !this.state.countLoading*/)
-      this.setState({loading: false});
+    this.setState({loading: false});
   }
 
   filterPage(filters) {
