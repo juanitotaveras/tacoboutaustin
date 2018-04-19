@@ -113,7 +113,7 @@ export default class Filter extends Component {
                 <Col xs="12">
 
                   <FormGroup check inline>
-                    <Label for="ratingFilter">Rating of at least:</Label>
+                    <Label for="ratingFilter" className="medText">Rating of at least:</Label>
                     <Input type="number" min="0" max="5" ref="ratFilter" id="ratingFilter" placeholder="1-5" onChange={e => this.handleRatingChange(e)}
                       onKeyPress={this.enterPressed.bind(this)}/>
                   </FormGroup>
