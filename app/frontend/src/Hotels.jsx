@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import { Container, Row, Col, Button,
   Form, FormGroup } from 'reactstrap';
 import HotelCard from './HotelCard';

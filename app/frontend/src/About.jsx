@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import Caroline from './assets/about_caroline.jpeg';
 import An from './assets/about_an.jpg';
 import Eduardo from './assets/about_eduardo.jpg';
@@ -7,7 +6,7 @@ import James from './assets/about_james.jpeg';
 import Juanito from './assets/about_juanito.jpg';
 import TeamMember from './TeamMember';
 import Header from './Header';
-import "./about.css";
+import "./css/About.css";
 import {
   Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem,
   NavLink, UncontrolledDropdown, DropdownToggle, DropdownMenu,

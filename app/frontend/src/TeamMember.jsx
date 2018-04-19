@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import {Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
 
 export default class TeamMember extends Component {

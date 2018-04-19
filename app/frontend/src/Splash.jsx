@@ -13,7 +13,7 @@ import austin_skyline from './assets/austin_skyline.jpg';
 import austin_taco from './assets/austin_taco.jpg';
 import austin_pool from './assets/austin_pool.jpg';
 import austin_hotel from './assets/austin_hotel.jpg';
-import './splash.css';
+import './css/Splash.css';
 
 const items = [
   {

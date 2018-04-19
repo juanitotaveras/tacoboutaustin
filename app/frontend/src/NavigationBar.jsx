@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import tacoLogo from './assets/taco_logo.png';
-import "./NavStyles.css"
+import "./css/Nav.css"
 import {
   Collapse,
   Navbar,

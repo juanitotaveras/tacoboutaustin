@@ -66,6 +66,18 @@ export default class HotelDetails extends Component {
 		return s;
 	}
 
+	parseCategories() {
+	    var categories = h_details["categories"];
+	    var s = "";
+	    for (var i = 0; i < categories.length; i++) {
+	      if(i == categories.length-1)
+	        s += categories[i]["name"];
+	      else
+	        s += categories[i]["name"] + ", ";
+	    }
+	    return s;
+  	}
+
 	render(props)
 	{
 		var nearby_restaurant_cards = nearby_restaurants.map(function(restaurant){
@@ -76,6 +88,7 @@ export default class HotelDetails extends Component {
 		          })
 
 		var map = this.buildMapSrc();
+	    var categories = this.parseCategories();
 
 		return (
 			<div className="background">
@@ -96,6 +109,8 @@ export default class HotelDetails extends Component {
 			        		map_src={map}
 			        		rating={h_details.rating}
 			        		reviews={h_details.reviews}
+			        		phone={h_details.phone}
+              				categories={categories}
 	                		/>
 	              		</Col>
 					</Row>

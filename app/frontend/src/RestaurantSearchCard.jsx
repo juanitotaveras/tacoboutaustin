@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Highlighter from './Highlighter';
 import NoImageFound from './assets/no_image_placeholder.png';
 import TacoRating from './TacoRating';
-import './App.css';
+
 
 export default class RestaurantCard extends Component {
 

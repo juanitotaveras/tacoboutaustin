@@ -8,7 +8,6 @@ import {Hotel} from './Hotels';
 import HotelSearchCard from './HotelSearchCard';
 import {Attraction} from './Attractions';
 import AttractionSearchCard from './AttractionSearchCard';
-import './App.css';
 import { api_url } from './config';
 import classnames from 'classnames';
 import Header from './Header';

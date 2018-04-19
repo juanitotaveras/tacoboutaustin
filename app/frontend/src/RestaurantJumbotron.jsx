@@ -153,8 +153,11 @@ export default class RestaurantJumbotron extends Component {
         <Row>
           <Col><p className="lead">{full_tacos_rating}{half_taco_rating}{gray_taco_rating}<br/></p>
           </Col>
-          <Col><h2>{this.props.categories}</h2>
-            <h3>Phone: {this.props.phone}</h3>
+          <Col><h2>Categories: {this.props.categories}</h2>
+            {
+              this.props.phone != "" &&
+              <h3>Phone: {this.props.phone}</h3>
+            }
           </Col>
         </Row>
           <Row>
@@ -205,5 +208,7 @@ RestaurantJumbotron.propTypes = {
   images: PropTypes.object,
   map_src: PropTypes.string,
   hours: PropTypes.array,
-  reviews: PropTypes.object
+  reviews: PropTypes.object,
+  phone: PropTypes.string,
+  categories: PropTypes.string
 };
