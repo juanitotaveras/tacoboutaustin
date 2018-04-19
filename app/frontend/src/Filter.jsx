@@ -113,7 +113,7 @@ export default class Filter extends Component {
                 <Col xs="12">
 
                   <FormGroup check inline>
-                    <Label for="ratingFilter">Rating of at least:</Label>
+                    <Label for="ratingFilter" className="medText">Rating of at least:</Label>
                     <Input type="number" min="0" max="5" ref="ratFilter" id="ratingFilter" placeholder="1-5" onChange={e => this.handleRatingChange(e)}
                       onKeyPress={this.enterPressed.bind(this)}/>
                   </FormGroup>
@@ -150,10 +150,10 @@ export default class Filter extends Component {
                 <br />
 
                 <Col xs="12">
-                  <Button outline color="primary" onClick={this.gatherFilters}>Apply filters</Button>
+                  <Button outline color="info" className="button-margin" onClick={this.gatherFilters}>Apply filters</Button>
                 </Col>
                 <Col xs="12">
-                  <Button outline color="primary" onClick={this.unapplyFilters}>Clear all filters</Button>
+                  <Button outline color="info" onClick={this.unapplyFilters}>Clear all filters</Button>
                 </Col>
               </Form>
           </Row>

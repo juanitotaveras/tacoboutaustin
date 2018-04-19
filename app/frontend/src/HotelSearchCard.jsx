@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Highlighter from './Highlighter';
 import NoImageFound from './assets/no_image_placeholder.png';
+import TacoRating from './TacoRating';
 import './App.css';
 
 export default class HotelCard extends Component {
@@ -21,7 +22,8 @@ export default class HotelCard extends Component {
           <CardBody>
             <CardTitle className="cardTitleText">{spans}</CardTitle>
             <CardSubtitle></CardSubtitle>     
-            <CardText className="cardSubText"><span>Rating: {h.rating}/5</span> <span style={{float: 'right'}}>Zip code: {h.zip_code}</span></CardText>
+            <CardText className="cardSubText"><TacoRating rating={h.rating}/>
+            <span style={{float: 'right'}}>Zip code: {h.zip_code}</span></CardText>
             <Link to={'/hotels/' + h.id}><Button outline >Check it out!</Button></Link>
           </CardBody>
         </Card>

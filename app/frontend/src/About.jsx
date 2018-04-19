@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import Caroline from './assets/about_caroline.JPG';
+import Caroline from './assets/about_caroline.jpeg';
 import An from './assets/about_an.jpg';
 import Eduardo from './assets/about_eduardo.jpg';
 import James from './assets/about_james.jpeg';
 import Juanito from './assets/about_juanito.jpg';
 import TeamMember from './TeamMember';
 import Header from './Header';
+import "./about.css";
 import {
   Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem,
   NavLink, UncontrolledDropdown, DropdownToggle, DropdownMenu,
@@ -51,7 +52,7 @@ class About extends Component {
         gitLogin: "juanitotaveras",
         imageSrc: Juanito,
         imageAlt: "About Juanito",
-        bio: "Juanito graduated with a Radio-Television-Film degree in 2017 and will graduate with a Computer Science degree this May. I really dig barbacoa.",
+        bio: "Juanito is graduating this Spring as a Computer Science and Film double-major. He digs barbacoa tacos.",
         responsibilities: "Front end",
         commits: 0,
         issues: 0,
@@ -155,7 +156,6 @@ class About extends Component {
     // Create a card for each team member
     this.memberCards = [];
     for (var i = 0; i < members.length; i++) {
-      // console.log(members[i]["commits"]);
       this.memberCards.push(this.createTeamMember(members[i]));
     }
 
@@ -165,8 +165,6 @@ class About extends Component {
 
     this.state.totalCommits = tempTotalCommits;
     this.state.totalIssues = tempTotalIssues;
-
-    console.log("tempTotalCommits: " + tempTotalCommits);
 
   }
 
@@ -188,26 +186,15 @@ class About extends Component {
         <Header
           title="About Us"
           image={HeaderBackground}
+          description="Tacoboutaustin is your one-stop shop to find out 
+      where to stay, where to eat, and what to do in Austin, Texas.
+      Kids and adults alike will find this site useful, but keep 
+      in mind that for several attractions you must be at 
+      least 18 or 21 years of age."
         />
         <br />
 
       <Container>
-          <Row>
-          <Col>
-    	<Jumbotron>
-    	      <h1 className="display-3">Where am I?</h1>
-      <p className="lead">Tacoboutaustin is your one-stop shop to find out 
-      where to stay, where to eat, and what to do in Austin, Texas.</p>
-      <p>Kids and adults alike will find this site useful, but keep 
-      in mind that for several attractions you must be at 
-      least 18 or 21 years of age. </p>
-      <p className="my-2">
-      We have a large selection of hotels, restaurants, 
-      and attractions that are organized by location in our beautiful city.
-      </p>
-    	</Jumbotron>
-          </Col>
-        </Row>
        <Row>
          <Col sm="12" >
            <div style={scoreboardStyle}>
@@ -215,6 +202,7 @@ class About extends Component {
            <h3>Commits: {this.state.totalCommits}</h3>
            <h3>Issues: {this.state.totalIssues}</h3>
            <h3>Unit tests: {this.state.totalUnitTests}</h3>
+           <br/>
            </div>
          </Col>
        </Row>
@@ -223,6 +211,7 @@ class About extends Component {
           <Col xs="12" sm="4">{this.memberCards[1]}</Col>
           <Col xs="12" sm="4">{this.memberCards[2]}</Col>
         </Row>
+        <br />
         <Row>
           <Col sm="2"></Col>
           <Col xs="12" sm="4">{this.memberCards[3]}</Col>

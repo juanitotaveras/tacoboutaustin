@@ -5,6 +5,7 @@ import 'react-select/dist/react-select.css';
 import Select from 'react-select';
 import PropTypes from "prop-types";
 import { api_url } from './config.js';
+import "./filter.css";
 
 var categories = [];
 var zipcodes = [];
@@ -113,7 +114,7 @@ export default class RestaurantFilter extends Component {
               <Col xs="12">
 
                <FormGroup check inline>
-                  <Label for="ratingFilter">Rating of at least:</Label>
+                  <Label for="ratingFilter" className="medText">Rating of at least:</Label>
                   <Input type="number" min="0" max="5" ref="ratFilter" id="ratingFilter" placeholder="1-5" onChange={e => this.handleRatingChange(e)}
                   onKeyPress={this.enterPressed.bind(this)}/>
                 </FormGroup>
@@ -123,8 +124,9 @@ export default class RestaurantFilter extends Component {
 
               <Col xs="12">
                 <FormGroup check inline>
-                  <Label check>
-                    <Input type="checkbox" ref="openFilter" onChange={e => this.handleHourChange(e)} onKeyPress={this.enterPressed.bind(this)} className="cardSubText"/>Show what's open right now
+                  <Label check className="cardSmallText">
+                    <Input type="checkbox" ref="openFilter" onChange={e => this.handleHourChange(e)} onKeyPress={this.enterPressed.bind(this)} />
+                    Show what's open right now
                   </Label>
                 </FormGroup>
               </Col>
@@ -160,10 +162,10 @@ export default class RestaurantFilter extends Component {
               <br />
 
              <Col xs="12">
-                <Button outline color="primary" onClick={this.gatherFilters}>Apply filters</Button>
+                <Button outline color="info" className="button-margin" onClick={this.gatherFilters}>Apply filters</Button>
               </Col>
               <Col xs="12">
-                <Button outline color="primary" onClick={this.unapplyFilters}>Clear all filters</Button>
+                <Button outline color="info" onClick={this.unapplyFilters}>Clear all filters</Button>
               </Col>
           </Form>
         </Row>
