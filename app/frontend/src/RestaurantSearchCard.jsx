@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Highlighter from './Highlighter';
 import NoImageFound from './assets/no_image_placeholder.png';
+import './App.css';
 
 export default class RestaurantCard extends Component {
 
@@ -14,7 +15,7 @@ export default class RestaurantCard extends Component {
     let image = (r.image == null) ? NoImageFound : r.image;
     return (
       <div>
-        <Card>
+        <Card className="cardDiv">
           <Link to={'/restaurants/' + r.id}><CardImg top width="100%" height="200em" src={image} alt="Le food" /></Link>
           <CardBody>
             <CardTitle className="cardTitleText">{spans}</CardTitle>

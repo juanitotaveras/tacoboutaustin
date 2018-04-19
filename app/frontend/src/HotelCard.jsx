@@ -32,7 +32,7 @@ export default class HotelCard extends Component {
     let image = (h.image == null) ? NoImageFound : h.image;
 
     return (
-      <div>
+      <div className="cardDiv">
         <Card>
           <Link to={'/hotels/' + h.id}><CardImg top width="100%" height="200em" src={image} alt="Card image cap" /></Link>
           <CardBody>

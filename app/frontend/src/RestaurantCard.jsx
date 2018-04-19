@@ -32,7 +32,7 @@ export default class RestaurantCard extends Component {
     let image = (r.image == null) ? NoImageFound : r.image;
 
     return (
-      <div>
+      <div className="cardDiv">
         <Card>
           <Link to={'/restaurants/' + r.id}><CardImg top width="100%" height="200em" src={image} alt="Le food" /></Link>
           <CardBody>

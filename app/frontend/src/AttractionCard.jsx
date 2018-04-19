@@ -33,7 +33,7 @@ export default class AttractionCard extends Component {
     let image = (a.image == null) ? NoImageFound : a.image;
 
     return (
-      <div>
+      <div className="cardDiv">
         <Card>
           <Link to={'/attractions/' + a.id}><CardImg top width="100%" height="200em" src={image} alt="Card image cap" /></Link>
           <CardBody>
