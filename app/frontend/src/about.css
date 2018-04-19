@@ -6,8 +6,14 @@
 }
 
 .about-card-img {
+	width: 34.6em;
+	height: 35em;
+	position: relative;
 	overflow: hidden;
-	border-radius: 5%;
+	background-size: cover;
+    background-repeat: no-repeat;	
+    background-position: 50% 50%;
+    border-radius: 5%;
 }
 
 .about-card-name {
