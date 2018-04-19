@@ -54,21 +54,15 @@ class Attraction {
 
 class Images {
   {field}id : Integer
-  {field}image1 : String(200)
-  {field}image2 : String(200)
-  {field}image3 : String(200)
-  {field}hotel_id : Integer
-  {field}restaurant_id : Integer
-  {field}attraction_id : Integer  
+  {field}image_url : String(200)
+  {field}place_id : Integer 
 }
 
 class Review {
   {field}id : Integer
   {field}text : String(200)
   {field}link : String(200)
-  {field}hotel_id : Integer
-  {field}restaurant_id : Integer
-  {field}attraction_id : Integer
+  {field}place_id : Integer
 }
 
 class Hour {

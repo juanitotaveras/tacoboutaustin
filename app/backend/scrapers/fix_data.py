@@ -32,7 +32,23 @@ def fix_hotels():
     hotel = Hotel.query.filter_by(name = "Austin Folk House").first()
     hotel.addImage("https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg")
     hotel.addCover("https://media.dexknows.com/media/photos/8532/b254/2c5d/a06e/9060/0d94/8eef/c653/image/8532b2542c5da06e90600d948eefc653.jpeg")
-   
+    
+    hotel = Hotel.query.filter_by(name="Austin Village Motor Inn").first()
+    hotel.cover_image = None
+    for image in hotel.images:
+        db.session.delete(image)
+
+
+    hotel = Hotel.query.filter_by(name="Red Roof").first()
+    hotel.cover_image = None
+    for image in hotel.images:
+        db.session.delete(image)
+
+    hotel = Hotel.query.filter_by(name="Budget Lodge").first()
+    hotel.cover_image = None
+    for image in hotel.images:
+        db.session.delete(image)
+
     db.session.commit()
 
 def fix_zip_code():
