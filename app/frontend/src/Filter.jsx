@@ -6,6 +6,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import { api_url } from './config';
 
+
 var categories = [];
 var zipcodes = [];
 export default class Filter extends Component {

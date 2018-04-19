@@ -5,7 +5,7 @@ import 'react-select/dist/react-select.css';
 import Select from 'react-select';
 import PropTypes from "prop-types";
 import { api_url } from './config.js';
-import "./filter.css";
+import "./css/Filter.css";
 
 var categories = [];
 var zipcodes = [];

@@ -1,7 +1,7 @@
 import React from 'react';
 import NavigationBar from './NavigationBar';
 import PropTypes from 'prop-types';
-import "./IntroStyles.css";
+import "./css/Intro.css";
 
 export default class Header extends React.Component {
 

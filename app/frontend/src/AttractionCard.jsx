@@ -1,12 +1,12 @@
 import React, { Component, Text } from 'react';
-import './CardStyles.css';
 import { Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import './App.css';
 import NoImageFound from './assets/no_image_placeholder.png';
 import TacoRating from './TacoRating';
+import './css/Card.css';
+
 
 export default class AttractionCard extends Component {
   render(props) {

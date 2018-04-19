@@ -94,9 +94,19 @@ export default class HotelJumbotron extends Component {
     return (
     <div>
       <Jumbotron>
-        <h1 className="display-3">{this.props.name}</h1>
-        <p className="lead">{full_tacos_rating}{half_taco_rating}{gray_taco_rating}<br/>
-        {this.props.address}</p>
+        <Row>
+          <Col><h1 className="display-3">{this.props.name}</h1></Col>
+        </Row>
+        <Row>
+          <Col><p className="lead">{full_tacos_rating}{half_taco_rating}{gray_taco_rating}<br/></p>
+          </Col>
+          <Col><h2>Categories: {this.props.categories}</h2>
+            {
+              this.props.phone != "" &&
+              <h3>Phone: {this.props.phone}</h3>
+            }
+          </Col>
+        </Row>
         <Row>
           <Col xs="6">
           <div>
@@ -144,5 +154,7 @@ HotelJumbotron.propTypes = {
   images: PropTypes.object,
   map_src: PropTypes.string,
   reviews: PropTypes.object,
-  amenities: PropTypes.string
+  amenities: PropTypes.string,
+  phone: PropTypes.string,
+  categories: PropTypes.string
 };

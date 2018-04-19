@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import { Container, Row, Col, Button, Pagination, PaginationItem, 
   PaginationLink, Form, FormGroup } from 'reactstrap';
 import AttractionCard from './AttractionCard';
@@ -170,7 +169,7 @@ export default class Attractions extends Component {
       <div classname="background">
         <Header 
           title="A Cornucopia of Attractions" 
-          description={"Whether you want to relax with some Blus on the Green, "+
+          description={"Whether you want to relax with some Blues on the Green, "+
           "splash around at Barton Springs, or rock out at Austin City Limits, "+
           "you'll always find something to do in Austin."}
           image={HeaderBackground}

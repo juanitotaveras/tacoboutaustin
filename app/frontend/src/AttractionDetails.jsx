@@ -72,6 +72,18 @@ export default class AttractionsDetails extends Component {
     }
     return s;
   }
+
+  parseCategories() {
+    var categories = a_details["categories"];
+    var s = "";
+    for (var i = 0; i < categories.length; i++) {
+      if(i == categories.length-1)
+        s += categories[i]["name"];
+      else
+        s += categories[i]["name"] + ", ";
+    }
+    return s;
+  }
   
   render() {
     var nearby_restaurant_cards = nearby_restaurants.map(function(restaurant){
@@ -82,6 +94,7 @@ export default class AttractionsDetails extends Component {
               })
 
     var map = this.buildMapSrc();
+    var categories = this.parseCategories();
 
     return (
       <div className="background">
@@ -102,6 +115,8 @@ export default class AttractionsDetails extends Component {
               map_src={map}
               rating={a_details.rating}
               reviews={a_details.reviews}
+              phone={a_details.phone}
+              categories={categories}
               />
             </Col>
           </Row>
