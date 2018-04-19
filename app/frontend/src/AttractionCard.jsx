@@ -8,6 +8,7 @@ import './App.css';
 import TacoFull from './assets/taco_full.png';
 import TacoHalf from './assets/taco_half.png';
 import TacoGray from './assets/taco_gray.png';
+import NoImageFound from './assets/no_image_placeholder.png';
 
 export default class AttractionCard extends Component {
   render(props) {
@@ -29,10 +30,12 @@ export default class AttractionCard extends Component {
       return <img top width="20em" src={TacoGray}/>
     })
 
+    let image = (a.image == null) ? NoImageFound : a.image;
+
     return (
-      <div>
+      <div className="cardDiv">
         <Card>
-          <Link to={'/attractions/' + a.id}><CardImg top width="100%" height="200em" src={a.image} alt="Card image cap" /></Link>
+          <Link to={'/attractions/' + a.id}><CardImg top width="100%" height="200em" src={image} alt="Card image cap" /></Link>
           <CardBody>
             <CardTitle className="cardTitleText"><div className="wrap">{a.name}</div></CardTitle>
             <CardSubtitle>{a.type}</CardSubtitle>

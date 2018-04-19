@@ -4,16 +4,19 @@ import { Card, CardImg, CardText, CardBody,
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Highlighter from './Highlighter';
+import NoImageFound from './assets/no_image_placeholder.png';
+import './App.css';
 
 export default class RestaurantCard extends Component {
 
   render(props) {
     var r = this.props.restaurant;
     let spans = new Highlighter().getHighlightedTerms(r.name, this.props.searchTerms);
+    let image = (r.image == null) ? NoImageFound : r.image;
     return (
       <div>
-        <Card>
-          <Link to={'/restaurants/' + r.id}><CardImg top width="100%" height="200em" src={r.image} alt="Le food" /></Link>
+        <Card className="cardDiv">
+          <Link to={'/restaurants/' + r.id}><CardImg top width="100%" height="200em" src={image} alt="Le food" /></Link>
           <CardBody>
             <CardTitle className="cardTitleText">{spans}</CardTitle>
             <CardSubtitle>{r.food}</CardSubtitle>

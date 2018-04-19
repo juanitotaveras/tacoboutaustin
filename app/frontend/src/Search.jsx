@@ -95,6 +95,7 @@ export default class Search extends Component {
 
 
 	request(url, parseResponse) {
+		console.log("URL: " + url);
 		var xmlHttp = new XMLHttpRequest();
 		xmlHttp.onreadystatechange = function() {
 			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 

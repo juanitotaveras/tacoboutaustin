@@ -48,6 +48,10 @@
   font-size: 1.2em;
 }
 
+.cardDiv {
+  margin-bottom: 1em;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
