@@ -172,8 +172,6 @@ class About extends Component {
   }
 
   componentDidMount() {
-
-
   }
 
  render(props) {
