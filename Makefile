@@ -71,7 +71,6 @@ uml:
 
 # make selenium - runs selenium tests
 selenium:
-	$(MAKE) gui_testing
 	cd app/frontend/guitests; make travis
 	@echo
 
