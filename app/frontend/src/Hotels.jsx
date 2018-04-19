@@ -7,6 +7,7 @@ import { api_url } from './config';
 import Sort from './Sort';
 import Filter from './Filter';
 import Paginator from './Paginator';
+import TacoAnimation from './assets/taco_loading.gif';
 import HeaderBackground from './assets/hotels_header_background.jpg';
 
 var hot_count = 0;
@@ -28,23 +29,28 @@ export default class Hotels extends Component {
   constructor(props) {
     super(props);
     this.handlePageClick = this.handlePageClick.bind(this);
-    this.sortPage = this.sortPage.bind(this)
-    this.filterPage = this.filterPage.bind(this)
-    this.fillInHotels = this.fillInHotels.bind(this)
+    this.sortPage = this.sortPage.bind(this);
+    this.filterPage = this.filterPage.bind(this);
+    this.fillInHotels = this.fillInHotels.bind(this);
+
+    this.doneLoading = this.doneLoading.bind(this);
+    this.requestCount = this.requestCount.bind(this);
+    this.requestPages = this.requestPages.bind(this);
+    this.getCount = this.getCount.bind(this);
     this.state = {
       onPage: 1,
-      attractions_display: [],
+      hotels_display: [],
       sorted: null,
       filters: {
         rating: 0,
         zipcode: 0,
-      }
+      },
+      loading: false
     };
   }
 
   componentWillMount() {
     const url = api_url + "/hotels";
-    this.request(url, this.getCount);
     this.getPage(1, null, null, false);
   }
 
@@ -57,20 +63,32 @@ export default class Hotels extends Component {
     this.setState({
         hotels_display: temp_hotels
       });
+    this.doneLoading();
   }
 
-  getCount(responseText) {
+  getCount(responseText, page_url) {
     hot_count = JSON.parse(responseText)["total"];
+    this.requestPages(page_url, this.fillInHotels);
   }
 
-  request(url, parseResponse) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-        parseResponse(xmlHttp.responseText);        
-    }
-    xmlHttp.open("GET", url, false) // true for asynchronous
-    xmlHttp.send(null);
+  requestCount(count_url, page_url, getCount) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          getCount(xmlHttp.responseText, page_url);
+      }
+      xmlHttp.open("GET", count_url, true) // true for asynchronous
+      xmlHttp.send(null);
+  }
+
+  requestPages(page_url, fillInHotels) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          fillInHotels(xmlHttp.responseText);
+      }
+      xmlHttp.open("GET", page_url, true) // true for asynchronous
+      xmlHttp.send(null);
   }
 
   getDateString() {
@@ -89,6 +107,9 @@ export default class Hotels extends Component {
   }
 
   getPage(pageNum, sortParam, fils) {
+    this.setState({
+      loading: true,
+    });
     var apiParams = [];
     var url = api_url + "/hotels?";
 
@@ -133,13 +154,16 @@ export default class Hotels extends Component {
     const count_url = url + apiParams.join("&");
     const page_url = count_url + "&page=" + pageNum;
 
-    this.request(count_url, this.getCount);
-    this.request(page_url, this.fillInHotels);
+    this.requestCount(count_url, page_url, this.getCount);
     this.setState({
       onPage: pageNum,
       sorted: sortParam,
       filters: fils
     });
+  }
+
+  doneLoading() {
+    this.setState({loading: false});
   }
 
   filterPage(filters) {
@@ -155,6 +179,10 @@ export default class Hotels extends Component {
   }
 
   render() {
+    const loadingImage =
+      <div className="text-center">
+        <img src={TacoAnimation} alt="Loading Image" width="10%" height="auto" style={{float: 'center'}}/>
+      </div>;
     var pages_count = Math.floor(hot_count/per_page);
     if (!((hot_count%per_page) == 0))
       pages_count++;
@@ -163,16 +191,8 @@ export default class Hotels extends Component {
             return <Col xs="12" md="4"><HotelCard hotel={hotel} /></Col>;
           })
 
-    return (
-      <div className="background">
-        <Header 
-          title="Places to Stay"
-          description="Choose from a variety of places to rest after an adventure-filled day, from inexpensive motels to luxurious suites."
-          image={HeaderBackground}
-        />
-        <br />
-
-        <Container>
+    const container = 
+            <Container>
             <Row>
                 <Col xs="12" md="2">
                   <Filter type="Hotels" handler={this.filterPage}/>
@@ -191,7 +211,24 @@ export default class Hotels extends Component {
                 </Col>
             </Row>
             <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
-          </Container>
+          </Container>;
+
+    return (
+      <div className="background">
+        <Header 
+          title="Places to Stay"
+          description="Choose from a variety of places to rest after an adventure-filled day, from inexpensive motels to luxurious suites."
+          image={HeaderBackground}
+        />
+        <br />
+          {
+            this.state.loading ?
+            loadingImage
+            :
+            container
+          }
+
+
         </div>
     );
   }

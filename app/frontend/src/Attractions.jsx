@@ -8,6 +8,7 @@ import Sort from './Sort';
 import Filter from './Filter';
 import Paginator from './Paginator';
 import HeaderBackground from './assets/attractions_header_background.jpg';
+import TacoAnimation from './assets/taco_loading.gif';
 
 var att_count = 0;
 const per_page = 12;
@@ -31,6 +32,10 @@ export default class Attractions extends Component {
     this.sortPage = this.sortPage.bind(this)
     this.filterPage = this.filterPage.bind(this)
     this.fillInAttractions = this.fillInAttractions.bind(this)
+    this.doneLoading = this.doneLoading.bind(this);
+    this.requestCount = this.requestCount.bind(this);
+    this.requestPages = this.requestPages.bind(this);
+    this.getCount = this.getCount.bind(this);
     this.state = {
       onPage: 1,
       attractions_display: [],
@@ -38,13 +43,13 @@ export default class Attractions extends Component {
       filters: {
         rating: 0,
         zipcode: 0,
-      }
+      },
+      loading: false
     };
   }
 
   componentWillMount() {
     const url = api_url + "/attractions";
-    this.request(url, this.getCount);
     this.getPage(1, null, null, false);
   }
 
@@ -57,20 +62,32 @@ export default class Attractions extends Component {
     this.setState({
         attractions_display: temp_attractions
       });
+    this.doneLoading();
   } 
 
-  getCount(responseText) {
-    att_count = JSON.parse(responseText)["total"];
+  getCount(responseText, page_url) {
+      att_count = JSON.parse(responseText)["total"];
+      this.requestPages(page_url, this.fillInAttractions);
   }
 
-  request(url, parseResponse) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-        parseResponse(xmlHttp.responseText);
-    }
-    xmlHttp.open("GET", url, false) // true for asynchronous
-    xmlHttp.send(null);
+  requestCount(count_url, page_url, getCount) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          getCount(xmlHttp.responseText, page_url);
+      }
+      xmlHttp.open("GET", count_url, true) // true for asynchronous
+      xmlHttp.send(null);
+  }
+
+  requestPages(page_url, fillInAttractions) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          fillInAttractions(xmlHttp.responseText);
+      }
+      xmlHttp.open("GET", page_url, true) // true for asynchronous
+      xmlHttp.send(null);
   }
 
   getDateString() {
@@ -91,7 +108,9 @@ export default class Attractions extends Component {
   getPage(pageNum, sortParam, fils) {
     var apiParams = [];
     var url = api_url + "/attractions?";
-
+    this.setState({
+      loading: true,
+    })
     // Sorting
     // Sorting
     if(sortParam != '')
@@ -134,13 +153,16 @@ export default class Attractions extends Component {
     const count_url = url + apiParams.join("&");
     const page_url = count_url + "&page=" + pageNum;
 
-    this.request(count_url, this.getCount);
-    this.request(page_url, this.fillInAttractions);
+    this.requestCount(count_url, page_url, this.getCount);
     this.setState({
       onPage: pageNum,
       sorted: sortParam,
       filters: fils
     });
+  }
+
+  doneLoading() {
+    this.setState({loading: false});
   }
 
   filterPage(filters) {
@@ -157,6 +179,10 @@ export default class Attractions extends Component {
 
 
   render() {
+    const loadingImage =
+      <div className="text-center">
+        <img src={TacoAnimation} alt="Loading Image" width="10%" height="auto" style={{float: 'center'}}/>
+      </div>;
     var pages_count = Math.floor(att_count/per_page);
     if (!((att_count%per_page) == 0))
       pages_count++;
@@ -165,17 +191,8 @@ export default class Attractions extends Component {
             return <Col xs="12" md="4"><AttractionCard attraction={attraction} /></Col>;
           })
 
-    return (
-      <div classname="background">
-        <Header 
-          title="A Cornucopia of Attractions" 
-          description={"Whether you want to relax with some Blues on the Green, "+
-          "splash around at Barton Springs, or rock out at Austin City Limits, "+
-          "you'll always find something to do in Austin."}
-          image={HeaderBackground}
-          />
-        <br />
-        <Container>
+    const container = 
+            <Container>
             <Row>
                 <Col xs="12" md="2">
                   <Filter type="Attractions" handler={this.filterPage}/>
@@ -195,7 +212,24 @@ export default class Attractions extends Component {
                 </Col>
             </Row>
             <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
-          </Container>
+          </Container>;
+
+    return (
+      <div classname="background">
+        <Header 
+          title="A Cornucopia of Attractions" 
+          description={"Whether you want to relax with some Blues on the Green, "+
+          "splash around at Barton Springs, or rock out at Austin City Limits, "+
+          "you'll always find something to do in Austin."}
+          image={HeaderBackground}
+          />
+        <br />
+        {
+          this.state.loading ?
+          loadingImage
+          :
+          container
+        }
         </div>
     );
   }
