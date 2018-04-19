@@ -11,11 +11,9 @@ import {
   CarouselIndicators,
   CarouselCaption,
   Container } from 'reactstrap';
-import TacoFull from './assets/taco_full.png';
-import TacoHalf from './assets/taco_half.png';
-import TacoGray from './assets/taco_gray.png';
+import LargeTacoRating from './LargeTacoRating';
 
-var parsed_opening_hours;
+var parsedOpeningHours;
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export default class RestaurantJumbotron extends Component {
@@ -95,13 +93,13 @@ export default class RestaurantJumbotron extends Component {
         splittedHours.push(day)
     }
 
-    this.parsed_opening_hours = splittedHours.map(function(hours) {
+    this.parsedOpeningHours = splittedHours.map(function(hours) {
       return <div><p>{hours}</p></div>
     }); 
   };
 
   componentWillMount() {
-    this.parsed_opening_hours = "";
+    this.parsedOpeningHours = "";
     this.parseBR();
   }
 
@@ -124,25 +122,9 @@ export default class RestaurantJumbotron extends Component {
       return <p>{review.text}<a href={review.link}>read more!</a></p>
     })
 
-    var more_images = this.props.images.map(function(image) {
+    var moreImages = this.props.images.map(function(image) {
                 return <Col xs='3'><img top width="100%" src={image} alt="Card image cap" /></Col>;
               })
-
-    let full_tacos = Math.floor(this.props.rating)
-    let half_tacos = Math.ceil(this.props.rating) - full_tacos
-    let gray_tacos = 5 - full_tacos - half_tacos
-
-    var full_tacos_rating = [...Array(full_tacos)].map(function(idx) {
-      return <img top width="30em" src={TacoFull}/>
-    })
-
-    var half_taco_rating = [...Array(half_tacos)].map(function(idx) {
-      return <img top width="30em" src={TacoHalf}/>
-    })
-
-    var gray_taco_rating = [...Array(gray_tacos)].map(function(idx) {
-      return <img top width="30em" src={TacoGray}/>
-    })
 
     return (
     <div>
@@ -151,7 +133,7 @@ export default class RestaurantJumbotron extends Component {
           <Col><h1 className="display-3">{this.props.name}</h1></Col>
         </Row>
         <Row>
-          <Col><p className="lead">{full_tacos_rating}{half_taco_rating}{gray_taco_rating}<br/></p>
+          <Col><p className="lead"><LargeTacoRating rating={this.props.rating}/><br/></p>
           </Col>
           <Col><h2>Categories: {this.props.categories}</h2>
             {
@@ -192,9 +174,15 @@ export default class RestaurantJumbotron extends Component {
         </Row>
         <p></p>
         <hr className="my-2" />
-        <p><b>Opening hours</b><br/>
-        {this.parsed_opening_hours}</p>
-        <p><b>Reviews</b><br/>
+        <div style={{textAlign: 'center'}}>
+
+        <h2><b>Opening hours</b></h2><br/>
+        <p>
+        {this.parsedOpeningHours}
+        </p>
+        </div>
+        <h2><b>Reviews</b></h2><br/>
+        <p>
         <blockquote><q>{reviews}</q></blockquote></p>
         <br/>
       </Jumbotron>

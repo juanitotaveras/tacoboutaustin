@@ -39,6 +39,9 @@ export default class Search extends Component {
 			displayedRes: [],
 			displayedAtt: [],
 			displayedHot: [],
+			resLoading: false,
+			attLoading: false,
+			hotLoading: false,
 			hasSearched: false,
 			activeTab: RES_TAB,
 			loading: true
@@ -47,7 +50,10 @@ export default class Search extends Component {
 		this.onChangeSearchBoxText = this.onChangeSearchBoxText.bind(this);
 		this.onSearch = this.onSearch.bind(this);
 		this.handlePageClick = this.handlePageClick.bind(this);
-		this.doneLoading = this.doneLoading.bind(this);
+		this.doneLoadingAll = this.doneLoadingAll.bind(this);
+		this.doneLoadingRes = this.doneLoadingRes.bind(this);
+		this.doneLoadingAtt = this.doneLoadingAtt.bind(this);
+		this.doneLoadingHot = this.doneLoadingHot.bind(this);
 	}
 
 	handlePageClick(pageNum) {
@@ -76,21 +82,20 @@ export default class Search extends Component {
 		let restaurants_parsed = JSON.parse(responseText)["list"];
 		for (let r of restaurants_parsed) 
 			restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"], r["zip_code"]));
+		doneLoading();
 	}
 
 	fillInHotels(responseText, doneLoading) {
 		let hotels_parsed = JSON.parse(responseText)["list"];
 		for (let h of hotels_parsed) 
 			hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"], h["zip_code"]));
+		doneLoading();
 	}
 
 	fillInAttractions(responseText, doneLoading) {
 		let attractions_parsed = JSON.parse(responseText)["list"];
 		for (let a of attractions_parsed) 
 			attractions.push(new Attraction(a["address"], a["id"], a["image"], a["name"], a["rating"], a["zip_code"]));
-		// this is where we will finishing getting requests
-		
-		// this.setState({loading: false});
 		doneLoading();
 	} 
 
@@ -113,6 +118,7 @@ export default class Search extends Component {
   	// This function is called every time we search and every time the page is changed.
   	// Sets the cards we will display as part of the State
 	showSearchItems(pageNum) {
+		console.log("in show search items: " + "reslen: " + restaurants.length + " attlen: " + attractions.length + " hotlen: " + hotels.length);
 
 		let startIdx = (pageNum - 1) * PER_PAGE;
 
@@ -153,7 +159,13 @@ export default class Search extends Component {
 							<HotelSearchCard hotel={hotel} searchTerms={searchTerms}/>
 						</Col>;
 			});
-
+		
+		if (restaurants.length > 0)
+			this.toggle(RES_TAB);
+		else if (attractions.length > 0)
+			this.toggle(ATT_TAB);
+		else if (hotels.length > 0)
+			this.toggle(HOT_TAB);
 
 		this.setState({
 			displayedRes: rArray,
@@ -188,7 +200,12 @@ export default class Search extends Component {
 
 	onSearch(event) {
 		event.preventDefault();
-		this.setState({loading: true});
+		this.setState({
+			resLoading: true,
+			attLoading: true,
+			hotLoading: true,
+			loading: true
+		});
 
 		if (this.state.hasSearched) {
 			// clear current results
@@ -205,9 +222,9 @@ export default class Search extends Component {
 			searchText += "&search_type=and"
 
 		const urls = ["/restaurants", "/hotels", "/attractions"].map((elem) => api_url + elem + searchText);
-		this.request(urls[0], this.fillInRestaurants, this.doneLoading);
-		this.request(urls[1], this.fillInHotels, this.doneLoading);
-		this.request(urls[2], this.fillInAttractions, this.doneLoading);
+		this.request(urls[0], this.fillInRestaurants, this.doneLoadingRes);
+		this.request(urls[2], this.fillInAttractions, this.doneLoadingAtt);
+		this.request(urls[1], this.fillInHotels, this.doneLoadingHot);
 	}
 
 	handleSeachInclusive() {
@@ -216,6 +233,7 @@ export default class Search extends Component {
 	}
 
 	componentDidMount() {
+		this.setState({loading: false});
 
 	}
 
@@ -231,16 +249,24 @@ export default class Search extends Component {
 	    }
 	 }
 
-	 doneLoading() {
+	 doneLoadingRes() {
+	 	this.setState({resLoading: false});
+	 	this.doneLoadingAll();
+	 }
+	 doneLoadingAtt() {
+	 	this.setState({attLoading: false});
+	 	this.doneLoadingAll();
+	 }
+	 doneLoadingHot() {
+	 	this.setState({hotLoading: false});
+	 	this.doneLoadingAll();
+	 }
 
-		if (restaurants.length > 0)
-			this.toggle(RES_TAB);
-		else if (attractions.length > 0)
-			this.toggle(ATT_TAB);
-		else if (hotels.length > 0)
-			this.toggle(HOT_TAB);
-
-		this.showSearchItems(1);
+	 doneLoadingAll() {
+	 	if (!this.state.resLoading && !this.state.hotLoading && !this.state.attLoading) {
+	 		// this.setState({loading: false});
+			this.showSearchItems(1);
+	 	}
 	 }
 
 	render() {
@@ -416,7 +442,7 @@ export default class Search extends Component {
 					)
 				}
 				{
-					pageCount > 1 &&
+					(pageCount > 1 && !this.state.loading) &&
 					 <Paginator pageCount={pageCount} activePage={activePage} onPageClicked={this.handlePageClick}/>
 				}
 				</Container>
@@ -433,6 +459,10 @@ export default class Search extends Component {
 
 				<Container>
 					{searchBox}
+					{
+					this.state.loading &&
+					loadingImage 
+					}
 				</Container>
 				</div>
 				);

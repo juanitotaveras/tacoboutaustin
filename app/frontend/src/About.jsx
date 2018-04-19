@@ -31,7 +31,7 @@ class About extends Component {
     this.state = {
       totalCommits: 0,
       totalIssues: 0,
-      totalUnitTests: 38
+      totalUnitTests: 80
       //methods
     }
     var members = [
@@ -55,7 +55,7 @@ class About extends Component {
         responsibilities: "Front end",
         commits: 0,
         issues: 0,
-        unitTests: 5
+        unitTests: 10
       },
       {
         name: "An Vo",
@@ -66,7 +66,7 @@ class About extends Component {
         responsibilities: "Back end, API",
         commits: 0,
         issues: 0,
-        unitTests: 15
+        unitTests: 26
       },
       {
         name: "Caroline Shi",
@@ -77,7 +77,7 @@ class About extends Component {
         responsibilities: "Front end",
         commits: 0,
         issues: 0,
-        unitTests: 6
+        unitTests: 19
       },
       {
         name: "James Crabtree",
@@ -88,7 +88,7 @@ class About extends Component {
         responsibilities: "Backend, Server Admin",
         commits: 0,
         issues: 0,
-        unitTests: 12
+        unitTests: 25
       },
     ]
 
@@ -198,9 +198,9 @@ class About extends Component {
          <Col sm="12" >
            <div style={scoreboardStyle}>
            <h1>Meet the team: <b>Keepin' It Weird</b></h1>
-           <h3>Commits: {this.state.totalCommits}</h3>
-           <h3>Issues: {this.state.totalIssues}</h3>
-           <h3>Unit tests: {this.state.totalUnitTests}</h3>
+           <h2>Commits: {this.state.totalCommits}</h2>
+           <h2>Issues: {this.state.totalIssues}</h2>
+           <h2>Unit tests: {this.state.totalUnitTests}</h2>
            <br/>
            </div>
          </Col>
