@@ -10,23 +10,33 @@ import {
   Col
 } from 'reactstrap';
 import austin_skyline from './assets/austin_skyline.jpg';
+import austin_taco from './assets/austin_taco.jpg';
+import austin_pool from './assets/austin_pool.jpg';
+import austin_hotel from './assets/austin_hotel.jpg';
+import './splash.css';
 
 const items = [
   {
     src: austin_skyline,
     altText: 'Austin, Texas',
-    caption: 'Explore Austin!'
+    caption: 'WELCOME TO AUSTIN'
   },
   {
-    src: 'https://2u0yuyu2fs02fa819ut739hy-wpengine.netdna-ssl.com/wp-content/uploads/2017/05/crescent39.jpg',
-    altText: 'Postcard',
-    caption: 'Every tourist ever'
+    src: austin_taco,
+    altText: 'Where to eat',
+    caption: 'EXPLORE FOOD'
   },
   {
-    src: 'https://cdn.vox-cdn.com/uploads/chorus_image/image/54444777/austin_taco_project_tacos.0.0.jpg',
-    altText: 'TACOZ',
-    caption: 'Our bread and butter'
-  }
+    src: austin_pool,
+    altText: 'Where to chill',
+    caption: 'EXPLORE ATTRACTIONS'
+  },
+  {
+    src: austin_hotel,
+    altText: 'Where to stay',
+    caption: 'EXPLORE HOTELS'
+  },
+  
 ];
 
 
@@ -78,7 +88,7 @@ export default class Splash extends Component {
           key={item.src} 
           >
           <img src={item.src} alt={item.altText} />
-          <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
+          <CarouselCaption className="c-caption" captionText={item.caption} captionHeader={item.altText} />
         </CarouselItem>
       );
     });
