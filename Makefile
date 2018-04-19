@@ -62,11 +62,12 @@ issues:
 
 # make stories  - prints link to current phase's stories
 stories:
-	@echo "http://www.github.com/${GithubID}/${RepoName}/blob/${SHA}/stories.txt"
+	@echo "http://www.github.com/juanitotaveras/tacoboutaustin/projects/2"
+
 
 # make uml      - prints link to uml diagram
 uml:
-	@echo "http://www.github.com/${GithubID}/${RepoName}/blob/${SHA}/UML/uml.png"
+	@echo "http://www.github.com/${GithubID}/${RepoName}/tree/master/UML/uml.png"
 
 # make selenium - runs selenium tests
 selenium:
