@@ -119,7 +119,8 @@ export default class HotelJumbotron extends Component {
         </Row>
         <p></p>
         <hr className="my-2" />
-        <p><b>Reviews</b><br/>
+        <h2><b>Reviews</b></h2><br/><br/>
+        <p>
         <blockquote><q>{all_reviews}</q></blockquote></p>
         <br/>
         {/*<p className="lead">

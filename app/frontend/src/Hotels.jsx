@@ -174,10 +174,6 @@ export default class Hotels extends Component {
 
         <Container>
             <Row>
-                <Col xs="12" md="2"><h1>Hotels</h1></Col>
-                <Col xs="0" md="10"/>
-            </Row>
-            <Row>
                 <Col xs="12" md="2">
                   <Filter type="Hotels" handler={this.filterPage}/>
                   <br />

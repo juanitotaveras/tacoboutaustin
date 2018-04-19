@@ -64,11 +64,11 @@ export default class AttractionJumbotron extends Component {
       );
     });
 
-    var all_reviews = this.props.reviews.map(function(review) {
+    var allReviews = this.props.reviews.map(function(review) {
       return <p>{review.text}<a href={review.link}>read more!</a></p>
     })
 
-    var more_images = this.props.images.map(function(image) {
+    var moreImages = this.props.images.map(function(image) {
                 return <Col xs='3'><img top width="100%" src={image} alt="Card image cap" /></Col>;
     })
 
@@ -118,8 +118,9 @@ export default class AttractionJumbotron extends Component {
         </Row>
         <p></p>
         <hr className="my-2" />
-        <p><b>Reviews</b><br/>
-        <blockquote><q>{all_reviews}</q></blockquote></p>
+        <h2><b>Reviews</b></h2><br/><br/>
+        <p>
+        <blockquote><q>{allReviews}</q></blockquote></p>
         <br/>
       </Jumbotron>
     </div>
