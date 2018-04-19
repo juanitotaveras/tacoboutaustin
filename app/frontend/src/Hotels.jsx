@@ -96,13 +96,21 @@ export default class Hotels extends Component {
     // Sorting
     if(sortParam != null)
     {
-      if (sortParam == "name") {
+      if (sortParam == "name_asc") {
         apiParams.push("order_by=name");
         apiParams.push("order=asc");
       }
-      else {
+      else if(sortParam == "name_desc") {
+        apiParams.push("order_by=name");
+        apiParams.push("order=desc");
+      } 
+      else if(sortParam == "rating_desc") {
         apiParams.push("order_by=rating");
         apiParams.push("order=desc");
+      }
+      else if(sortParam == "rating_asc") {
+        apiParams.push("order_by=rating");
+        apiParams.push("order=asc");
       }
     }
 
@@ -111,8 +119,15 @@ export default class Hotels extends Component {
       if(fils.rating != 0) {
         apiParams.push("rating=" + fils.rating);
       }
-      if(fils.zipcode != 0) {
-        apiParams.push("zipcode=" + fils.zipcode);
+      if(fils.selectedZipcodes != '') {
+        apiParams.push("zipcode=" + fils.selectedZipcodes);
+      }
+      if(fils.open == true) {
+        var timeString = this.getDateString();
+        apiParams.push("time=" + timeString);
+      }
+      if(fils.selectedCategories != '') {
+        apiParams.push("categories=" + fils.selectedCategories);
       }
     }
 
@@ -152,8 +167,8 @@ export default class Hotels extends Component {
     return (
       <div className="background">
         <Header 
-          title="Hotels"
-          description="Hotels description"
+          title="Places to Stay"
+          description="Choose from a variety of places to rest after an adventure-filled day, from inexpensive motels to luxurious suites."
           image={HeaderBackground}
         />
         <br />
@@ -165,7 +180,7 @@ export default class Hotels extends Component {
             </Row>
             <Row>
                 <Col xs="12" md="2">
-                  <Filter handler={this.filterPage}/>
+                  <Filter type="Hotels" handler={this.filterPage}/>
                   <br />
                   <Sort handler={this.sortPage}/>
                 </Col>

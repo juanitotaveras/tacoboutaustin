@@ -93,7 +93,7 @@ website:
 
 # make report   - prints link to technical report
 report:
-	@echo "https://carorineee.gitbooks.io/report-and-critiques/content/"
+	@echo "https://carorineee.gitbooks.io/report-and-critiques/content/techreport/"
 
 # make apidoc   - prints link to api documentation
 apidoc:
@@ -101,8 +101,8 @@ apidoc:
 
 # make self     - prints link to self critique
 self:
-	@echo "http://${GithubID}.gitbooks.io/api/path-to-self-critique"
+	@echo "https://carorineee.gitbooks.io/report-and-critiques/content/selfcritiques/"
 
 # make other    - prints link to other critique
 other:
-	@echo "http://${GithubID}.gitbooks.io/api/path-to-other-critique"
+	@echo "https://carorineee.gitbooks.io/report-and-critiques/content/othercritiques/"

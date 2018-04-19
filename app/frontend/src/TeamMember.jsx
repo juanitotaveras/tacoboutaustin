@@ -8,17 +8,15 @@ export default class TeamMember extends Component {
 	}
 	render(props) {
 		return (
-			<Card>
-              <CardImg top width="50%" height="300em" src={this.props.imageSrc} alt={this.props.imageAlt}/>
+			<Card className="about-card">
+              <CardImg top width="100%" height="100%" className="about-card-img" src={this.props.imageSrc} alt={this.props.imageAlt}/>
               <CardBody>
-                <CardTitle> {this.props.name}</CardTitle>
-                <CardSubtitle> {this.props.bio}</CardSubtitle>
-                <CardText> 
-                  {this.props.responsibilities} <br/>
-                  Commits: {this.props.commits} <br/>
-                  Issues: {this.props.issues} <br/>
-                  Unit Tests: {this.props.unitTests}
-
+                <CardTitle className="cardTitleText about-card-name"> {this.props.name}</CardTitle>
+                <CardSubtitle className="cardSubText about-card-description"> {this.props.bio}</CardSubtitle>
+                <br />
+                <CardText className="cardSmallText"> 
+                  Responsibilities: {this.props.responsibilities} <br/>
+                  Commits: {this.props.commits}, Issues: {this.props.issues}, Unit Tests: {this.props.unitTests}
                 </CardText>
               </CardBody>
             </Card>);

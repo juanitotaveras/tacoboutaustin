@@ -95,7 +95,7 @@ class Distance(db.Model):
     __tablename__ = 'distance'
     id = db.Column(db.Integer, ForeignKey('place.id'), primary_key = True)
     second_place_id = db.Column(db.Integer, ForeignKey('place.id'), primary_key = True)
-    distance = db.Column(db.Integer)
+    distance = db.Column(db.Float)
 
 class Place(db.Model):
     __tablename__ = "place"

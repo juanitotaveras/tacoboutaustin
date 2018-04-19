@@ -92,15 +92,23 @@ export default class Restaurants extends Component {
     var url = api_url + "/restaurants?";
 
     // Sorting
-    if(sortParam != null)
+    if(sortParam != '')
     {
-      if (sortParam == "name") {
+      if (sortParam == "name_asc") {
         apiParams.push("order_by=name");
         apiParams.push("order=asc");
       }
-      else {
+      else if(sortParam == "name_desc") {
+        apiParams.push("order_by=name");
+        apiParams.push("order=desc");
+      } 
+      else if(sortParam == "rating_desc") {
         apiParams.push("order_by=rating");
         apiParams.push("order=desc");
+      }
+      else if(sortParam == "rating_asc") {
+        apiParams.push("order_by=rating");
+        apiParams.push("order=asc");
       }
     }
 
@@ -109,12 +117,15 @@ export default class Restaurants extends Component {
       if(fils.rating != 0) {
         apiParams.push("rating=" + fils.rating);
       }
-      if(fils.zipcode != 0) {
-        apiParams.push("zipcode=" + fils.zipcode);
+      if(fils.selectedZipcodes != '') {
+        apiParams.push("zipcode=" + fils.selectedZipcodes);
       }
       if(fils.open == true) {
         var timeString = this.getDateString();
         apiParams.push("time=" + timeString);
+      }
+      if(fils.selectedCategories != '') {
+        apiParams.push("categories=" + fils.selectedCategories);
       }
     }
 
@@ -150,36 +161,36 @@ export default class Restaurants extends Component {
       pages_count++;
 
     var cards = this.state.restaurants_display.map(function(restaurant) {
-            return <RestaurantCard restaurant={restaurant} />;
+            return <Col xs="12" md="4"><RestaurantCard restaurant={restaurant} /></Col>;
           })
 
     return (
     	<div className="background">
         <Header
-          title="Restaurants"
-          description="Restaurants description"
+          title="World-class Restaurants"
+          description="From mouth-watering barbeque to spicy Tex-Mex, our wide selection is bound to make your belly happy."
           image={HeaderBackground}
         />
         <br />
     		<Container id="jump">
-            <Col xs="12" md="2">
-              <RestaurantFilter handler={this.filterPage}/>
-              <br />
-              <Sort handler={this.sortPage}/>
-            </Col>
             <Row>
-            <CardColumns>
-            {
-              res_count > 0 &&
-              cards
-            }
-            {
-              res_count == 0 &&
-              <h1>No results found.</h1>
-            }
-            </CardColumns>
-            </Row>
+                <Col xs="12" md="2">
+                  <RestaurantFilter handler={this.filterPage}/>
+                  <br />
+                  <Sort handler={this.sortPage}/>
+                </Col>
 
+                <Col xs="12" md="10">
+                {
+                  res_count > 0 &&
+                  cards
+                }
+                {
+                  res_count == 0 &&
+                  <h1>No results found.</h1>
+                }
+                </Col>
+            </Row>
             <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick} />
       	</Container>
       </div>

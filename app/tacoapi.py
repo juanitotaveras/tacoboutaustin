@@ -16,7 +16,7 @@ from copy import copy
 from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Hour, Distance, Zipcode
 import re
 
-numberOfClosePlace = 2
+numberOfClosePlace = 4
 
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
            "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
@@ -148,7 +148,8 @@ def getFilterQuery(query, args, Model):
         for token in categoriesTokens:
             query = query.filter(Model.categories.any(category_id = token))
     if zipcode is not None:
-        query = query.filter_by(zipcode=zipcode)
+        zipcodesTokens = zipcode.split(',')
+        query = query.filter(Model.zipcode.in_(zipcodesTokens))
     if Model == Restaurant:  # special case with restaurant, because restaurant have open hour and categories
         time = args.get('time', default=None, type=str)
         if time is not None:
@@ -214,6 +215,7 @@ def getList(args, type):
     return output
 
 def getOne(id, type):
+    global numberOfClosePlace
     Model = getModel(type)
     place = Model.query.filter(getIdType(Model, type) == id).first()
     if place == None:
