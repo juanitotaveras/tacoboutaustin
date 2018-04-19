@@ -22,6 +22,7 @@ import unittest
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
 from pyvirtualdisplay import Display
+from guitest_config import settings
 #from selenium.webdriver.common.by import By
 #from selenium.webdriver.common.keys import Keys
 #from selenium.webdriver.support.ui import Select
@@ -31,7 +32,7 @@ NOT_VISIBLE = 0
 VISIBLE = 1
 class TestAbout(unittest.TestCase):
     def setUp(self):
-        self.display = Display(visible=NOT_VISIBLE, size=(1920, 1080))
+        self.display = Display(visible=settings['VISIBLE'], size=(1920, 1080))
         self.display.start()
         self.driver = webdriver.Chrome("./chromedriver")
         self.base_url = 'http://tacoboutaustin.me'

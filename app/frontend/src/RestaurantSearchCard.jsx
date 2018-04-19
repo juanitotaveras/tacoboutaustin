@@ -19,7 +19,7 @@ export default class RestaurantCard extends Component {
         <Card className="cardDiv">
           <Link to={'/restaurants/' + r.id}><CardImg top width="100%" height="200em" src={image} alt="Le food" /></Link>
           <CardBody>
-            <CardTitle className="cardTitleText">{spans}</CardTitle>
+            <CardTitle className="cardTitleText wrap">{spans}</CardTitle>
             <CardSubtitle>{r.food}</CardSubtitle>
             <CardText className="cardSubText">
             <TacoRating rating={r.rating}/>

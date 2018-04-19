@@ -20,7 +20,7 @@ export default class HotelCard extends Component {
         <Card>
           <Link to={'/hotels/' + h.id}><CardImg top width="100%" height="200em" src={image} alt="Card image cap" /></Link>
           <CardBody>
-            <CardTitle className="cardTitleText">{spans}</CardTitle>
+            <CardTitle className="cardTitleText wrap">{spans}</CardTitle>
             <CardSubtitle></CardSubtitle>     
             <CardText className="cardSubText"><TacoRating rating={h.rating}/>
             <span style={{float: 'right'}}>Zip code: {h.zip_code}</span></CardText>
