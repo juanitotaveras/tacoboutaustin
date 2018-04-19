@@ -1,7 +1,7 @@
 {
 	"info": {
 		"name": "tacoboutaustin api tests",
-		"_postman_id": "a81d2d2c-9c0c-9328-a3bd-6f6275a76aad",
+		"_postman_id": "ac5670a2-1a74-e30b-54f2-e1b44211f45e",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,7 +12,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "01bdb6e1-5450-4b0c-bb04-78a39e8d570e",
+						"id": "c0090dd1-d3ab-41ff-b728-f30309d0cb79",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -34,27 +34,45 @@
 							"                            \"type\": \"string\"",
 							"                        }",
 							"                    },",
+							"                    \"categories\": {",
+							"                        \"type\": \"array\",",
+							"                        \"items\": {",
+							"                            \"type\": \"object\",",
+							"                            \"properties\": {",
+							"                                \"id\": {",
+							"                                    \"type\": \"string\"",
+							"                                },",
+							"                                \"name\": {",
+							"                                    \"type\": \"string\"",
+							"                                }",
+							"                            }",
+							"                        }",
+							"                    },",
 							"                    \"id\": {",
 							"                        \"type\": \"integer\"",
 							"                    },",
 							"                    \"image\": {",
-							"                        \"type\": \"string\"",
+							"                        \"type\": [\"string\", \"null\"]",
 							"                    },",
 							"                    \"name\": {",
 							"                        \"type\": \"string\"",
 							"                    },",
 							"                    \"rating\": {",
 							"                        \"type\": \"number\"",
+							"                    },",
+							"                    \"zip_code\": {",
+							"                        \"type\": \"number\"",
 							"                    }",
 							"                },",
 							"                \"additionalProperties\": false,",
-							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"                \"required\": [\"address\", \"categories\", \"id\", \"image\", \"name\", \"rating\", \"zip_code\"]",
 							"            }",
 							"        }",
 							"    }",
 							"}",
 							"",
 							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
+							"console.log(tv4.error)",
 							"",
 							"var last_id = -1;",
 							"var uniqueID = true;",
@@ -62,6 +80,7 @@
 							"var validImages = true;",
 							"var validAddress = true;",
 							"var validNames = true;",
+							"var validCategories = true;",
 							"for(let item of resp.list){",
 							"    uniqueID = item.id > last_id && uniqueID;",
 							"    last_id = item.id;",
@@ -69,13 +88,16 @@
 							"    validImages = item.image !== \"\" && validImages;",
 							"    validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
 							"    validNames = (item.name !== \"\") && validNames;",
+							"    validCategories = item.categories.length > 0 && validCategories; ",
 							"}",
 							"",
 							"tests[\"ID's are unique\"] = uniqueID;",
 							"tests[\"Ratings are valid\"] = validRatings;",
 							"tests[\"All instances have frontpage images\"] = validImages;",
 							"tests[\"Addresses are not NULL\"] = validAddress;",
-							"tests[\"Names are not NULL\"] = validNames;"
+							"tests[\"Names are not NULL\"] = validNames;",
+							"tests[\"All instances have >= 1 category\"] = validCategories",
+							""
 						]
 					}
 				}
@@ -106,7 +128,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "04b4a178-9d0e-4ff8-923f-889244baedb1",
+						"id": "da51336b-09b2-4fe2-a26c-3a42da7eefb6",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -118,7 +140,10 @@
 							"",
 							"var matchesFilter = true;",
 							"for(let item of resp.list){",
-							"    matchesFilter = item.rating >= 4 && item.zipcode == 78704 && matchesFilter",
+							"    var hasCategory = false;",
+							"    for(let cat of item.categories)",
+							"        hasCategory = cat.id == \"mexican\" || hasCategory;",
+							"    matchesFilter = item.rating >= 4 && item.zip_code == 78704 && hasCategory && matchesFilter",
 							"}",
 							"",
 							"tests[\"Response matches filter\"] = matchesFilter"
@@ -131,7 +156,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://api.tacoboutaustin.me/restaurants?page=1&rating=4&zipcode=78704",
+					"raw": "http://api.tacoboutaustin.me/restaurants?page=1&rating=4&zipcode=78704&categories=mexican",
 					"protocol": "http",
 					"host": [
 						"api",
@@ -156,6 +181,11 @@
 							"key": "zipcode",
 							"value": "78704",
 							"equals": true
+						},
+						{
+							"key": "categories",
+							"value": "mexican",
+							"equals": true
 						}
 					]
 				},
@@ -169,7 +199,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "23a7c991-786a-42fb-8dca-42405909d167",
+						"id": "0d4f3a81-4e6f-4101-9961-e508bbf96f95",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -179,7 +209,7 @@
 							"",
 							"var matchesFilter = true;",
 							"for(let item of resp.list){",
-							"    matchesFilter = (item.name.includes(\"taco\") || item.zipcode == 78704) && matchesFilter",
+							"    matchesFilter = (item.name.toLowerCase().includes(\"taco\") || item.zip_code == 78704) && matchesFilter",
 							"}",
 							"",
 							"tests[\"Response matches filter\"] = matchesFilter"
@@ -220,7 +250,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "69ba4ad2-056c-4196-ad82-d0c83814d9c9",
+						"id": "b1a0bd14-c5e6-4652-86db-1ff254b72291",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -230,7 +260,7 @@
 							"",
 							"var matchesFilter = true;",
 							"for(let item of resp.list){",
-							"    matchesFilter = (item.name.includes(\"taco\") && item.zipcode == 78704) && matchesFilter",
+							"    matchesFilter = (item.name.toLowerCase().includes(\"taco\") && item.zip_code == 78704) && matchesFilter",
 							"}",
 							"",
 							"tests[\"Response matches filter\"] = matchesFilter"
@@ -276,7 +306,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "0930a4d4-e7ba-4ed3-80c7-b9c9de101df3",
+						"id": "5bb03e53-2290-4365-9f1e-666106772ad8",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -298,27 +328,45 @@
 							"                            \"type\": \"string\"",
 							"                        }",
 							"                    },",
+							"                    \"categories\": {",
+							"                        \"type\": \"array\",",
+							"                        \"items\": {",
+							"                            \"type\": \"object\",",
+							"                            \"properties\": {",
+							"                                \"id\": {",
+							"                                    \"type\": \"string\"",
+							"                                },",
+							"                                \"name\": {",
+							"                                    \"type\": \"string\"",
+							"                                }",
+							"                            }",
+							"                        }",
+							"                    },",
 							"                    \"id\": {",
 							"                        \"type\": \"integer\"",
 							"                    },",
 							"                    \"image\": {",
-							"                        \"type\": \"string\"",
+							"                        \"type\": [\"string\", \"null\"]",
 							"                    },",
 							"                    \"name\": {",
 							"                        \"type\": \"string\"",
 							"                    },",
 							"                    \"rating\": {",
 							"                        \"type\": \"number\"",
+							"                    },",
+							"                    \"zip_code\": {",
+							"                        \"type\": \"number\"",
 							"                    }",
 							"                },",
 							"                \"additionalProperties\": false,",
-							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"                \"required\": [\"address\", \"categories\", \"id\", \"image\", \"name\", \"rating\", \"zip_code\"]",
 							"            }",
 							"        }",
 							"    }",
 							"}",
 							"",
 							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
+							"console.log(tv4.error)",
 							"",
 							"var last_id = -1;",
 							"var uniqueID = true;",
@@ -326,6 +374,7 @@
 							"var validImages = true;",
 							"var validAddress = true;",
 							"var validNames = true;",
+							"var validCategories = true;",
 							"for(let item of resp.list){",
 							"    uniqueID = item.id > last_id && uniqueID;",
 							"    last_id = item.id;",
@@ -333,13 +382,15 @@
 							"    validImages = item.image !== \"\" && validImages;",
 							"    validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
 							"    validNames = (item.name !== \"\") && validNames;",
+							"    validCategories = item.categories.length > 0 && validCategories; ",
 							"}",
 							"",
 							"tests[\"ID's are unique\"] = uniqueID;",
 							"tests[\"Ratings are valid\"] = validRatings;",
 							"tests[\"All instances have frontpage images\"] = validImages;",
 							"tests[\"Addresses are not NULL\"] = validAddress;",
-							"tests[\"Names are not NULL\"] = validNames;"
+							"tests[\"Names are not NULL\"] = validNames;",
+							"tests[\"All instances have >= 1 category\"] = validCategories"
 						]
 					}
 				}
@@ -370,7 +421,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "04b4a178-9d0e-4ff8-923f-889244baedb1",
+						"id": "a935a604-182b-4b27-8236-066e400bfd50",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -382,7 +433,7 @@
 							"",
 							"var matchesFilter = true;",
 							"for(let item of resp.list){",
-							"    matchesFilter = item.rating >= 4 && item.zipcode == 78704 && matchesFilter",
+							"    matchesFilter = item.rating >= 4 && item.zip_code == 78704 && matchesFilter;",
 							"}",
 							"",
 							"tests[\"Response matches filter\"] = matchesFilter"
@@ -433,7 +484,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "23a7c991-786a-42fb-8dca-42405909d167",
+						"id": "bf22a2a5-c81f-4183-927c-64f6818978b7",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -443,7 +494,7 @@
 							"",
 							"var matchesFilter = true;",
 							"for(let item of resp.list){",
-							"    matchesFilter = (item.name.includes(\"taco\") || item.zipcode == 78704) && matchesFilter",
+							"    matchesFilter = (item.name.toLowerCase().includes(\"driskill\") || item.zip_code == 78704) && matchesFilter",
 							"}",
 							"",
 							"tests[\"Response matches filter\"] = matchesFilter"
@@ -484,7 +535,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "69ba4ad2-056c-4196-ad82-d0c83814d9c9",
+						"id": "93e5e997-d0c4-49a5-ae61-4fbc872f1dfd",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -494,7 +545,7 @@
 							"",
 							"var matchesFilter = true;",
 							"for(let item of resp.list){",
-							"    matchesFilter = (item.name.includes(\"taco\") && item.zipcode == 78704) && matchesFilter",
+							"    matchesFilter = (item.name.toLowerCase().includes(\"driskill\") && item.zip_code == 78701) && matchesFilter",
 							"}",
 							"",
 							"tests[\"Response matches filter\"] = matchesFilter"
@@ -507,7 +558,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://api.tacoboutaustin.me/hotels?search=driskill,78704&search_type=and",
+					"raw": "http://api.tacoboutaustin.me/hotels?search=driskill,78701&search_type=and",
 					"protocol": "http",
 					"host": [
 						"api",
@@ -520,7 +571,7 @@
 					"query": [
 						{
 							"key": "search",
-							"value": "driskill,78704",
+							"value": "driskill,78701",
 							"equals": true
 						},
 						{
@@ -540,7 +591,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "7d97a549-1bc4-47be-8349-9d5d09fcde77",
+						"id": "49b84bcf-9854-4e4d-94ff-78b332011ba9",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -562,25 +613,45 @@
 							"                            \"type\": \"string\"",
 							"                        }",
 							"                    },",
+							"                    \"categories\": {",
+							"                        \"type\": \"array\",",
+							"                        \"items\": {",
+							"                            \"type\": \"object\",",
+							"                            \"properties\": {",
+							"                                \"id\": {",
+							"                                    \"type\": \"string\"",
+							"                                },",
+							"                                \"name\": {",
+							"                                    \"type\": \"string\"",
+							"                                }",
+							"                            }",
+							"                        }",
+							"                    },",
 							"                    \"id\": {",
 							"                        \"type\": \"integer\"",
 							"                    },",
 							"                    \"image\": {",
-							"                        \"type\": \"string\"",
+							"                        \"type\": [\"string\", \"null\"]",
 							"                    },",
 							"                    \"name\": {",
 							"                        \"type\": \"string\"",
 							"                    },",
 							"                    \"rating\": {",
 							"                        \"type\": \"number\"",
+							"                    },",
+							"                    \"zip_code\": {",
+							"                        \"type\": \"number\"",
 							"                    }",
 							"                },",
 							"                \"additionalProperties\": false,",
-							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"                \"required\": [\"address\", \"categories\", \"id\", \"image\", \"name\", \"rating\", \"zip_code\"]",
 							"            }",
 							"        }",
 							"    }",
 							"}",
+							"",
+							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
+							"console.log(tv4.error)",
 							"",
 							"var last_id = -1;",
 							"var uniqueID = true;",
@@ -588,6 +659,7 @@
 							"var validImages = true;",
 							"var validAddress = true;",
 							"var validNames = true;",
+							"var validCategories = true;",
 							"for(let item of resp.list){",
 							"    uniqueID = item.id > last_id && uniqueID;",
 							"    last_id = item.id;",
@@ -595,13 +667,15 @@
 							"    validImages = item.image !== \"\" && validImages;",
 							"    validAddress = item.address.length == 2 && (item.address[0] !== \"\" && item.address[1] !== \"\") && validAddress;",
 							"    validNames = (item.name !== \"\") && validNames;",
+							"    validCategories = item.categories.length > 0 && validCategories; ",
 							"}",
 							"",
 							"tests[\"ID's are unique\"] = uniqueID;",
 							"tests[\"Ratings are valid\"] = validRatings;",
 							"tests[\"All instances have frontpage images\"] = validImages;",
 							"tests[\"Addresses are not NULL\"] = validAddress;",
-							"tests[\"Names are not NULL\"] = validNames;"
+							"tests[\"Names are not NULL\"] = validNames;",
+							"//tests[\"All instances have >= 1 category\"] = validCategories"
 						]
 					}
 				}
@@ -632,7 +706,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "04b4a178-9d0e-4ff8-923f-889244baedb1",
+						"id": "b1838ae8-59a6-4478-98c6-5b1d95402d29",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -644,7 +718,9 @@
 							"",
 							"var matchesFilter = true;",
 							"for(let item of resp.list){",
-							"    matchesFilter = item.rating >= 4 && item.zipcode == 78704 && matchesFilter",
+							"    for(let cat of item.categories)",
+							"        hasCategory = cat.id == \"landmarks\" || hasCategory;",
+							"    matchesFilter = item.rating >= 4 && item.zip_code == 78701 && matchesFilter",
 							"}",
 							"",
 							"tests[\"Response matches filter\"] = matchesFilter"
@@ -657,7 +733,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://api.tacoboutaustin.me/attractions?page=1&rating=4&zipcode=78704",
+					"raw": "http://api.tacoboutaustin.me/attractions?page=1&rating=2&zipcode=78701&categories=landmarks",
 					"protocol": "http",
 					"host": [
 						"api",
@@ -675,12 +751,17 @@
 						},
 						{
 							"key": "rating",
-							"value": "4",
+							"value": "2",
 							"equals": true
 						},
 						{
 							"key": "zipcode",
-							"value": "78704",
+							"value": "78701",
+							"equals": true
+						},
+						{
+							"key": "categories",
+							"value": "landmarks",
 							"equals": true
 						}
 					]
@@ -695,7 +776,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "23a7c991-786a-42fb-8dca-42405909d167",
+						"id": "8fea44be-40ef-4985-bfe0-af0fe93c1b8e",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -705,7 +786,7 @@
 							"",
 							"var matchesFilter = true;",
 							"for(let item of resp.list){",
-							"    matchesFilter = (item.name.includes(\"taco\") || item.zipcode == 78704) && matchesFilter",
+							"    matchesFilter = (item.name.toLowerCase().includes(\"alamo\") || item.zip_code == 78704) && matchesFilter",
 							"}",
 							"",
 							"tests[\"Response matches filter\"] = matchesFilter"
@@ -746,7 +827,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "69ba4ad2-056c-4196-ad82-d0c83814d9c9",
+						"id": "b1e6414a-994c-4891-8bee-527ba7f707ef",
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
@@ -756,7 +837,7 @@
 							"",
 							"var matchesFilter = true;",
 							"for(let item of resp.list){",
-							"    matchesFilter = (item.name.includes(\"taco\") && item.zipcode == 78704) && matchesFilter",
+							"    matchesFilter = (item.name.toLowerCase().includes(\"alamo\") && item.zip_code == 78704) && matchesFilter",
 							"}",
 							"",
 							"tests[\"Response matches filter\"] = matchesFilter"
@@ -812,7 +893,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "3bfbea3c-1041-4d06-8c1a-f10fabfdaaaf",
+						"id": "9ae63ef0-322f-4b0c-8a17-dacbb77183b7",
 						"type": "text/javascript",
 						"exec": [
 							"function validate_nearby(near){",
@@ -868,6 +949,23 @@
 							"                            \"type\": \"string\"",
 							"                        }",
 							"                    },",
+							"                    \"categories\": {",
+							"                        \"type\": \"array\",",
+							"                        \"items\": {",
+							"                            \"type\": \"object\",",
+							"                            \"properties\": {",
+							"                                \"id\": {",
+							"                                    \"type\": \"string\"",
+							"                                },",
+							"                                \"name\": {",
+							"                                    \"type\": \"string\"",
+							"                                }",
+							"                            }",
+							"                        }",
+							"                    },",
+							"                    \"distance\": {",
+							"                        \"type\": \"number\"",
+							"                    },",
 							"                    \"id\": {",
 							"                        \"type\": \"integer\"",
 							"                    },",
@@ -879,10 +977,13 @@
 							"                    },",
 							"                    \"rating\": {",
 							"                        \"type\": \"number\"",
+							"                    },",
+							"                    \"zip_code\": {",
+							"                        \"type\": \"integer\"",
 							"                    }",
 							"                },",
 							"                \"additionalProperties\": false,",
-							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"                \"required\": [\"address\", \"categories\", \"id\", \"distance\", \"image\", \"name\", \"rating\", \"zip_code\"]",
 							"            }",
 							"        },",
 							"        \"close_by_hotels\": {",
@@ -896,6 +997,23 @@
 							"                            \"type\": \"string\"",
 							"                        }",
 							"                    },",
+							"                    \"categories\": {",
+							"                        \"type\": \"array\",",
+							"                        \"items\": {",
+							"                            \"type\": \"object\",",
+							"                            \"properties\": {",
+							"                                \"id\": {",
+							"                                    \"type\": \"string\"",
+							"                                },",
+							"                                \"name\": {",
+							"                                    \"type\": \"string\"",
+							"                                }",
+							"                            }",
+							"                        }",
+							"                    },",
+							"                    \"distance\": {",
+							"                        \"type\": \"number\"",
+							"                    },",
 							"                    \"id\": {",
 							"                        \"type\": \"integer\"",
 							"                    },",
@@ -907,10 +1025,13 @@
 							"                    },",
 							"                    \"rating\": {",
 							"                        \"type\": \"number\"",
+							"                    },",
+							"                    \"zip_code\": {",
+							"                        \"type\": \"integer\"",
 							"                    }",
 							"                },",
 							"                \"additionalProperties\": false,",
-							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"                \"required\": [\"address\", \"categories\", \"id\", \"distance\", \"image\", \"name\", \"rating\", \"zip_code\"]",
 							"            }",
 							"        },",
 							"        \"restaurant\": {",
@@ -922,8 +1043,36 @@
 							"                        \"type\": \"string\"",
 							"                    }",
 							"                },",
+							"                \"categories\": {",
+							"                    \"type\": \"array\",",
+							"                    \"properties\": {",
+							"                        \"type\": \"object\",",
+							"                        \"properties\": {",
+							"                            \"id\": {",
+							"                                \"type\": \"string\"",
+							"                            },",
+							"                            \"name\": {",
+							"                                \"type\": \"string\"",
+							"                            }",
+							"                        }",
+							"                    }",
+							"                },",
 							"                \"hours\": {",
-							"                    \"type\": \"string\"",
+							"                    \"type\": \"array\",",
+							"                    \"properties\": {",
+							"                        \"type\": \"object\",",
+							"                        \"properties\": {",
+							"                            \"close_time\": {",
+							"                                \"type\": \"string\"",
+							"                            },",
+							"                            \"day\": {",
+							"                                \"type\": \"integer\"",
+							"                            },",
+							"                            \"open_time\": {",
+							"                                \"type\": \"string\"",
+							"                            }",
+							"                        }",
+							"                    }",
 							"                },",
 							"                \"id\": {",
 							"                    \"type\": \"integer\"",
@@ -970,16 +1119,17 @@
 							"                }",
 							"            },",
 							"            \"additionalProperties\": false,",
-							"            \"required\": [\"address\", \"hours\", \"id\", \"images\", \"location\", \"name\", \"phone\", \"rating\", \"reviews\"]",
+							"            \"required\": [\"address\", \"categories\", \"hours\", \"id\", \"images\", \"location\", \"name\", \"phone\", \"rating\", \"reviews\"]",
 							"        }",
 							"    }",
 							"}",
 							"",
 							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
+							"console.log(tv4.error)",
 							"",
-							"tests[\"2 Nearby Attractions\"] = resp.close_by_attractions.length == 2;",
+							"tests[\"4 Nearby Attractions\"] = resp.close_by_attractions.length == 4;",
 							"tests[\"Attractions have valid information\"] = validate_nearby(resp.close_by_attractions);",
-							"tests[\"2 Nearby Hotels\"] = resp.close_by_hotels.length == 2;",
+							"tests[\"4 Nearby Hotels\"] = resp.close_by_hotels.length == 4;",
 							"tests[\"Hotels have valid information\"] = validate_nearby(resp.close_by_hotels);",
 							"",
 							"var item = resp.restaurant;",
@@ -1001,7 +1151,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://api.tacoboutaustin.me/restaurants/0",
+					"raw": "http://api.tacoboutaustin.me/restaurants/1",
 					"protocol": "http",
 					"host": [
 						"api",
@@ -1010,7 +1160,7 @@
 					],
 					"path": [
 						"restaurants",
-						"0"
+						"1"
 					]
 				},
 				"description": ""
@@ -1023,7 +1173,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "d9fa5ded-18a9-4734-86e5-56a96b7ce5a5",
+						"id": "674d1fb2-8829-4b17-8a9d-e8d4178174a9",
 						"type": "text/javascript",
 						"exec": [
 							"function validate_nearby(near){",
@@ -1077,6 +1227,21 @@
 							"                        \"type\": \"string\"",
 							"                    }",
 							"                },",
+							"                \"categories\": {",
+							"                    \"type\": \"array\",",
+							"                    \"properties\": {",
+							"                        \"type\": \"object\",",
+							"                        \"properties\": {",
+							"                            \"id\": {",
+							"                                \"type\": \"string\"",
+							"                            },",
+							"                            \"name\": {",
+							"                                \"type\": \"string\"",
+							"                            }",
+							"                        }",
+							"                    }",
+							"                },",
+							"                ",
 							"                \"id\": {",
 							"                    \"type\": \"integer\"",
 							"                },",
@@ -1122,7 +1287,7 @@
 							"                }",
 							"            },",
 							"            \"additionalProperties\": false,",
-							"            \"required\": [\"address\", \"id\", \"images\", \"location\", \"name\", \"phone\", \"rating\", \"reviews\"]",
+							"            \"required\": [\"address\", \"categories\", \"id\", \"images\", \"location\", \"name\", \"phone\", \"rating\", \"reviews\"]",
 							"        },",
 							"        \"close_by_hotels\": {",
 							"            \"type\": \"array\",",
@@ -1135,6 +1300,23 @@
 							"                            \"type\": \"string\"",
 							"                        }",
 							"                    },",
+							"                    \"categories\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"object\",",
+							"                            \"properties\": {",
+							"                                \"id\": {",
+							"                                    \"type\": \"string\"",
+							"                                },",
+							"                                \"name\": {",
+							"                                    \"type\": \"string\"",
+							"                                }",
+							"                            }",
+							"                        }",
+							"                    },",
+							"                    \"distance\": {",
+							"                        \"type\": \"number\"",
+							"                    },",
 							"                    \"id\": {",
 							"                        \"type\": \"integer\"",
 							"                    },",
@@ -1146,10 +1328,13 @@
 							"                    },",
 							"                    \"rating\": {",
 							"                        \"type\": \"number\"",
+							"                    },",
+							"                    \"zip_code\": {",
+							"                        \"type\": \"number\"",
 							"                    }",
 							"                },",
 							"                \"additionalProperties\": false,",
-							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"                \"required\": [\"address\", \"categories\", \"id\", \"distance\", \"image\", \"name\", \"rating\", \"zip_code\"]",
 							"            }",
 							"        },",
 							"        \"close_by_restaurants\": {",
@@ -1163,6 +1348,23 @@
 							"                            \"type\": \"string\"",
 							"                        }",
 							"                    },",
+							"                    \"categories\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"object\",",
+							"                            \"properties\": {",
+							"                                \"id\": {",
+							"                                    \"type\": \"string\"",
+							"                                },",
+							"                                \"name\": {",
+							"                                    \"type\": \"string\"",
+							"                                }",
+							"                            }",
+							"                        }",
+							"                    },",
+							"                    \"distance\": {",
+							"                        \"type\": \"number\"",
+							"                    },",
 							"                    \"id\": {",
 							"                        \"type\": \"integer\"",
 							"                    },",
@@ -1174,10 +1376,13 @@
 							"                    },",
 							"                    \"rating\": {",
 							"                        \"type\": \"number\"",
+							"                    },",
+							"                    \"zip_code\": {",
+							"                        \"type\": \"number\"",
 							"                    }",
 							"                },",
 							"                \"additionalProperties\": false,",
-							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"                \"required\": [\"address\", \"categories\", \"id\", \"distance\", \"image\", \"name\", \"rating\", \"zip_code\"]",
 							"            }",
 							"        }",
 							"    }",
@@ -1185,9 +1390,9 @@
 							"",
 							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
 							"",
-							"tests[\"2 Nearby Hotels\"] = resp.close_by_hotels.length == 2;",
+							"tests[\"4 Nearby Hotels\"] = resp.close_by_hotels.length == 4;",
 							"tests[\"Hotels have valid information\"] = validate_nearby(resp.close_by_hotels);",
-							"tests[\"2 Nearby Restaurants\"] = resp.close_by_restaurants.length == 2;",
+							"tests[\"4 Nearby Restaurants\"] = resp.close_by_restaurants.length == 4;",
 							"tests[\"Restaurants have valid information\"] = validate_nearby(resp.close_by_restaurants);",
 							"",
 							"var item = resp.attraction;",
@@ -1196,7 +1401,7 @@
 							"tests[\"Rating is valid\"] = item.rating > 0 && item.rating % 0.5 === 0;",
 							"tests[\"Images are Valid\"] = validate_images(item.images);",
 							"tests[\"Name is valid\"] = item.name !== \"\";",
-							"tests[\"Phone Number is Valid\"] = item.phone !== \"\" && item.phone.length == 14;",
+							"//tests[\"Phone Number is Valid\"] = item.phone !== \"\" && item.phone.length == 14;",
 							"tests[\"Reviews are Valid\"] = item.reviews.length == 3 && validate_reviews(item.reviews);",
 							"tests[\"Location is valid\"] = item.location.lat >= -90.0 && item.location.lat <= 90.0 && item.location.long >= -180.0 && item.location.long <= 180.0; "
 						]
@@ -1230,7 +1435,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "8c83dc1b-06f8-405b-8677-d3f15c46ac6f",
+						"id": "f06d2adb-f5cf-435f-9e4e-480fc206ba61",
 						"type": "text/javascript",
 						"exec": [
 							"function validate_nearby(near){",
@@ -1286,6 +1491,23 @@
 							"                            \"type\": \"string\"",
 							"                        }",
 							"                    },",
+							"                    \"categories\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"object\",",
+							"                            \"properties\": {",
+							"                                \"id\": {",
+							"                                    \"type\": \"string\"",
+							"                                },",
+							"                                \"name\": {",
+							"                                    \"type\": \"string\"",
+							"                                }",
+							"                            }",
+							"                        }",
+							"                    },",
+							"                    \"distance\": {",
+							"                        \"type\": \"number\"",
+							"                    },",
 							"                    \"id\": {",
 							"                        \"type\": \"integer\"",
 							"                    },",
@@ -1297,10 +1519,13 @@
 							"                    },",
 							"                    \"rating\": {",
 							"                        \"type\": \"number\"",
+							"                    },",
+							"                    \"zip_code\": {",
+							"                        \"type\": \"number\"",
 							"                    }",
 							"                },",
 							"                \"additionalProperties\": false,",
-							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"                \"required\": [\"address\", \"categories\", \"id\", \"distance\", \"image\", \"name\", \"rating\", \"zip_code\"]",
 							"            }",
 							"        },",
 							"        \"close_by_restaurants\": {",
@@ -1314,6 +1539,23 @@
 							"                            \"type\": \"string\"",
 							"                        }",
 							"                    },",
+							"                    \"categories\": {",
+							"                        \"type\": \"array\",",
+							"                        \"properties\": {",
+							"                            \"type\": \"object\",",
+							"                            \"properties\": {",
+							"                                \"id\": {",
+							"                                    \"type\": \"string\"",
+							"                                },",
+							"                                \"name\": {",
+							"                                    \"type\": \"string\"",
+							"                                }",
+							"                            }",
+							"                        }",
+							"                    },",
+							"                    \"distance\": {",
+							"                        \"type\": \"number\"",
+							"                    },",
 							"                    \"id\": {",
 							"                        \"type\": \"integer\"",
 							"                    },",
@@ -1325,10 +1567,13 @@
 							"                    },",
 							"                    \"rating\": {",
 							"                        \"type\": \"number\"",
+							"                    },",
+							"                    \"zip_code\": {",
+							"                        \"type\": \"number\"",
 							"                    }",
 							"                },",
 							"                \"additionalProperties\": false,",
-							"                \"required\": [\"address\", \"id\", \"image\", \"name\", \"rating\"]",
+							"                \"required\": [\"address\", \"categories\", \"id\", \"distance\", \"image\", \"name\", \"rating\", \"zip_code\"]",
 							"            }",
 							"        },",
 							"        \"hotel\": {",
@@ -1338,6 +1583,20 @@
 							"                    \"type\": \"array\",",
 							"                    \"properties\": {",
 							"                        \"type\": \"string\"",
+							"                    }",
+							"                },",
+							"                \"categories\": {",
+							"                    \"type\": \"array\",",
+							"                    \"properties\": {",
+							"                        \"type\": \"object\",",
+							"                        \"properties\": {",
+							"                            \"id\": {",
+							"                                \"type\": \"string\"",
+							"                            },",
+							"                            \"name\": {",
+							"                                \"type\": \"string\"",
+							"                            }",
+							"                        }",
 							"                    }",
 							"                },",
 							"                \"id\": {",
@@ -1385,16 +1644,17 @@
 							"                }",
 							"            },",
 							"            \"additionalProperties\": false,",
-							"            \"required\": [\"address\", \"id\", \"images\", \"location\", \"name\", \"phone\", \"rating\", \"reviews\"]",
+							"            \"required\": [\"address\", \"categories\", \"id\", \"images\", \"location\", \"name\", \"phone\", \"rating\", \"reviews\"]",
 							"        }",
 							"    }",
 							"}",
 							"",
 							"tests[\"Valid schema\"] = tv4.validate(resp, schema);",
+							"console.log(tv4.error)",
 							"",
-							"tests[\"2 Nearby Attractions\"] = resp.close_by_attractions.length == 2;",
+							"tests[\"4 Nearby Attractions\"] = resp.close_by_attractions.length == 4;",
 							"tests[\"Attractions have valid information\"] = validate_nearby(resp.close_by_attractions);",
-							"tests[\"2 Nearby Restaurants\"] = resp.close_by_restaurants.length == 2;",
+							"tests[\"4 Nearby Restaurants\"] = resp.close_by_restaurants.length == 4;",
 							"tests[\"Restaurants have valid information\"] = validate_nearby(resp.close_by_restaurants);",
 							"",
 							"var item = resp.hotel;",
@@ -1415,7 +1675,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://api.tacoboutaustin.me/hotels/0",
+					"raw": "http://api.tacoboutaustin.me/hotels/1",
 					"protocol": "http",
 					"host": [
 						"api",
@@ -1424,7 +1684,7 @@
 					],
 					"path": [
 						"hotels",
-						"0"
+						"1"
 					]
 				},
 				"description": ""
@@ -1450,7 +1710,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://api.tacoboutaustin.me/restaurants/1",
+					"raw": "http://api.tacoboutaustin.me/restaurants/500",
 					"protocol": "http",
 					"host": [
 						"api",
@@ -1459,7 +1719,7 @@
 					],
 					"path": [
 						"restaurants",
-						"1"
+						"500"
 					]
 				},
 				"description": ""
@@ -1520,7 +1780,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://api.tacoboutaustin.me/attractions/0",
+					"raw": "http://api.tacoboutaustin.me/attractions/500",
 					"protocol": "http",
 					"host": [
 						"api",
@@ -1529,7 +1789,7 @@
 					],
 					"path": [
 						"attractions",
-						"0"
+						"500"
 					]
 				},
 				"description": ""
@@ -1592,7 +1852,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://api.tacoboutaustin.me/hotels/1",
+					"raw": "http://api.tacoboutaustin.me/hotels/500",
 					"protocol": "http",
 					"host": [
 						"api",
@@ -1601,7 +1861,7 @@
 					],
 					"path": [
 						"hotels",
-						"1"
+						"500"
 					]
 				},
 				"description": ""

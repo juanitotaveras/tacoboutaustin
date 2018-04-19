@@ -293,7 +293,7 @@ def get_hotel(id):
     hotel_data, type1, type1_place, type2, type2_place = getOne(id, "hotel")
     
     if type1 is not None:
-        return jsonify({'status': "OK", 'restaurant': hotel_data, type1: type1_place, type2: type2_place})
+        return jsonify({'status': "OK", 'hotel': hotel_data, type1: type1_place, type2: type2_place})
     else:
         return hotel_data
 
@@ -306,7 +306,7 @@ def get_attractions():
 def get_attraction(id):
     attraction_data, type1, type1_place, type2, type2_place = getOne(id, "attraction")
     if type1 is not None:
-        return jsonify({'status': "OK", 'restaurant': attraction_data, type1: type1_place, type2: type2_place})
+        return jsonify({'status': "OK", 'attraction': attraction_data, type1: type1_place, type2: type2_place})
     else:
         return attraction_data
 
