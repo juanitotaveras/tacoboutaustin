@@ -34,8 +34,9 @@ export default class Restaurants extends Component {
     this.filterPage = this.filterPage.bind(this);
     this.fillInRestaurants = this.fillInRestaurants.bind(this);
     this.doneLoading = this.doneLoading.bind(this);
-    this.countDoneLoading = this.countDoneLoading.bind(this);
-    this.pagesDoneLoading = this.pagesDoneLoading.bind(this);
+    this.requestCount = this.requestCount.bind(this);
+    this.requestPages = this.requestPages.bind(this);
+    this.getCount = this.getCount.bind(this);
 
     this.state = {
       onPage: 1,
@@ -47,14 +48,11 @@ export default class Restaurants extends Component {
         open: false
       },
       loading: false,
-      countLoading: false,
-      pagesLoading: false
     };
   }
 
   componentWillMount() {
     const url = api_url + "/restaurants";
-    this.requestSync(url, this.getCount);
     this.getPage(1, null, null, false);
   }
 
@@ -62,7 +60,7 @@ export default class Restaurants extends Component {
 
   }
 
-  fillInRestaurants(responseText, doneLoading) {
+  fillInRestaurants(responseText) {
       var tempRestaurants = [];
       let resParsed = JSON.parse(responseText)["list"];
       for (let r of resParsed) {
@@ -71,33 +69,31 @@ export default class Restaurants extends Component {
       this.setState({
         restaurantsDisplay: tempRestaurants
       });
-      doneLoading();
+      this.doneLoading();
   }
 
-  getCount(responseText/*, doneLoading*/) {
+  getCount(responseText, page_url) {
       resCount = JSON.parse(responseText)["total"];
-      // doneLoading();
-  }
+      this.requestPages(page_url, this.fillInRestaurants);
+    }
 
-  requestSync(url, parseResponse) {
+  requestCount(count_url, page_url, getCount) {
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-          parseResponse(xmlHttp.responseText);
-        // console.log("REPONSE " + xmlHttp.responseText);
+          getCount(xmlHttp.responseText, page_url);
       }
-      xmlHttp.open("GET", url, false) // true for asynchronous
+      xmlHttp.open("GET", count_url, true) // true for asynchronous
       xmlHttp.send(null);
   }
 
-  request(url, parseResponse, doneLoading) {
+  requestPages(page_url, fillInRestaurants) {
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-          parseResponse(xmlHttp.responseText, doneLoading);
-        // console.log("REPONSE " + xmlHttp.responseText);
+          fillInRestaurants(xmlHttp.responseText);
       }
-      xmlHttp.open("GET", url, true) // true for asynchronous
+      xmlHttp.open("GET", page_url, true) // true for asynchronous
       xmlHttp.send(null);
   }
 
@@ -113,9 +109,7 @@ export default class Restaurants extends Component {
 
   getPage(pageNum, sortParam, fils) {
     this.setState({
-      // loading: true,
-      pagesLoading: true,
-      countLoading: true
+      loading: true,
     })
     var apiParams = [];
     var url = api_url + "/restaurants?";
@@ -161,8 +155,7 @@ export default class Restaurants extends Component {
     const count_url = url + apiParams.join("&");
     const page_url = count_url + "&page=" + pageNum;
 
-    this.requestSync(count_url, this.getCount);
-    this.request(page_url, this.fillInRestaurants, this.pagesDoneLoading);
+    this.requestCount(count_url, page_url, this.getCount);
     this.setState({
       onPage: pageNum,
       sorted: sortParam,
@@ -170,18 +163,9 @@ export default class Restaurants extends Component {
     });
   }
 
-  countDoneLoading() {
-    this.setState({countLoading: false});
-  }
-
-  pagesDoneLoading() {
-    console.log("PAGES DONE LOADING");
-    this.setState({pagesLoading: false});
-  }
 
   doneLoading() {
-    if (!this.state.pagesLoading /*&& !this.state.countLoading*/)
-      this.setState({loading: false});
+    this.setState({loading: false});
   }
 
   filterPage(filters) {
@@ -199,8 +183,8 @@ export default class Restaurants extends Component {
 
   render() {
     const loadingImage =
-      <div className="text-center" height="50%">
-        <img src={TacoAnimation} alt="Loading Image" width="30%" height="auto" style={{float: 'center'}}/>
+      <div className="text-center">
+        <img src={TacoAnimation} alt="Loading Image" width="10%" height="auto" style={{float: 'center'}}/>
       </div>;
     var pages_count = Math.floor(resCount/per_page);
     if (!((resCount%per_page) == 0))
@@ -234,7 +218,7 @@ export default class Restaurants extends Component {
         </Container>;
 
     return (
-    	<div className="background">
+      <div className="background">
         <Header
           title="World-class Restaurants"
           description="From mouth-watering barbeque to spicy Tex-Mex, our wide selection is bound to make your belly happy."

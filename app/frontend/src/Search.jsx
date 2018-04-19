@@ -118,7 +118,6 @@ export default class Search extends Component {
   	// This function is called every time we search and every time the page is changed.
   	// Sets the cards we will display as part of the State
 	showSearchItems(pageNum) {
-		console.log("in show search items: " + "reslen: " + restaurants.length + " attlen: " + attractions.length + " hotlen: " + hotels.length);
 
 		let startIdx = (pageNum - 1) * PER_PAGE;
 
