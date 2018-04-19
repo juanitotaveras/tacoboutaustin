@@ -11,9 +11,7 @@ import {
   CarouselIndicators,
   CarouselCaption,
   Container } from 'reactstrap';
-import TacoFull from './assets/taco_full.png';
-import TacoHalf from './assets/taco_half.png';
-import TacoGray from './assets/taco_gray.png';
+import LargeTacoRating from './LargeTacoRating';
 
 export default class AttractionJumbotron extends Component {
   constructor(props) {
@@ -74,22 +72,6 @@ export default class AttractionJumbotron extends Component {
                 return <Col xs='3'><img top width="100%" src={image} alt="Card image cap" /></Col>;
     })
 
-    let full_tacos = Math.floor(this.props.rating)
-    let half_tacos = Math.ceil(this.props.rating) - full_tacos
-    let gray_tacos = 5 - full_tacos - half_tacos
-
-    var full_tacos_rating = [...Array(full_tacos)].map(function(idx) {
-      return <img top width="30em" src={TacoFull}/>
-    })
-
-    var half_taco_rating = [...Array(half_tacos)].map(function(idx) {
-      return <img top width="30em" src={TacoHalf}/>
-    })
-
-    var gray_taco_rating = [...Array(gray_tacos)].map(function(idx) {
-      return <img top width="30em" src={TacoGray}/>
-    })
-
     return (
     <div>
       <Jumbotron>
@@ -97,7 +79,7 @@ export default class AttractionJumbotron extends Component {
           <Col><h1 className="display-3">{this.props.name}</h1></Col>
         </Row>
         <Row>
-          <Col><p className="lead">{full_tacos_rating}{half_taco_rating}{gray_taco_rating}<br/></p>
+          <Col><p className="lead"><LargeTacoRating rating={this.props.rating}/><br/></p>
           </Col>
           <Col><h2>Categories: {this.props.categories}</h2>
             {

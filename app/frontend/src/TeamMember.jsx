@@ -13,9 +13,11 @@ export default class TeamMember extends Component {
                 <CardTitle className="cardTitleText about-card-name"> {this.props.name}</CardTitle>
                 <CardSubtitle className="cardSubText about-card-description"> {this.props.bio}</CardSubtitle>
                 <br />
-                <CardText className="cardSmallText"> 
-                  Responsibilities: {this.props.responsibilities} <br/>
+                <CardText> 
+                  <span className="medPlusText">Responsibilities: {this.props.responsibilities} <br/></span>
+                  <span  className="medText">
                   Commits: {this.props.commits}, Issues: {this.props.issues}, Unit Tests: {this.props.unitTests}
+                  </span>
                 </CardText>
               </CardBody>
             </Card>);
