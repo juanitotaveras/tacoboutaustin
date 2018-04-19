@@ -221,7 +221,7 @@ def getOne(id, type):
     if place == None:
         response = jsonify({'status': "INVALID_ID"})
         response.status_code = 404
-        return response
+        return response, None, None, None, None
 
     place_data = {}
     place_data['id'] = getIdType(place, type)
@@ -275,8 +275,11 @@ def get_restaurants():
 @app.route('/restaurants/<id>')
 def get_restaurant(id):
     restaurant_data, type1, type1_place, type2, type2_place = getOne(id, "restaurant")
-    
-    return jsonify({'status': "OK", 'restaurant': restaurant_data, type1: type1_place, type2: type2_place})
+
+    if type1 is not None:
+        return jsonify({'status': "OK", 'restaurant': restaurant_data, type1: type1_place, type2: type2_place})
+    else:
+        return restaurant_data
 
 
 @app.route('/hotels')
@@ -289,7 +292,10 @@ def get_hotels():
 def get_hotel(id):
     hotel_data, type1, type1_place, type2, type2_place = getOne(id, "hotel")
     
-    return jsonify({'status': "OK", 'hotel': hotel_data, type1: type1_place, type2: type2_place})
+    if type1 is not None:
+        return jsonify({'status': "OK", 'restaurant': hotel_data, type1: type1_place, type2: type2_place})
+    else:
+        return hotel_data
 
 @app.route('/attractions')
 def get_attractions():
@@ -299,8 +305,10 @@ def get_attractions():
 @app.route('/attractions/<id>')
 def get_attraction(id):
     attraction_data, type1, type1_place, type2, type2_place = getOne(id, "attraction")
-    
-    return jsonify({'status': "OK", 'attraction': attraction_data, type1: type1_place, type2: type2_place})
+    if type1 is not None:
+        return jsonify({'status': "OK", 'restaurant': attraction_data, type1: type1_place, type2: type2_place})
+    else:
+        return attraction_data
 
 @app.route('/categories')
 def get_categories():
