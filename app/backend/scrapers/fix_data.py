@@ -37,6 +37,16 @@ def fix_hotels():
     hotel.cover_image = None
     for image in hotel.images:
         db.session.delete(image)
+    
+    hotel = Hotel.query.filter_by(name="Americas Best Value Inn").filter_by(zipcode=76504).first()
+    hotel.cover_image = None
+    for image in hotel.images:
+        db.session.delete(image)
+
+    hotel = Hotel.query.filter_by(name="Ammericas Best Value Inn").filter_by(zipcode=76504).first()
+    hotel.cover_image = None
+    for image in hotel.images:
+        db.session.delete(image)
 
 
     hotel = Hotel.query.filter_by(name="Red Roof").first()
