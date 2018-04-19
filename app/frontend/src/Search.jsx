@@ -3,7 +3,6 @@ import { Input, InputGroup, Button, Container, Row, Jumbotron, Col,
 	Form, FormGroup, Label, Nav, NavItem, NavLink,
 	TabPane, Card, CardTitle, CardText, TabContent  } from 'reactstrap';
 	import {Restaurant} from './Restaurants';
-// import Restaurants from './Restaurants';
 import RestaurantSearchCard from './RestaurantSearchCard';
 import {Hotel} from './Hotels';
 import HotelSearchCard from './HotelSearchCard';
@@ -19,8 +18,8 @@ import HeaderBackground from './assets/search_header_background.jpg';
 var restaurants = [];
 var hotels = [];
 var attractions = [];
-let per_page = 20;
-let per_category = per_page/3;
+let PER_PAGE = 16;
+let PER_CATEGORY = PER_PAGE/3;
 
 var searchTerms = [];
 var matchAllTerms = false;
@@ -113,11 +112,11 @@ export default class Search extends Component {
   	// Sets the cards we will display as part of the State
 	showSearchItems(pageNum) {
 
-		let startIdx = (pageNum - 1) * per_page;
+		let startIdx = (pageNum - 1) * PER_PAGE;
 
-		var rStartIdx = (this.state.resPage-1) * per_page;
-		var aStartIdx = (this.state.attPage-1) * per_page;
-		var hStartIdx = (this.state.hotPage-1) * per_page;
+		var rStartIdx = (this.state.resPage-1) * PER_PAGE;
+		var aStartIdx = (this.state.attPage-1) * PER_PAGE;
+		var hStartIdx = (this.state.hotPage-1) * PER_PAGE;
 
 		switch (this.state.activeTab) {
 			case RES_TAB:
@@ -131,14 +130,14 @@ export default class Search extends Component {
 				break;
 		}
 
-		let rArray = restaurants.slice(rStartIdx, rStartIdx + per_page)
+		let rArray = restaurants.slice(rStartIdx, rStartIdx + PER_PAGE)
 			.map( (restaurant) => {
 				return <Col xs="12" sm="6" md="3">
 							<RestaurantSearchCard restaurant={restaurant} searchTerms={searchTerms}/>
 						</Col>;
 			});
 
-		let aArray =  attractions.slice(aStartIdx, aStartIdx + per_page)
+		let aArray =  attractions.slice(aStartIdx, aStartIdx + PER_PAGE)
 			.map( (attraction) => {
 				return <Col xs="12" sm="6" md="3">
 							<AttractionSearchCard attraction={attraction} searchTerms={searchTerms}/>
@@ -146,7 +145,7 @@ export default class Search extends Component {
 			});
 
 
-		let hArray = hotels.slice(hStartIdx, hStartIdx + per_page)
+		let hArray = hotels.slice(hStartIdx, hStartIdx + PER_PAGE)
 			.map( (hotel) => {
 				return <Col xs="12" sm="6" md="3">
 							<HotelSearchCard hotel={hotel} searchTerms={searchTerms}/>
@@ -288,7 +287,7 @@ export default class Search extends Component {
 				activePage = this.state.hotPage;
 				break;
 		}
-		let pageCount = Math.ceil(arrayLength/per_page);
+		let pageCount = Math.ceil(arrayLength/PER_PAGE);
 
 		const restaurantTabComponent = 
 			<TabPane tabId={RES_TAB}>

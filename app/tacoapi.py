@@ -16,7 +16,7 @@ from copy import copy
 from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Hour, Distance, Zipcode
 import re
 
-numberOfClosePlace = 2
+numberOfClosePlace = 4
 
 dayDict = {"Sunday": 0, "Monday": 1, "Tuesday": 2,
            "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
@@ -215,6 +215,7 @@ def getList(args, type):
     return output
 
 def getOne(id, type):
+    global numberOfClosePlace
     Model = getModel(type)
     place = Model.query.filter(getIdType(Model, type) == id).first()
     if place == None:
