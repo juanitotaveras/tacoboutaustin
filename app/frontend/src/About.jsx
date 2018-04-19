@@ -105,7 +105,6 @@ class About extends Component {
 
       for (var key in dict) {
         let stats = dict[key];
-        console.log(stats);
         let author = stats["author"]["login"]
 
         for (var i = 0; i < members.length; i++) {
@@ -119,12 +118,10 @@ class About extends Component {
 
     function updateIssues(responseText) {
       var dict = eval(responseText);
-      console.log("ISSUES DICT: ");
-      console.log(dict);
+
       for (var key in dict) {
         let stats = dict[key];
         let author = stats["user"]["login"];
-        console.log("AUTHOR: " + author);
 
         for (var i = 0; i < members.length; i++) {
           if (members[i]["gitLogin"] == author) {
