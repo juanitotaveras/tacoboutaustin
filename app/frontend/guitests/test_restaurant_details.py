@@ -20,24 +20,16 @@ from unittest import main, TestCase
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from pyvirtualdisplay import Display
+from guitest_config import settings, initialize
 #from selenium.webdriver.common.by import By
 #from selenium.webdriver.common.keys import Keys
 #from selenium.webdriver.support.ui import Select
 
 #from selenium.common.exceptions import NoAlertPresentException
 
-NOT_VISIBLE = 0
-VISIBLE = 1
 class TestRestaurantDetails(TestCase):
     def setUp(self):
-        self.display = Display(visible=NOT_VISIBLE, size=(1920, 1080))
-        self.display.start()
-        self.driver = webdriver.Chrome("./chromedriver")
-        self.base_url = 'http://tacoboutaustin.me'
-        self.verificationErrors = []
-        self.driver.get(self.base_url)
-        self.driver.implicitly_wait(20)
-        # self.accept_next_alert = True
+        self = initialize(self)
 
     def test_restaurant_details(self):
         driver = self.driver
