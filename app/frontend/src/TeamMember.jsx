@@ -11,9 +11,9 @@ export default class TeamMember extends Component {
 			<Card>
               <CardImg top width="50%" height="300em" src={this.props.imageSrc} alt={this.props.imageAlt}/>
               <CardBody>
-                <CardTitle> {this.props.name}</CardTitle>
-                <CardSubtitle> {this.props.bio}</CardSubtitle>
-                <CardText> 
+                <CardTitle className="cardTitleText"> {this.props.name}</CardTitle>
+                <CardSubtitle className="cardSubText"> {this.props.bio}</CardSubtitle>
+                <CardText className="cardSmallText"> 
                   {this.props.responsibilities} <br/>
                   Commits: {this.props.commits} <br/>
                   Issues: {this.props.issues} <br/>

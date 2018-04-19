@@ -109,7 +109,7 @@ export default class RestaurantFilter extends Component {
     return(
       <Row>
           <Form>
-              <Col xs="12"><legend>Filter by:</legend></Col>
+              <Col xs="12"><legend><span className="cardTitleText">Filter by:</span></legend></Col>
               <Col xs="12">
 
                <FormGroup check inline>
@@ -124,7 +124,7 @@ export default class RestaurantFilter extends Component {
               <Col xs="12">
                 <FormGroup check inline>
                   <Label check>
-                    <Input type="checkbox" ref="openFilter" onChange={e => this.handleHourChange(e)} onKeyPress={this.enterPressed.bind(this)}/>Show what's open right now
+                    <Input type="checkbox" ref="openFilter" onChange={e => this.handleHourChange(e)} onKeyPress={this.enterPressed.bind(this)} className="cardSubText"/>Show what's open right now
                   </Label>
                 </FormGroup>
               </Col>
@@ -133,7 +133,7 @@ export default class RestaurantFilter extends Component {
 
               <Col xs="12">
                 <FormGroup>
-                  <Label for="zipcodeFilter">Filter by zipcode</Label>
+                  <Label for="zipcodeFilter" className="cardSubText">Filter by zipcode</Label>
                   <Select 
                     name="zipcodeFilter"
                     options={zipcodes}
@@ -146,7 +146,7 @@ export default class RestaurantFilter extends Component {
               </Col>
 
               <Col xs="12">
-                  <Label for="categoryFilter">Filter by category</Label>
+                  <Label for="categoryFilter" className="cardSubText">Filter by category</Label>
                   <Select 
                     name="categoryFilter"
                     options={categories}

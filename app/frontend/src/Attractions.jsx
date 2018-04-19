@@ -169,8 +169,10 @@ export default class Attractions extends Component {
     return (
       <div classname="background">
         <Header 
-          title="Attractions" 
-          description="Attractions description"
+          title="A Cornucopia of Attractions" 
+          description={"Whether you want to relax with some Blus on the Green, "+
+          "splash around at Barton Springs, or rock out at Austin City Limits, "+
+          "you'll always find something to do in Austin"}
           image={HeaderBackground}
           />
         <br />

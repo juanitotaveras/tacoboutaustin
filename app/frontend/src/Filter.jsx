@@ -136,7 +136,7 @@ export default class Filter extends Component {
               </Col>
 
                 <Col xs="12">
-                    <Label for="categoryFilter">Filter by category</Label>
+                    <Label for="categoryFilter" className="cardSubText">Filter by category</Label>
                     <Select 
                       name="categoryFilter"
                       options={categories}

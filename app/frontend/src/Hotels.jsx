@@ -167,8 +167,8 @@ export default class Hotels extends Component {
     return (
       <div className="background">
         <Header 
-          title="Hotels"
-          description="Hotels description"
+          title="Places to Stay"
+          description="Choose from a variety of places to rest after an adventure-filled day, from inexpensive motels to luxurious suites."
           image={HeaderBackground}
         />
         <br />

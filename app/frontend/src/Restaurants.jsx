@@ -167,8 +167,8 @@ export default class Restaurants extends Component {
     return (
     	<div className="background">
         <Header
-          title="Restaurants"
-          description="Restaurants description"
+          title="World-class Restaurants"
+          description="From mouth-watering barbeque to spicy Tex-Mex, our wide selection is bound to make your belly happy."
           image={HeaderBackground}
         />
         <br />

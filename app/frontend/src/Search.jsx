@@ -16,7 +16,6 @@ import Header from './Header';
 import Paginator from './Paginator';
 import HeaderBackground from './assets/search_header_background.jpg';
 
-// var restaurants = [Restaurant('address', 'id', 'image', 'name', 'rating')];
 var restaurants = [];
 var hotels = [];
 var attractions = [];
@@ -25,69 +24,67 @@ let per_category = per_page/3;
 
 var searchTerms = [];
 var matchAllTerms = false;
+const RES_TAB = "restaurantsTab";
+const ATT_TAB = "attractionsTab";
+const HOT_TAB = "hotelsTab";
 
 export default class Search extends Component {
-
 
 	constructor(props) {
 		super(props);
 		this.state = {
 			value: '', 
-			onPage: 1,
-			rPage: 1,
-			hPage: 1,
-			aPage: 1,
-			displayedRestaurants: [],
-			displayedHotels: [],
-			displayedAttractions: [],
+			resPage: 1,
+			hotPage: 1,
+			attPage: 1,
+			displayedRes: [],
+			displayedAtt: [],
+			displayedHot: [],
 			hasSearched: false,
-			activeTab: '1'
+			activeTab: RES_TAB
 		};
 		this.toggle = this.toggle.bind(this);
-		this.onChange = this.onChange.bind(this);
+		this.onChangeSearchBoxText = this.onChangeSearchBoxText.bind(this);
 		this.onSearch = this.onSearch.bind(this);
 		this.handlePageClick = this.handlePageClick.bind(this);
 
 	}
 
-		handlePageClick(pageNum) {
-			switch (this.state.activeTab) {
-				case "restaurantsTab":
-					this.setState({
-						rPage: pageNum
-					});
-					break;
-				case "attractionsTab":
-					this.setState({
-						aPage: pageNum
-					});
-					break;
-				case "hotelsTab":
-					this.setState({
-						hPage: pageNum
-					});
-					break;
-			}
-			this.setState({
-				done_loading: false
-			});
+	handlePageClick(pageNum) {
+		switch (this.state.activeTab) {
+			case RES_TAB:
+				this.setState({
+					resPage: pageNum
+				});
+				break;
+			case ATT_TAB:
+				this.setState({
+					attPage: pageNum
+				});
+				break;
+			case HOT_TAB:
+				this.setState({
+					hotPage: pageNum
+				});
+				break;
+		}
+		this.setState({
+			done_loading: false
+		});
 
-			this.showSearchItems(pageNum);
-		}
-		fillInRestaurants(responseText) {
-		// console.log("RESPONSE: " + responseText);
+		this.showSearchItems(pageNum);
+	}
+
+	fillInRestaurants(responseText) {
 		let restaurants_parsed = JSON.parse(responseText)["list"];
-		for (let r of restaurants_parsed) {
+		for (let r of restaurants_parsed) 
 			restaurants.push(new Restaurant(r["address"], r["id"], r["image"], r["name"], r["rating"], r["zip_code"]));
-		}
 	}
 
 	fillInHotels(responseText) {
 		let hotels_parsed = JSON.parse(responseText)["list"];
-		for (let h of hotels_parsed) {
-			// TODO: Highlight matching search terms
+		for (let h of hotels_parsed) 
 			hotels.push(new Hotel(h["address"], h["id"], h["image"], h["name"], h["rating"], h["zip_code"]));
-		}
 	}
 
 	fillInAttractions(responseText) {
@@ -103,63 +100,69 @@ export default class Search extends Component {
 			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
 				parseResponse(xmlHttp.responseText);
 		}
-      xmlHttp.open("GET", url, false) // true for asynchronous
-      xmlHttp.send(null);
-  }
-
-  onChange(event) {
-  	this.setState({value: event.target.value});
-  }
-
-  showSearchItems(pageNum) {
-  	// TODO: Try to display equal number of results for each
-  	// maybe like 7 for each
-
-  	// let idx = (pageNum-1) * per_page;
-  	console.log("SIZES OF ARRAYS: res" + restaurants.length + " att: " + attractions.length + " hot: " + hotels.length );
-  	let p = pageNum -1;
-
-  	var activeTabName = "";
-
-  	if (!this.state.hasSearched) {
-  		if (restaurants.length > 0)
-  			this.toggle("restaurantsTab");
-  		else if (attractions.length > 0)
-  			this.toggle("attractionsTab");
-  		else if (hotels.length > 0)
-  			this.toggle("hotelsTab");
+		xmlHttp.open("GET", url, false) // true for asynchronous
+		xmlHttp.send(null);
   	}
 
-  	var rIdx = (this.state.rPage-1) * per_page;
-  	var aIdx = (this.state.aPage-1) * per_page;
-  	var hIdx = (this.state.hPage-1) * per_page;
-  	console.log("IDX ON SHOWSEARCHITEMS:  pageNum: " + pageNum + " rIDX: " + rIdx);
+	onChangeSearchBoxText(event) {
+  		this.setState({value: event.target.value});
+  	}
 
-	switch (this.state.activeTab) {
-		case "restaurantsTab":
-			rIdx = p * per_page;
-			break;
-		case "attractionsTab":
-			aIdx = p * per_page;
-			break;
-		case "hotelsTab":
-			hIdx = p * per_page;
-			break;
+  	// This function is called every time we search and every time the page is changed.
+  	// Sets the cards we will display as part of the State
+	showSearchItems(pageNum) {
+
+		let startIdx = (pageNum - 1) * per_page;
+
+		var rStartIdx = (this.state.resPage-1) * per_page;
+		var aStartIdx = (this.state.attPage-1) * per_page;
+		var hStartIdx = (this.state.hotPage-1) * per_page;
+
+		switch (this.state.activeTab) {
+			case RES_TAB:
+				rStartIdx = startIdx;
+				break;
+			case ATT_TAB:
+				aStartIdx = startIdx;
+				break;
+			case HOT_TAB:
+				hStartIdx = startIdx;
+				break;
+		}
+
+		let rArray = restaurants.slice(rStartIdx, rStartIdx + per_page)
+			.map( (restaurant) => {
+				return <Col xs="12" sm="6" md="3">
+							<RestaurantSearchCard restaurant={restaurant} searchTerms={searchTerms}/>
+						</Col>;
+			});
+
+		let aArray =  attractions.slice(aStartIdx, aStartIdx + per_page)
+			.map( (attraction) => {
+				return <Col xs="12" sm="6" md="3">
+							<AttractionSearchCard attraction={attraction} searchTerms={searchTerms}/>
+						</Col>;
+			});
+
+
+		let hArray = hotels.slice(hStartIdx, hStartIdx + per_page)
+			.map( (hotel) => {
+				return <Col xs="12" sm="6" md="3">
+							<HotelSearchCard hotel={hotel} searchTerms={searchTerms}/>
+						</Col>;
+			});
+
+
+		this.setState({
+			displayedRes: rArray,
+			displayedAtt: aArray,
+			displayedHot: hArray,
+			hasSearched: true
+		});
 	}
 
-  	let rArray = restaurants.slice(rIdx, rIdx+per_page);
-  	let hArray = hotels.slice(hIdx, hIdx+per_page);
-  	let aArray = attractions.slice(aIdx, aIdx+per_page);
-  	this.setState({
-  		displayedRestaurants: rArray,
-  		displayedHotels: hArray,
-  		displayedAttractions: aArray,
-  		hasSearched: true
-  	});
-  }
-
-  enterPressed(event) {
-  	var code = event.keyCode || event.which;
+	enterPressed(event) {
+		var code = event.keyCode || event.which;
 	    if(code === 13)  //13 is the enter keycode
 	        this.onSearch(event);
 	}
@@ -181,14 +184,13 @@ export default class Search extends Component {
 	}
 
 	onSearch(event) {
-		// ?search=TERM1,TERM2,TERM3   TERM4A+TERM4B
 		event.preventDefault();
 
 		if (this.state.hasSearched) {
 			// clear current results
 			restaurants = [];
-			hotels = [];
 			attractions = [];
+			hotels = [];
 		}
 
 		let searchRequestText = this.createSearchString(this.state.value);
@@ -202,6 +204,13 @@ export default class Search extends Component {
 		this.request(urls[0], this.fillInRestaurants);
 		this.request(urls[1], this.fillInHotels);
 		this.request(urls[2], this.fillInAttractions);
+
+		if (restaurants.length > 0)
+			this.toggle(RES_TAB);
+		else if (attractions.length > 0)
+			this.toggle(ATT_TAB);
+		else if (hotels.length > 0)
+			this.toggle(HOT_TAB);
 
 		this.showSearchItems(1);
 	}
@@ -227,13 +236,13 @@ export default class Search extends Component {
 	    }
 	 }
 
-
 	render() {
 		const searchBox = 
 			<Row>
+				<br/>
 			<InputGroup>
 			{/* <i class="fas fa-search" style={styles}></i>*/}
-			<Input className="biggerText" type="text" onChange={this.onChange} value={this.state.value} onKeyPress={this.enterPressed.bind(this)}
+			<Input className="biggerText" type="text" onChange={this.onChangeSearchBoxText} value={this.state.value} onKeyPress={this.enterPressed.bind(this)}
 			placeholder="Search something..." />
 			<Button color="secondary" style={{fontSize: '1.5em'}}onClick={this.onSearch}>Search!</Button>
 			</InputGroup>
@@ -254,170 +263,165 @@ export default class Search extends Component {
 			</Row>
 			</div>;
 
-	const page_numbers = [];
-	var arrayLength = 0;
-	var activePage = 0;
-	switch (this.state.activeTab) {
-		case "restaurantsTab":
-			arrayLength = restaurants.length;
-			activePage = this.state.rPage;
-			break;
-		case "attractionsTab":
-			arrayLength = attractions.length;
-			activePage = this.state.aPage;
-			break;
-		case "hotelsTab":
-			arrayLength = hotels.length;
-			activePage = this.state.hPage;
-			break;
-	}
-	let pageCount = Math.ceil(arrayLength/per_page);
-	console.log("resturants length: " + restaurants.length);
-	console.log("active Tab: " + this.state.activeTab);
-	console.log("PAGE COUNT: " + pageCount + " arrayLength: " + arrayLength + " per page: " + per_page + " displayedRestaurants.length " + this.state.displayedRestaurants.length);
-	var restaurantCards = this.state.displayedRestaurants.map(function(restaurant) {
-		return <Col xs="12" sm="6" md="3"><RestaurantSearchCard restaurant={restaurant} searchTerms={searchTerms}/></Col>;
-	});
 
-	const restaurantComponent = 
-		<Row>
-		<div>
-		<br/>
-		{restaurantCards}
-		</div>
-		</Row>;
+		const page_numbers = [];
+		var arrayLength = 0;
+		var activePage = 0;
 
+		var activeTab = this.state.activeTab;
+		const resCount = restaurants.length;
+		const attCount = attractions.length;
+		const hotCount = hotels.length;
 
-	const hotelCards = this.state.displayedHotels.map(function(hotel) {
-		return <Col xs="12" sm="6" md="3"><HotelSearchCard hotel={hotel} searchTerms={searchTerms}/></Col>;
-	});
+		switch (activeTab) {
+			case RES_TAB:
+				arrayLength = resCount;
+				activePage = this.state.resPage;
+				break;
+			case ATT_TAB:
+				arrayLength = attCount;
+				activePage = this.state.attPage;
+				break;
+			case HOT_TAB:
+				arrayLength = hotCount;
+				activePage = this.state.hotPage;
+				break;
+		}
+		let pageCount = Math.ceil(arrayLength/per_page);
 
-	const hotelComponent = 
-		<div>
-		<br/>
-		<Row>
-		{hotelCards}
-		</Row>
-		</div>;
-	const attractionCards = this.state.displayedAttractions.map(function(attraction) {
-		return <Col xs="12" sm="6" md="3"><AttractionSearchCard attraction={attraction} searchTerms={searchTerms}/></Col>;
-	});
-
-	const attractionComponent = 
-		<div>
-		<br />
-		<Row>
-			{attractionCards}
-		</Row>
-		</div>;
-
-	const restaurantsNavItem =
-		          <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === 'restaurantsTab' })}
-              onClick={() => { this.toggle('restaurantsTab'); }}
-            >
-              Restaurants ({restaurants.length})
-            </NavLink>
-          </NavItem>;
-    const hotelsNavItem =
-              <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === 'attractionsTab' })}
-              onClick={() => { this.toggle('attractionsTab'); }}
-            >
-              Attractions ({attractions.length})
-            </NavLink>
-          </NavItem>;
-    const attractionsNavItem = 
-              <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === 'hotelsTab' })}
-              onClick={() => { this.toggle('hotelsTab'); }}
-            >
-              Hotels ({hotels.length})
-            </NavLink>
-          </NavItem>;
-
-	const tabContainer = 
-	<div>
-        <Nav tabs>
-        	{
-        		restaurants.length > 0 &&
-        		restaurantsNavItem
-        	}
-        	{
-        		hotels.length > 0 &&
-        		hotelsNavItem
-        	}
-        	{
-        		attractions.length > 0 &&
-        		attractionsNavItem
-        	}
-
-        </Nav>
-
-        <TabContent activeTab={this.state.activeTab}>
-
-          <TabPane tabId="restaurantsTab">
-            {restaurantComponent}
-          </TabPane>
-
-          <TabPane tabId="attractionsTab">
-            {attractionComponent}
-          </TabPane>
-
-          <TabPane tabId="hotelsTab">
-          	{hotelComponent}
-          </TabPane>
-        </TabContent>
-      </div>;
-
-
-	if (this.state.hasSearched) {
-		return(
-			<div className="background">
-        	<Header 
-        		title="Search Austin"
-        		image={HeaderBackground}
-        	/>
-        	<br />
-			<Container>
-				<Row>	
-					<Col xs="5"/><Col xs="2"><h1>Search Austin</h1></Col><Col xs="5"/>
+		const restaurantTabComponent = 
+			<TabPane tabId={RES_TAB}>
+				<Row>
+					<div>
+					<br/>
+						{this.state.displayedRes}
+					</div>
 				</Row>
-			{searchBox}
-			{
-				this.noResultsFound() ?
-				noResultsComponent
-				:
-				tabContainer
-			}
-			{
-				pageCount > 1 &&
-				 <Paginator pageCount={pageCount} activePage={activePage} onPageClicked={this.handlePageClick}/>
-			}
-			</Container>
-			</div>
-			);
-	} else {
-		return(							
-			<div className="background">
-        	<Header 
-        		title="Search Austin"
-        		image={HeaderBackground}
-        	/>
-        	<br />
-
-			<Container>
-				<Row>	
-					<Col xs="5"/><Col xs="2"><h1>Search Austin</h1></Col><Col xs="5"/>
+			</TabPane>;
+		const attractionTabComponent = 
+			<TabPane tabId={ATT_TAB}>
+				<div>
+				<br />
+				<Row>
+					{this.state.displayedAtt}
 				</Row>
+				</div>
+			</TabPane>;
+
+		const hotelTabComponent = 
+			<TabPane tabId={HOT_TAB}>
+				<div>
+				<br/>
+				<Row>
+					{this.state.displayedHot}
+				</Row>
+				</div>
+			</TabPane>;
+
+
+		const restaurantsNavItem =
+			          <NavItem>
+	            <NavLink
+	              className={classnames({ active: activeTab === RES_TAB })}
+	              onClick={() => { this.toggle(RES_TAB); }}
+	            >
+	              Restaurants ({resCount})
+	            </NavLink>
+	          </NavItem>;
+	    const attractionsNavItem = 
+	              <NavItem>
+	            <NavLink
+	              className={classnames({ active: activeTab === ATT_TAB })}
+	              onClick={() => { this.toggle(ATT_TAB); }}
+	            >
+	              Attractions ({attCount})
+	            </NavLink>
+	          </NavItem>;
+	    const hotelsNavItem =
+	              <NavItem>
+	            <NavLink
+	              className={classnames({ active: activeTab === HOT_TAB })}
+	              onClick={() => { this.toggle(HOT_TAB); }}
+	            >
+	              Hotels ({hotCount})
+	            </NavLink>
+	          </NavItem>;
+
+		const tabContainer = 
+			<div>
+		        <Nav tabs>
+		        	{
+		        		resCount > 0 &&
+		        		restaurantsNavItem
+		        	}
+		        	{
+		        		attCount > 0 &&
+		        		attractionsNavItem
+		        	}
+		        	{
+		        		hotCount > 0 &&
+		        		hotelsNavItem
+		        	}
+
+		        </Nav>
+
+		        <TabContent activeTab={activeTab}>
+
+		          {
+		          	resCount > 0 &&
+		          	restaurantTabComponent
+		          }
+		          {
+		          	attCount > 0 &&
+		          	attractionTabComponent
+		          }
+		          {
+		          	hotCount > 0 &&
+		          	hotelTabComponent
+		          }
+
+		        </TabContent>
+		      </div>;
+
+
+		if (this.state.hasSearched) {
+			return(
+				<div className="background">
+	        	<Header 
+	        		title="Search Austin"
+	        		image={HeaderBackground}
+	        	/>
+	        	<br />
+				<Container>
 				{searchBox}
-			</Container>
-			</div>
-			);
-	}
+				{
+					this.noResultsFound() ?
+					noResultsComponent
+					:
+					tabContainer
+				}
+				{
+					pageCount > 1 &&
+					 <Paginator pageCount={pageCount} activePage={activePage} onPageClicked={this.handlePageClick}/>
+				}
+				</Container>
+				</div>
+				);
+		} else {
+			return(							
+				<div className="background">
+	        	<Header 
+	        		title="Search Austin"
+	        		image={HeaderBackground}
+	        	/>
+	        	<br />
+
+				<Container>
+					{searchBox}
+				</Container>
+				</div>
+				);
+		}
 
 	}
 
