@@ -161,7 +161,7 @@ export default class Restaurants extends Component {
       pages_count++;
 
     var cards = this.state.restaurants_display.map(function(restaurant) {
-            return <RestaurantCard restaurant={restaurant} />;
+            return <Col xs="12" md="4"><RestaurantCard restaurant={restaurant} /></Col>;
           })
 
     return (
@@ -173,24 +173,24 @@ export default class Restaurants extends Component {
         />
         <br />
     		<Container id="jump">
-            <Col xs="12" md="2">
-              <RestaurantFilter handler={this.filterPage}/>
-              <br />
-              <Sort handler={this.sortPage}/>
-            </Col>
             <Row>
-            <CardColumns>
-            {
-              res_count > 0 &&
-              cards
-            }
-            {
-              res_count == 0 &&
-              <h1>No results found.</h1>
-            }
-            </CardColumns>
-            </Row>
+                <Col xs="12" md="2">
+                  <RestaurantFilter handler={this.filterPage}/>
+                  <br />
+                  <Sort handler={this.sortPage}/>
+                </Col>
 
+                <Col xs="12" md="10">
+                {
+                  res_count > 0 &&
+                  cards
+                }
+                {
+                  res_count == 0 &&
+                  <h1>No results found.</h1>
+                }
+                </Col>
+            </Row>
             <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick} />
       	</Container>
       </div>
