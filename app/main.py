@@ -42,7 +42,7 @@ def serve(path):
             return send_from_directory(REACT_FILES, 'index.html')
 """
 import tacoapi
-from models import Restaurant, Hotel, Images, Review, Attraction, app
+from models import Place, Restaurant, Hotel, Image, Review, Attraction, Hour, app
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, use_reloader=True, threaded=True)

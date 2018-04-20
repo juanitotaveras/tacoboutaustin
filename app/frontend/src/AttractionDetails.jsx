@@ -9,6 +9,7 @@ import RestaurantCard from './RestaurantCard';
 import HotelCard from './HotelCard';
 import { Link, Redirect } from 'react-router-dom';
 import { api_url } from './config';
+import Header from './Header';
 
 var nearby_restaurants = [];
 var nearby_hotels = [];
@@ -71,6 +72,18 @@ export default class AttractionsDetails extends Component {
     }
     return s;
   }
+
+  parseCategories() {
+    var categories = a_details["categories"];
+    var s = "";
+    for (var i = 0; i < categories.length; i++) {
+      if(i == categories.length-1)
+        s += categories[i]["name"];
+      else
+        s += categories[i]["name"] + ", ";
+    }
+    return s;
+  }
   
   render() {
     var nearby_restaurant_cards = nearby_restaurants.map(function(restaurant){
@@ -81,8 +94,12 @@ export default class AttractionsDetails extends Component {
               })
 
     var map = this.buildMapSrc();
+    var categories = this.parseCategories();
 
     return (
+      <div className="background">
+        <Header image={a_details.images[0]}/>
+        <br />
       <Container>
         {
           redirect == true &&
@@ -98,6 +115,8 @@ export default class AttractionsDetails extends Component {
               map_src={map}
               rating={a_details.rating}
               reviews={a_details.reviews}
+              phone={a_details.phone}
+              categories={categories}
               />
             </Col>
           </Row>
@@ -112,6 +131,7 @@ export default class AttractionsDetails extends Component {
           </Row></div>
         }
       </Container>
+      </div>
     );
   }
 

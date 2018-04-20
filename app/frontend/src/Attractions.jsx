@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import './App.css';
 import { Container, Row, Col, Button, Pagination, PaginationItem, 
   PaginationLink, Form, FormGroup } from 'reactstrap';
 import AttractionCard from './AttractionCard';
+import Header from './Header';
 import { api_url } from './config';
 import Sort from './Sort';
 import Filter from './Filter';
-
+import Paginator from './Paginator';
+import HeaderBackground from './assets/attractions_header_background.jpg';
+import TacoAnimation from './assets/taco_loading.gif';
 
 var att_count = 0;
 const per_page = 12;
@@ -26,9 +28,14 @@ export class Attraction {
 export default class Attractions extends Component {
   constructor(props) {
     super(props);
+    this.handlePageClick = this.handlePageClick.bind(this);
     this.sortPage = this.sortPage.bind(this)
     this.filterPage = this.filterPage.bind(this)
     this.fillInAttractions = this.fillInAttractions.bind(this)
+    this.doneLoading = this.doneLoading.bind(this);
+    this.requestCount = this.requestCount.bind(this);
+    this.requestPages = this.requestPages.bind(this);
+    this.getCount = this.getCount.bind(this);
     this.state = {
       onPage: 1,
       attractions_display: [],
@@ -36,13 +43,13 @@ export default class Attractions extends Component {
       filters: {
         rating: 0,
         zipcode: 0,
-      }
+      },
+      loading: false
     };
   }
 
   componentWillMount() {
     const url = api_url + "/attractions";
-    this.request(url, this.getCount);
     this.getPage(1, null, null, false);
   }
 
@@ -55,20 +62,32 @@ export default class Attractions extends Component {
     this.setState({
         attractions_display: temp_attractions
       });
+    this.doneLoading();
   } 
 
-  getCount(responseText) {
-    att_count = JSON.parse(responseText)["total"];
+  getCount(responseText, page_url) {
+      att_count = JSON.parse(responseText)["total"];
+      this.requestPages(page_url, this.fillInAttractions);
   }
 
-  request(url, parseResponse) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
-        parseResponse(xmlHttp.responseText);
-    }
-    xmlHttp.open("GET", url, false) // true for asynchronous
-    xmlHttp.send(null);
+  requestCount(count_url, page_url, getCount) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          getCount(xmlHttp.responseText, page_url);
+      }
+      xmlHttp.open("GET", count_url, true) // true for asynchronous
+      xmlHttp.send(null);
+  }
+
+  requestPages(page_url, fillInAttractions) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
+          fillInAttractions(xmlHttp.responseText);
+      }
+      xmlHttp.open("GET", page_url, true) // true for asynchronous
+      xmlHttp.send(null);
   }
 
   getDateString() {
@@ -89,17 +108,28 @@ export default class Attractions extends Component {
   getPage(pageNum, sortParam, fils) {
     var apiParams = [];
     var url = api_url + "/attractions?";
-
+    this.setState({
+      loading: true,
+    })
     // Sorting
-    if(sortParam != null)
+    // Sorting
+    if(sortParam != '')
     {
-      if (sortParam == "name") {
+      if (sortParam == "name_asc") {
         apiParams.push("order_by=name");
         apiParams.push("order=asc");
       }
-      else {
+      else if(sortParam == "name_desc") {
+        apiParams.push("order_by=name");
+        apiParams.push("order=desc");
+      } 
+      else if(sortParam == "rating_desc") {
         apiParams.push("order_by=rating");
         apiParams.push("order=desc");
+      }
+      else if(sortParam == "rating_asc") {
+        apiParams.push("order_by=rating");
+        apiParams.push("order=asc");
       }
     }
 
@@ -108,21 +138,31 @@ export default class Attractions extends Component {
       if(fils.rating != 0) {
         apiParams.push("rating=" + fils.rating);
       }
-      if(fils.zipcode != 0) {
-        apiParams.push("zipcode=" + fils.zipcode);
+      if(fils.selectedZipcodes != '') {
+        apiParams.push("zipcode=" + fils.selectedZipcodes);
+      }
+      if(fils.open == true) {
+        var timeString = this.getDateString();
+        apiParams.push("time=" + timeString);
+      }
+      if(fils.selectedCategories != '') {
+        apiParams.push("categories=" + fils.selectedCategories);
       }
     }
 
     const count_url = url + apiParams.join("&");
     const page_url = count_url + "&page=" + pageNum;
 
-    this.request(count_url, this.getCount);
-    this.request(page_url, this.fillInAttractions);
+    this.requestCount(count_url, page_url, this.getCount);
     this.setState({
       onPage: pageNum,
       sorted: sortParam,
       filters: fils
     });
+  }
+
+  doneLoading() {
+    this.setState({loading: false});
   }
 
   filterPage(filters) {
@@ -139,32 +179,28 @@ export default class Attractions extends Component {
 
 
   render() {
-    var page_numbers = [];
-    const pages_count = (att_count%per_page) == 0 ? att_count/per_page : att_count/per_page + 1;
-    for(var i = 1; i <= pages_count; i++)
-      page_numbers.push(i);
+    const loadingImage =
+      <div className="text-center">
+        <img src={TacoAnimation} alt="Loading Image" width="10%" height="auto" style={{float: 'center'}}/>
+      </div>;
+    var pages_count = Math.floor(att_count/per_page);
+    if (!((att_count%per_page) == 0))
+      pages_count++;
 
     var cards = this.state.attractions_display.map(function(attraction){
-            return <Col xs="6" sm="4"><AttractionCard attraction={attraction} /></Col>;
+            return <Col xs="12" md="4"><AttractionCard attraction={attraction} /></Col>;
           })
 
-    var pages = page_numbers.map((pageNum) => {
-      return <li onClick={() => this.handlePageClick(pageNum)}><PaginationItem><PaginationLink>{pageNum}</PaginationLink></PaginationItem></li>;
-    })
-
-    return (
-      <div>
-        <Container>
+    const container = 
+            <Container>
             <Row>
-                <Col><h1>Attractions</h1></Col>
-            </Row>
-            <Row>
-                <Col xs="2">
-                  <Filter handler={this.filterPage}/>
+                <Col xs="12" md="2">
+                  <Filter type="Attractions" handler={this.filterPage}/>
                   <br />
                   <Sort handler={this.sortPage}/>
                 </Col>
-                <Col><Container>
+
+                <Col xs="12" md="10">
                 {
                   att_count > 0 &&
                   cards
@@ -173,13 +209,27 @@ export default class Attractions extends Component {
                   att_count == 0 &&
                   <h1>No results found.</h1>
                 }
-                </Container></Col>
+                </Col>
             </Row>
-            <Row>
-                <Col sm="5"></Col>
-                <Col><Pagination size="lg">{pages}</Pagination></Col>
-            </Row>
-          </Container>
+            <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
+          </Container>;
+
+    return (
+      <div classname="background">
+        <Header 
+          title="A Cornucopia of Attractions" 
+          description={"Whether you want to relax with some Blues on the Green, "+
+          "splash around at Barton Springs, or rock out at Austin City Limits, "+
+          "you'll always find something to do in Austin."}
+          image={HeaderBackground}
+          />
+        <br />
+        {
+          this.state.loading ?
+          loadingImage
+          :
+          container
+        }
         </div>
     );
   }

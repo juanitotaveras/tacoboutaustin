@@ -9,23 +9,34 @@ import {
   Row, 
   Col
 } from 'reactstrap';
+import austin_skyline from './assets/austin_skyline.jpg';
+import austin_taco from './assets/austin_taco.jpg';
+import austin_pool from './assets/austin_pool.jpg';
+import austin_hotel from './assets/austin_hotel.jpg';
+import './css/Splash.css';
 
 const items = [
   {
-    src: 'https://odis.homeaway.com/odis/destination/5f483ac3-763b-4506-9e15-3fff2e1e8291.hw1.jpg',
+    src: austin_skyline,
     altText: 'Austin, Texas',
-    caption: 'Explore Austin!'
+    caption: 'WELCOME TO AUSTIN'
   },
   {
-    src: 'https://2u0yuyu2fs02fa819ut739hy-wpengine.netdna-ssl.com/wp-content/uploads/2017/05/crescent39.jpg',
-    altText: 'Postcard',
-    caption: 'Every tourist ever'
+    src: austin_taco,
+    altText: 'Where to eat',
+    caption: 'EXPLORE FOOD'
   },
   {
-    src: 'https://cdn.vox-cdn.com/uploads/chorus_image/image/54444777/austin_taco_project_tacos.0.0.jpg',
-    altText: 'TACOZ',
-    caption: 'Our bread and butter'
-  }
+    src: austin_pool,
+    altText: 'Where to chill',
+    caption: 'EXPLORE ATTRACTIONS'
+  },
+  {
+    src: austin_hotel,
+    altText: 'Where to stay',
+    caption: 'EXPLORE HOTELS'
+  },
+  
 ];
 
 
@@ -71,33 +82,27 @@ export default class Splash extends Component {
     const slides = items.map((item) => {
       return (
         <CarouselItem
+          className="nav-carousel-item"
           onExiting={this.onExiting}
           onExited={this.onExited}
           key={item.src} 
           >
           <img src={item.src} alt={item.altText} />
-          <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
+          <CarouselCaption className="c-caption" captionText={item.caption} captionHeader={item.altText} />
         </CarouselItem>
       );
     });
 
     return (
-    	<Container>
-    		<Row>
-          <Col>
-  		      <Carousel
-  		        activeIndex={activeIndex}
-  		        next={this.next}
-  		        previous={this.previous}
-  		      >
-  		        {/*<CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={this.goToIndex} />*/}
-  		        {slides}
-  		        <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
-  		        <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
-  		      </Carousel>
-          </Col>
-	      </Row>
-	    </Container>
+	      <Carousel
+	        activeIndex={activeIndex}
+	        next={this.next}
+	        previous={this.previous}
+	      >
+	        {slides}
+	        <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
+	        <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
+	      </Carousel>
   )};
 }
 

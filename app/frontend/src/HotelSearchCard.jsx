@@ -4,19 +4,25 @@ import { Card, CardImg, CardText, CardBody,
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Highlighter from './Highlighter';
+import NoImageFound from './assets/no_image_placeholder.png';
+import TacoRating from './TacoRating';
 
 export default class HotelCard extends Component {
   render() {
     var h = this.props.hotel;
     let spans = new Highlighter().getHighlightedTerms(h.name, this.props.searchTerms);
+
+    let image = (h.image == null) ? NoImageFound : h.image;
+
     return (
-      <div>
+      <div className="cardDiv">
         <Card>
-          <Link to={'/hotels/' + h.id}><CardImg top width="100%" height="200em" src={h.image} alt="Card image cap" /></Link>
+          <Link to={'/hotels/' + h.id}><CardImg top width="100%" height="200em" src={image} alt="Card image cap" /></Link>
           <CardBody>
-            <CardTitle>{spans}</CardTitle>
+            <CardTitle className="cardTitleText wrap">{spans}</CardTitle>
             <CardSubtitle></CardSubtitle>     
-            <CardText><span>Rating: {h.rating}/5</span> <span style={{float: 'right'}}>Zip code: {h.zip_code}</span></CardText>
+            <CardText className="cardSubText"><TacoRating rating={h.rating}/>
+            <span style={{float: 'right'}}>Zip code: {h.zip_code}</span></CardText>
             <Link to={'/hotels/' + h.id}><Button outline >Check it out!</Button></Link>
           </CardBody>
         </Card>

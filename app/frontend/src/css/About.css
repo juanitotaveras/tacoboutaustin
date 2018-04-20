@@ -1,0 +1,23 @@
+.about-card {
+	border-radius: 5%;
+	border-style: solid;
+    border-width: 1.5px;
+    border-color: grey;
+}
+
+.about-card-img {
+	position: relative;
+	overflow: hidden;
+	background-size: cover;
+    background-repeat: no-repeat;	
+    background-position: 50% 50%;
+    border-radius: 5%;
+}
+
+.about-card-name {
+	font-weight: bold;
+}
+
+.about-card-description {
+	font-weight: normal;
+}

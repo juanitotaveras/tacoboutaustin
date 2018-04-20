@@ -4,20 +4,26 @@ import { Card, CardImg, CardText, CardBody,
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Highlighter from './Highlighter';
+import NoImageFound from './assets/no_image_placeholder.png';
+import TacoRating from './TacoRating';
+
 
 export default class RestaurantCard extends Component {
 
   render(props) {
     var r = this.props.restaurant;
     let spans = new Highlighter().getHighlightedTerms(r.name, this.props.searchTerms);
+    let image = (r.image == null) ? NoImageFound : r.image;
     return (
       <div>
-        <Card>
-          <Link to={'/restaurants/' + r.id}><CardImg top width="100%" height="200em" src={r.image} alt="Le food" /></Link>
+        <Card className="cardDiv">
+          <Link to={'/restaurants/' + r.id}><CardImg top width="100%" height="200em" src={image} alt="Le food" /></Link>
           <CardBody>
-            <CardTitle>{spans}</CardTitle>
+            <CardTitle className="cardTitleText wrap">{spans}</CardTitle>
             <CardSubtitle>{r.food}</CardSubtitle>
-            <CardText><span>Rating: {r.rating}/5</span> <span style={{float: 'right'}}>Zip code: {r.zip_code}</span></CardText>
+            <CardText className="cardSubText">
+            <TacoRating rating={r.rating}/>
+            <span style={{float: 'right'}}>Zip code: {r.zip_code}</span></CardText>
             <Link to={'/restaurants/' + r.id}><Button outline >Check it out!</Button></Link>
           </CardBody>
         </Card>

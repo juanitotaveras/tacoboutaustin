@@ -22,23 +22,14 @@ import unittest
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
 from pyvirtualdisplay import Display
+from guitest_config import settings, initialize
 #from selenium.webdriver.common.by import By
 #from selenium.webdriver.common.keys import Keys
 #from selenium.webdriver.support.ui import Select
 
-
-NOT_VISIBLE = 0
-VISIBLE = 1
 class TestSearch(unittest.TestCase):
     def setUp(self):
-        self.display = Display(visible=NOT_VISIBLE, size=(1920, 1080))
-        self.display.start()
-        self.driver = webdriver.Chrome("./chromedriver")
-        self.base_url = 'http://tacoboutaustin.me'
-        self.verificationErrors = []
-        self.driver.get(self.base_url)
-        self.driver.implicitly_wait(20)
-        # self.accept_next_alert = True
+        self = initialize(self)
     
     def test_search(self):
         driver = self.driver

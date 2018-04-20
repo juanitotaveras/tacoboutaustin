@@ -8,6 +8,7 @@
 # app/backend/scraper/Helper_methods.py
 # --------------------------------------
 
+#from __future__ import print_function
 import requests
 import sys, os
 FILE_ABSOLUTE_PATH = os.path.abspath(__file__)  # get absolute filepath
@@ -16,8 +17,7 @@ PARENT_DIR = os.path.dirname(CURRENT_DIR)  # get parent directory path
 BASE_DIR = os.path.dirname(PARENT_DIR)  # get grand parent directory path
 sys.path.append(BASE_DIR)
 from main import app, db
-from models import Restaurant, Hotel, Images, Review, Attraction, Category, Association
-#from sqlalchemy import func
+from models import Place, Restaurant, Hotel, Image, Review, Attraction, Category, Association, Zipcode
 import pprint
 
 SYGIC_KEY = "EPrgMMQzpr9RMzaj25Tsw9QXrjtKbVMX2kY4NdWz"
@@ -27,19 +27,39 @@ GOOGLE_KEY = "AIzaSyD6F4xULR2I7GtEAH82L9vL6dAaEQAqnpQ"
 sygic_headers = {'x-api-key': SYGIC_KEY}
 yelp_headers = {'Authorization': YELP_KEY}
 
+
+pp = pprint.PrettyPrinter(indent=4)
+
+def getModel(type):
+    if type == "restaurant":
+        return Restaurant
+    if type == "hotel":
+        return Hotel
+    if type == "attraction":
+        return Attraction
+    return Place
+
 def scrap_yelp_data(name, longitude, latitude):
     url = "https://api.yelp.com/v3/businesses/search?term=" + "\"" + name + "\"&latitude=" + str(latitude) + "&longitude=" + str(longitude)
     response = requests.get(url, headers = yelp_headers)
     response_json = response.json()
-    if response_json['total'] <= 0 or len(response_json['businesses']) == 0:
+    if 'error' in response_json or response_json['total'] <= 0 or len(response_json['businesses']) == 0:
         return None, None
-    #pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(response.json())
-    id = response_json['businesses'][0]['id']
+    found = False
+    for business in response_json['businesses']:
+        if isNotExist(business):
+            id = business['id']
+            found = True
+            break
+    if not found:
+        return None, None
 
     url = "https://api.yelp.com/v3/businesses/" + id
     response = requests.get(url, headers = yelp_headers)
     detail = response.json()
+
+    if len(detail['location']['display_address']) < 2 or detail['location']['zip_code'] == '':
+        return None, None
 
     url = "https://api.yelp.com/v3/businesses/" + id + "/reviews"
     response = requests.get(url, headers = yelp_headers)
@@ -47,74 +67,16 @@ def scrap_yelp_data(name, longitude, latitude):
     
     return detail, review
 
-"""
-Sun - Thu: 11 am - 10:30 pm 
-Fri - Sat: 11 am - 11:30 pm
-"""
 
-days = {0:"Sunday", 1:"Monday", 2:"Tuesday", 3:"Wednesday", 4:"Thursday", 5:"Friday", 6:"Saturday"}
+def isNotExist(business):
+    another_place = Place.query.filter_by(name = business['name']).filter_by(phone = business['display_phone']).first() 
+    return (another_place is None)
 
-
-def convert_hour(hours):
-    start_hours = ["closed", "closed", "closed", "closed", "closed", "closed", "closed"]
-    end_hours = ["", "", "", "", "", "", ""]
-    open_hours = ""
-
-    table = {}
-    for i in range(len(hours)):
-        day_num = hours[i]['day']
-        table[day_num] = hours[i]
-
-    for day, value in table.items():
-        start_hours[day] = convert_military(table[day]['start'])
-        end_hours[day] = " - " + convert_military(table[day]['end'])
-    
-    for i in range(7):
-        open_hours += days[i] + ": "
-        if not end_hours is "":
-            open_hours += start_hours[i] + end_hours[i] + "<br>"
-    return open_hours
-
-def convert_military(time):
-    hour_num = int(time[:2])
-    result =""
-    if hour_num > 12:
-        result = str(hour_num - 12) + ":" + time[-2:] + "PM"
-    else:
-        result = str(hour_num) + ":" + time[-2:] +"AM"
-    if result == "0:00AM":
-        result = "12:00AM"
-    return result 
-
-
-"""
-def close_places(place_type, number, zip_code):
-    places = None
-    if place_type == "restaurant":
-        places = Restaurant.query.filter_by(zipcode=zip_code).order_by(
-            func.random()).limit(number).all()
-    if place_type == "hotel":
-        places = Hotel.query.filter_by(zipcode=zip_code).order_by(
-            func.random()).limit(number).all()
-    if place_type == "attraction":
-        places = Attraction.query.filter_by(zipcode=zip_code).order_by(
-            func.random()).limit(number).all()
-    places_data = []
-    if places is not None:
-        for place in places:
-            place_data = {}
-            place_data['id'] = place.id
-            place_data['name'] = place.name
-            place_data['images'] = [place.image1, place.image2, place.image3]
-            place_data['rating'] = place.rating
-            place_data['address'] = [place.address1, place.address2]
-            places_data.append(place_data)
-    return places_data
-"""
+def isHotel(categories):
+    for category in categories:
+        if category['alias'] == "realestateagents" or category['alias'] == "homedecor" or category['alias'] == "collegeuniv" or category['alias'] == "structuralengineers" or category['alias'] == "hair_extensions":
+            return False
+    return True
 
 if __name__ == "__main__":
-    print(convert_military("1130"))
-    #places_data = close_places("restaurant", 2, 78752)
-    #restaurant = Restaurant.query.filter_by(zipcode=78752).all()
-    #print(restaurant)
-    #print(places_data)
+    pass

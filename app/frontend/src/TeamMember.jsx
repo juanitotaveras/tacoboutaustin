@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import {Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
 
 export default class TeamMember extends Component {
@@ -8,17 +7,17 @@ export default class TeamMember extends Component {
 	}
 	render(props) {
 		return (
-			<Card>
-              <CardImg top width="50%" height="300em" src={this.props.imageSrc} alt={this.props.imageAlt}/>
+			<Card className="about-card">
+              <CardImg top width="300em" height="330em" className="about-card-img" src={this.props.imageSrc} alt={this.props.imageAlt}/>
               <CardBody>
-                <CardTitle> {this.props.name}</CardTitle>
-                <CardSubtitle> {this.props.bio}</CardSubtitle>
+                <CardTitle className="cardTitleText about-card-name"> {this.props.name}</CardTitle>
+                <CardSubtitle className="cardSubText about-card-description"> {this.props.bio}</CardSubtitle>
+                <br />
                 <CardText> 
-                  {this.props.responsibilities} <br/>
-                  Commits: {this.props.commits} <br/>
-                  Issues: {this.props.issues} <br/>
-                  Unit Tests: {this.props.unitTests}
-
+                  <span className="medPlusText">Responsibilities: {this.props.responsibilities} <br/></span>
+                  <span  className="medText">
+                  Commits: {this.props.commits}, Issues: {this.props.issues}, Unit Tests: {this.props.unitTests}
+                  </span>
                 </CardText>
               </CardBody>
             </Card>);

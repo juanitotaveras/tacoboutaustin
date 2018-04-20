@@ -24,20 +24,11 @@ from unittest import main, TestCase
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from pyvirtualdisplay import Display
+from guitest_config import settings, initialize
 
-
-
-NOT_VISIBLE = 0
-VISIBLE = 1
 class HotelsTest(TestCase):
     def setUp(self):
-        self.display = Display(visible=NOT_VISIBLE, size=(1920, 1080))
-        self.display.start()
-        self.driver = webdriver.Chrome("./chromedriver")
-        self.base_url = 'http://tacoboutaustin.me'
-        self.verificationErrors = []
-        self.driver.implicitly_wait(10)
-        # self.accept_next_alert = True
+        self = initialize(self)
 
     def test_click_on_hotel_details(self):
         # self.driver.find_element_by_xpath

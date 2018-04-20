@@ -26,7 +26,7 @@ WORKDIR /app/frontend
 # install dependencies
 RUN npm install
 RUN npm install --save reactstrap@next react react-dom 
-RUN npm install --save bootstrap reactstrap@next react-router-dom
+RUN npm install --save bootstrap reactstrap@next react-router-dom react-select
 RUN npm install --save-dev mocha
 
 # Install Python dependencies (from Downing's site)
