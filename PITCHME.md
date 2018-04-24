@@ -1,6 +1,6 @@
 ---?image=assets/image/austin_skyline.jpg
 
-# Tacoboutaustin.me
+# Tacoboutaustin
 
 ### Where to eat, where to stay, and what to do in Austin, Texas.
 
