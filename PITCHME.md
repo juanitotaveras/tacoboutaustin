@@ -4,7 +4,7 @@
 
 ### Where to eat, where to stay, and what to do in Austin, Texas.
 
----?image=assets/image/kyle-gregory-devaras.jpg
+---?image=assets/image/austin_skyline.jpg
 
 ## Tips!
 
