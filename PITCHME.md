@@ -6,8 +6,6 @@
 
 ---?image=assets/image/austin_skyline.jpg
 
-- image of Austin, TX
-
 ## Tips!
 
 <br>
