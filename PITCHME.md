@@ -33,7 +33,10 @@
 ---
 
 ## Eduardo Campos
- - test content
+ - I’m a third year CS student, currently working at Synopsys.
+ - Born and raised in San Luis Potosi, Mexico.
+ - I worked on the front-end of the website.
+ - Mainly on the details page for each model, overall look and feel and some documentation.
 
 ---
 
