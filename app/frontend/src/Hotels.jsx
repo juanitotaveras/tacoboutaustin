@@ -175,14 +175,16 @@ export default class Hotels extends Component {
   }
 
   handlePageClick(pageNum) {
+    document.getElementById('jump').scrollIntoView();
     this.getPage(pageNum, this.state.sorted, this.state.filters);
   }
 
   render() {
     const loadingImage =
       <div className="text-center">
-        <img src={TacoAnimation} alt="Loading Image" width="10%" height="auto" style={{float: 'center'}}/>
+        <img src={TacoAnimation} alt="Loading Image" width="65%" height="auto" style={{marginLeft: '60%'}}/>
       </div>;
+
     var pages_count = Math.floor(hot_count/per_page);
     if (!((hot_count%per_page) == 0))
       pages_count++;
@@ -191,27 +193,17 @@ export default class Hotels extends Component {
             return <Col xs="12" md="4"><HotelCard hotel={hotel} /></Col>;
           })
 
-    const container = 
-            <Container>
-            <Row>
-                <Col xs="12" md="2">
-                  <Filter type="Hotels" handler={this.filterPage}/>
-                  <br />
-                  <Sort handler={this.sortPage}/>
-                </Col>
-                <Col xs="12" md="10">
-                {
-                  hot_count > 0 &&
-                  cards
-                }
-                {
-                  hot_count == 0 &&
-                  <h1>No results found.</h1>
-                }
-                </Col>
-            </Row>
-            <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
-          </Container>;
+    const container =      
+      <Col xs="12" md="10">
+      {
+        hot_count > 0 &&
+        cards
+      }
+      {
+        hot_count == 0 &&
+        <h1>No results found.</h1>
+      }
+      </Col>
 
     return (
       <div className="background">
@@ -221,14 +213,28 @@ export default class Hotels extends Component {
           image={HeaderBackground}
         />
         <br />
-          {
-            this.state.loading ?
-            loadingImage
-            :
-            container
-          }
 
+        <Container id="jump">
+            <Row>
+                <Col xs="12" md="2">
+                  <Filter type="Hotels" handler={this.filterPage}/>
+                  <br />
+                  <Sort handler={this.sortPage}/>
+                </Col>
+            {
+              this.state.loading ?
+              loadingImage
+              :
+              container
+            }
+           </Row>
 
+            {
+              !this.state.loading &&
+              <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick} />
+            }         
+
+          </Container>
         </div>
     );
   }
