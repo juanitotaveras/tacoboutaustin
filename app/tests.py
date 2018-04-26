@@ -3,6 +3,7 @@
 # pylint: disable = bad-whitespace
 # pylint: disable = invalid-name
 # pylint: disable = missing-docstring
+# pylint: disable = too-many-public-methods
 
 # --------------------------------------
 # app/backend/tests.py
@@ -13,7 +14,7 @@ import requests
 from flask_json_multidict import MultiDict
 from tacoapi import close_places, isOpen, getSearchQuery, getFilterQuery, getSortAndPageQuery
 from models import Hotel, Restaurant, Attraction
-from main import app
+
 
 API_URL = "http://api.tacoboutaustin.me/"
 
@@ -248,7 +249,9 @@ class TestApi(TestCase):
             self.assertTrue(isinstance(place, Restaurant))
             haveCategories = False
             for assoc in place.categories:
-                haveCategories = haveCategories or assoc.category_id == "japanese" or assoc.category_id == "cocktailbars"
+                haveCategories = haveCategories or \
+                                assoc.category_id == "japanese" or \
+                                assoc.category_id == "cocktailbars"
             self.assertTrue(haveCategories)
 
     def test_categories_filter_query_3(self):
@@ -270,7 +273,9 @@ class TestApi(TestCase):
             self.assertTrue(isinstance(place, Hotel))
             haveCategories = False
             for assoc in place.categories:
-                haveCategories = haveCategories or assoc.category_id == "musicvenues" or assoc.category_id == "divebars"
+                haveCategories = haveCategories or \
+                                assoc.category_id == "musicvenues" or \
+                                assoc.category_id == "divebars"
             self.assertTrue(haveCategories)
     def test_categories_filter_query_5(self):
         args = MultiDict([('categories', 'hiking')])
@@ -291,7 +296,9 @@ class TestApi(TestCase):
             self.assertTrue(isinstance(place, Attraction))
             haveCategories = False
             for assoc in place.categories:
-                haveCategories = haveCategories or assoc.category_id == "hiking" or assoc.category_id == "parks"
+                haveCategories = haveCategories or \
+                assoc.category_id == "hiking" or \
+                assoc.category_id == "parks"
             self.assertTrue(haveCategories)
 
     def test_rating_filter_query_1(self):
