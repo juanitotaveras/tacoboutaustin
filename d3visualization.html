@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<html>
+<head>
 <meta charset="utf-8">
 <style>
 
@@ -31,6 +33,14 @@
 }
 
 </style>
+</head>
+
+<body>
+
+  <h1>Visualizing Learn2Earn's data </h1>
+
+  <p>Learn2Earn is a site for those who are interested in finding courses to take and jobs that are related to such courses. Their API returns a list of subjects, courses within that subject, and jobs related to that subject. Each large bubble on the screen represents a subject. Each of the large bubbles is comprised of smaller bubbles which represent the courses within each subject. The size of the large bubbles are scaled according to the number of jobs related to that subject. </p>
+
 <svg width="960" height="960"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
@@ -108,3 +118,6 @@ d3.json("data.json", function(error, root) {
 });
 
 </script>
+
+</body>
+</html>
