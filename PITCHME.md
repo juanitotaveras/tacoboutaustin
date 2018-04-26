@@ -21,13 +21,20 @@
 --- 
 
 ## Caroline Shi
-@title[Download this Template!]
 - test content
 
+---
 ## An Vo
--  hai
+ - I moved to the U.S about five years ago.
+ - I worked mostly on the back-end.
+ - I created tables, relationships, API endpoints and wrote unit tests.
+
+---
 
 ## Eduardo Campos
+ - test content
+
+---
 
 ---
 
