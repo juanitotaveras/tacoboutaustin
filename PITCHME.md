@@ -42,8 +42,6 @@
 
 ---
 
----
-
 # DEMO
 ## Prepare to be amazed
 
