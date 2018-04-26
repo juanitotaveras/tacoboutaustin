@@ -73,7 +73,7 @@ d3.json("data.json", function(error, root) {
       .attr("class", "label")
       .style("fill-opacity", function(d) { return d.parent === root ? 1 : 0; })
       .style("display", function(d) { return d.parent === root ? "inline" : "none"; })
-      .text(function(d) { return d.data.name.substring(0, 8); });
+      .text(function(d) { return d.children ? d.data.name : d.data.name.substring(0, 8) ; });
 
   var node = g.selectAll("circle,text");
 
