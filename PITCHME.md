@@ -21,7 +21,8 @@
 --- 
 
 ## Caroline Shi
-- test content
+- I'm a third year student and a unicorn (a native Austinite!)
+- I worked on the front-end, including writing React components and unit tests. Specifically, I worked on things such as the sorting, filtering, splash page, and grid cards. 
 
 ---
 ## An Vo
@@ -32,7 +33,10 @@
 ---
 
 ## Eduardo Campos
- - test content
+ - I’m a third year CS student, currently working at Synopsys.
+ - Born and raised in San Luis Potosi, Mexico.
+ - I worked on the front-end of the website.
+ - Mainly on the details page for each model, overall look and feel and some documentation.
 
 ---
 
