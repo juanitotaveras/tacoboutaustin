@@ -58,9 +58,9 @@
 
 ## What did we do well? - Frontend
 
-- The Splash Page is beautiful.
-- The logo, loading animation, and rating icons are custom-made, original, and relevant to the site.
-- The site is very user-friendly, easy to navigate, and looks good overall.
+- The Splash Page is beautiful. |
+- The logo, loading animation, and rating icons are custom-made, original, and relevant to the site. |
+- The site is very user-friendly, easy to navigate, and looks good overall. |
 - We implemented our own pagination and highlighting components without dependencies.
 - Filtering and sorting work very well also.
 - Our site also looks pretty good on mobile devices.
