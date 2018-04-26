@@ -6,6 +6,19 @@
 
 ---?image=assets/image/austin_skyline.jpg
 
+## Juanito Taveras
+- I'm finishing college next week.
+- I worked mainly on front-end content. I made drawings and animations for the site, and wrote a lot of JSX code to put together our React components, such as Searching, Highlighting, and Loading components.
+
+## James Crabtree
+
+## Caroline Shi
+
+## An Vo
+- 
+
+## Eduardo Campos
+
 ## Tips!
 
 <br>
