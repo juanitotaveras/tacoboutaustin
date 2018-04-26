@@ -17,6 +17,7 @@ before_install:
     - make create_env
     - docker ps
     - make gui_testing
+    - pip install -r requirements.txt
 
 install:
     - npm install -g istanbul
