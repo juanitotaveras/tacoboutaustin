@@ -7,7 +7,7 @@
 ---
 
 ## Juanito Taveras
-- I'm finishing college next week.
+- I'm finishing college next week. I enjoy making multi-media content.
 - I worked mainly on front-end content. I made drawings and animations for the site, and wrote a lot of JSX code to put together our React components, such as Searching, Highlighting, and Loading components.
 
 ---
@@ -28,6 +28,17 @@
 -  hai
 
 ## Eduardo Campos
+
+---
+
+# DEMO
+## Prepare to be amazed
+
+---
+
+## Unit test screenshot
+
+--- 
 
 ## Tips!
 
