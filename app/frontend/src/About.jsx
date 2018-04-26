@@ -247,6 +247,7 @@ class About extends Component {
             <a href="https://carorineee.gitbooks.io/report-and-critiques/content/">Technical Report</a><br/>
             <a href="https://github.com/juanitotaveras/tacoboutaustin">Github Repo</a><br/>
             <a href="https://travis-ci.org/juanitotaveras/tacoboutaustin">Travis CI</a><br/>
+            <a href="http://tacoboutaustin.me:3000/d3visualization.html">D3 Visualization</a><br/>
         </p>
         </Jumbotron>
       </Container>
