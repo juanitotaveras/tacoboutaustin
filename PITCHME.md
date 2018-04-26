@@ -21,8 +21,8 @@
 --- 
 
 ## Caroline Shi
-@title[Download this Template!]
-- test content
+- I'm a third year student and a unicorn (a native Austinite!)
+- I worked on the front-end, including writing React components and unit tests. Specifically, I worked on things such as the sorting, filtering, splash page, and grid cards. 
 
 ## An Vo
 -  hai
