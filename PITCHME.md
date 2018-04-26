@@ -4,7 +4,7 @@
 
 ### Where to eat, where to stay, and what to do in Austin, Texas.
 
----?image=assets/image/austin_skyline.jpg
+---
 
 ## Juanito Taveras
 - I'm finishing college next week.
