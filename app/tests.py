@@ -12,7 +12,7 @@ from unittest import main, TestCase
 import requests
 from flask_json_multidict import MultiDict
 from tacoapi import close_places, isOpen, getSearchQuery, getFilterQuery, getSortAndPageQuery
-from models import Hotel, Restaurant, Attraction, Place, Hour, Distance
+from models import Hotel, Restaurant, Attraction
 from main import app
 
 API_URL = "http://api.tacoboutaustin.me/"
@@ -39,25 +39,25 @@ class TestApi(TestCase):
         self.assertEqual(status, "OK")
 
     def test_message_restaurant_id_1(self):
-        response = requests.get(API_URL + "restaurants/0")
+        response = requests.get(API_URL + "restaurants/1")
         status = response.json()['status']
         self.assertEqual(response.ok, True)
         self.assertEqual(status, "OK")
 
     def test_message_restaurant_id_2(self):
-        response = requests.get(API_URL + "restaurants/201") # invalid id
+        response = requests.get(API_URL + "restaurants/500") # invalid id
         status = response.json()['status']
         self.assertEqual(response.ok, False)
         self.assertEqual(status, "INVALID_ID")
 
     def test_message_hotel_id_1(self):
-        response = requests.get(API_URL + "hotels/0")
+        response = requests.get(API_URL + "hotels/1")
         status = response.json()['status']
         self.assertEqual(response.ok, True)
         self.assertEqual(status, "OK")
 
     def test_message_hotel_id_2(self):
-        response = requests.get(API_URL + "hotels/201")
+        response = requests.get(API_URL + "hotels/300")
         status = response.json()['status']
         self.assertEqual(response.ok, False)
         self.assertEqual(status, "INVALID_ID")
@@ -69,7 +69,7 @@ class TestApi(TestCase):
         self.assertEqual(status, "OK")
 
     def test_message_attraction_id_2(self):
-        response = requests.get(API_URL + "attractions/201")
+        response = requests.get(API_URL + "attractions/500")
         status = response.json()['status']
         self.assertEqual(response.ok, False)
         self.assertEqual(status, "INVALID_ID")
@@ -151,7 +151,7 @@ class TestApi(TestCase):
         for place in response:
             self.assertTrue(isinstance(place, Restaurant))
             self.assertTrue("taco" in place.name.lower() or "taco" in str(place.zipcode))
-    
+
     def test_search_query_2(self):
         args = MultiDict([('search', 'taco,78701'), ('search_type', 'and')])
         query = getSearchQuery(args, Restaurant)
@@ -169,7 +169,7 @@ class TestApi(TestCase):
         for place in response:
             self.assertTrue(isinstance(place, Hotel))
             self.assertTrue("austin" in place.name.lower() or "austin" in str(place.zipcode))
-    
+
     def test_search_query_4(self):
         args = MultiDict([('search', 'austin,78701'), ('search_type', 'and')])
         query = getSearchQuery(args, Hotel)
@@ -179,7 +179,7 @@ class TestApi(TestCase):
             name_check = "austin" in place.name.lower() or "78701" in place.name.lower()
             zipcode_check = "austin" in str(place.zipcode) or "78701" in str(place.zipcode)
             self.assertTrue( name_check and zipcode_check)
-    
+
     def test_search_query_5(self):
         args = MultiDict([('search', 'Austin')])
         query = getSearchQuery(args,Attraction)
@@ -187,7 +187,7 @@ class TestApi(TestCase):
         for place in response:
             self.assertTrue(isinstance(place, Attraction))
             self.assertTrue("austin" in place.name.lower() or "austin" in str(place.zipcode))
-    
+
     def test_search_query_6(self):
         args = MultiDict([('search', 'austin,78701'), ('search_type', 'and')])
         query = getSearchQuery(args, Attraction)
@@ -197,7 +197,7 @@ class TestApi(TestCase):
             name_check = "austin" in place.name.lower() or "78701" in place.name.lower()
             zipcode_check = "austin" in str(place.zipcode) or "78701" in str(place.zipcode)
             self.assertTrue( name_check and zipcode_check)
-    
+
     def test_filter_query_1(self):
         args = MultiDict([('zipcode', '78701')])
         query = getFilterQuery(Hotel.query, args, Hotel)
@@ -213,7 +213,7 @@ class TestApi(TestCase):
         for place in response:
             self.assertTrue(isinstance(place, Restaurant))
             self.assertEqual(place.zipcode, 78701)
-    
+
     def test_zipcode_filter_query_1(self):
         args = MultiDict([('zipcode', '78701')])
         query = getFilterQuery(Attraction.query, args, Attraction)
