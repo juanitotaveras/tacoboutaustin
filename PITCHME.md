@@ -95,7 +95,8 @@
 ---
 
 ## What puzzles us?
-- We would also like to save filters and user preferences when users navigate throughout the site - we can use cookies for this, but we didn't put time into implementing these details  |
+- We would also like to save filters and user preferences when users navigate throughout the site; We can use cookies for this, but we didn't put time into implementing these details  |
+
 - We would like to get better data, but found it difficult because the best APIs were closed off to us  |
 
 ---
