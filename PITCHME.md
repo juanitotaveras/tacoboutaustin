@@ -10,13 +10,15 @@
 - I'm finishing college next week.
 - I worked mainly on front-end content. I made drawings and animations for the site, and wrote a lot of JSX code to put together our React components, such as Searching, Highlighting, and Loading components.
 
-<br>
+---?image=assets/image/austin_skyline.jpg
 
 
 ## James Crabtree
+
 - test content
 
 ## Caroline Shi
+@title[Download this Template!]
 - test content
 
 ## An Vo
