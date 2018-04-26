@@ -54,9 +54,9 @@
 
 # Self-Critique
 
-## What did we do well?
+--- 
 
-### Frontend
+## What did we do well? - Frontend
 
 - The Splash Page is beautiful.
 - The logo, loading animation, and rating icons are custom-made, original, and relevant to the site.
@@ -67,8 +67,8 @@
 
 ---
 
-## What did we do well?
-### Backend
+## What did we do well? -  Backend
+
 - Our data models are structured in a very logical and clean way.
 - Our API is easy-to-use and has many options for developers.
 - We don't use Flask RESTless, and our API is custom-made.
@@ -129,6 +129,7 @@ We felt that the website didn't look very nice and that the instance detail page
 We felt that we should be able to filter courses and jobs by related subject since that seemed like something a user might want to know. We also felt that the way they display related models on the details page of each instance was very unappealing and confusing.
 
 --- 
+
 
 ## Tips!
 
