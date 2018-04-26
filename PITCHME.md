@@ -1,39 +1,51 @@
----?image=assets/image/austin_skyline.jpg
+
+<!-- .slide: data-background-image="./assets/md/assets/austin_skyline.jpg" data-background-size="100% 100%" data-background-color=" " data-background-position="center" -->
+
 
 # Tacoboutaustin
 
 ### Where to eat, where to stay, and what to do in Austin, Texas.
 
----?image=assets/image/austin_skyline.jpg
+---
+<!-- .slide: data-background-image="./assets/md/assets/austin_skyline.jpg" data-background-size="100% 100%" data-background-color=" " data-background-position="center" -->
+
 
 ## Tips!
 
 <br>
 
-@fa[arrows gp-tip](Press F to go Fullscreen)
+<i class="fa fa-arrows gp-tip" aria-hidden="true"> Press F to go Fullscreen</i>
 
-@fa[microphone gp-tip](Press S for Speaker Notes)
+<i class="fa fa-microphone gp-tip" aria-hidden="true"> Press S for Speaker Notes</i>
 
----?image=assets/image/kyle-gregory-devaras.jpg
+---
+<!-- .slide: data-background-image="./assets/md/assets/kyle-gregory-devaras.jpg" data-background-size="100% 100%" data-background-color=" " data-background-position="center" -->
+
 
 ## Template Features
 
-- Code Presenting |
-- Repo Source, Static Blocks, GIST |
-- Custom CSS Styling |
-- Slideshow Background Image |
-- Slide-specific Background Images |
-- Custom Logo, TOC, and Footnotes |
+- Code Presenting  <!-- .element: class="fragment" -->
+- Repo Source, Static Blocks, GIST  <!-- .element: class="fragment" -->
+- Custom CSS Styling  <!-- .element: class="fragment" -->
+- Slideshow Background Image  <!-- .element: class="fragment" -->
+- Slide-specific Background Images  <!-- .element: class="fragment" -->
+- Custom Logo, TOC, and Footnotes  <!-- .element: class="fragment" -->
 
----?code=sample/go/server.go&lang=golang&title=Golang File
+---
+### Code Block Delimiter
+sample/go/server.go
+### Source File Not Found
 
-@[1,3-6](Present code found within any repo source file.)
-@[8-18](Without ever leaving your slideshow.)
-@[19-28](Using GitPitch code-presenting with (optional) annotations.)
 
----?image=assets/image/john-reign-abarintos.jpg
+<span class="code-presenting-annotation fragment current-only" data-code-focus="1,3-6">Present code found within any repo source file.</span>
+<span class="code-presenting-annotation fragment current-only" data-code-focus="8-18">Without ever leaving your slideshow.</span>
+<span class="code-presenting-annotation fragment current-only" data-code-focus="19-28">Using GitPitch code-presenting with (optional) annotations.</span>
 
-@title[JavaScript Block]
+---
+<!-- .slide: data-background-image="./assets/md/assets/john-reign-abarintos.jpg" data-background-size="100% 100%" data-background-color=" " data-background-position="center" -->
+
+
+<span class="menu-title" style="display: none">JavaScript Block</span>
 
 <p><span class="slide-title">JavaScript Block</span></p>
 
@@ -60,17 +72,122 @@ http.createServer(function (request, response) {
 }).listen(8080);
 ```
 
-@[1,2](You can present code inlined within your slide markdown too.)
-@[9-17](Displayed using code-syntax highlighting just like your IDE.)
-@[19-20](Again, all of this without ever leaving your slideshow.)
+<span class="code-presenting-annotation fragment current-only" data-code-focus="1,2">You can present code inlined within your slide markdown too.</span>
+<span class="code-presenting-annotation fragment current-only" data-code-focus="9-17">Displayed using code-syntax highlighting just like your IDE.</span>
+<span class="code-presenting-annotation fragment current-only" data-code-focus="19-20">Again, all of this without ever leaving your slideshow.</span>
 
----?gist=onetapbeyond/494e0fecaf0d6a2aa2acadfb8eb9d6e8&lang=scala&title=Scala GIST
+---
 
-@[23](You can even present code found within any GitHub GIST.)
-@[41-53](GIST source code is beautifully rendered on any slide.)
-@[57-62](And code-presenting works seamlessly for GIST too, both online and offline.)
+<span class='menu-title slide-title'>Scala GIST</span>
+```scala
+package io.onetapbeyond.lambda.spark.executor.examples
 
----?image=assets/image/kyle-gregory-devaras.jpg
+import io.onetapbeyond.lambda.spark.executor.Gateway._
+import io.onetapbeyond.aws.gateway.executor._
+import org.apache.spark._
+import scala.collection.JavaConverters._
+
+/*
+ * TaskDelegation
+ *
+ * https://github.com/onetapbeyond/lambda-spark-executor
+ *
+ * A sample application that demonstrates the basic usage
+ * of SAMBA to delegate selected Spark RDD tasks to execute
+ * on AWS Lambda compute infrastructure in the cloud.
+ */
+object TaskDelegation {
+
+  def main(args:Array[String]):Unit = {
+
+    try {
+
+      val sc = initSparkContext()
+
+      /*
+       * Initialize a basic batch data source for the
+       * example by generating an RDD[Int].
+       */
+      val dataRDD = sc.parallelize(1 to BATCH_DATA_SIZE)
+
+      /*
+       * API_GATEWAY represents the API on the AWS API
+       * Gateway implemented by an AWS Lambda function.
+       * We register the gateway as a Spark broadcast
+       * variable so it can be safely referenced later
+       * within the Spark RDD.map operation that builds
+       * our AWSTask.
+       */
+      val gateway = sc.broadcast(API_GATEWAY)
+
+      /*
+       * Map over dataRDD[Int] to produce an RDD[AWSTask].
+       * Each AWSTask will execute an AWS Lambda function
+       * exposed by the API_SCORE_ENDPOINT endpoint on the
+       * AWS API Gateway.
+       */
+      val aTaskRDD = dataRDD.map(num => {
+
+        AWS.Task(gateway.value)
+           .resource(API_SCORE_ENDPOINT)
+           .input(Map("num" -> num).asJava)
+           .post()
+      })
+
+      aTaskRDD.foreach { aTask => println(aTask) }
+
+      /*
+       * Delegate aTaskRDD[AWSTask] execution to AWS Lambda
+       * compute infrastructure to produce
+       * aTaskResultRDD[AWSResult].
+       */
+      val aTaskResultRDD = aTaskRDD.delegate
+
+      /*
+       * As this is an example application we can simply use
+       * the foreach() operation on the RDD to force the
+       * computation and to output the results. And as we are
+       * using a mock API on the AWS API Gateway there is no
+       * response data, the result simply indicates success
+       * or failure.
+       */
+      aTaskResultRDD.foreach { result => {
+        println("TaskDelegation: compute score input=" +
+          result.input + " result=" + result.success)
+      }}
+
+    } catch {
+      case t:Throwable =>
+        println("TaskDelegation: caught ex=" + t)
+    }
+
+  }
+
+  def initSparkContext():SparkContext = {
+    val conf = new SparkConf().setAppName(APP_NAME)
+    new SparkContext(conf)
+  }
+
+  private val APP_NAME = "SAMBA Task Delegation Example"
+  private val BATCH_DATA_SIZE = 10
+  private val API_ID = "06ti6xmgg2"
+  private val API_STAGE = "mock"
+  private val API_SCORE_ENDPOINT = "/score"
+  private val API_GATEWAY:AWSGateway =
+    AWS.Gateway(API_ID).region(AWS.Region.OREGON)
+                       .stage(API_STAGE)
+                       .build()
+}
+```
+
+
+<span class="code-presenting-annotation fragment current-only" data-code-focus="23">You can even present code found within any GitHub GIST.</span>
+<span class="code-presenting-annotation fragment current-only" data-code-focus="41-53">GIST source code is beautifully rendered on any slide.</span>
+<span class="code-presenting-annotation fragment current-only" data-code-focus="57-62">And code-presenting works seamlessly for GIST too, both online and offline.</span>
+
+---
+<!-- .slide: data-background-image="./assets/md/assets/kyle-gregory-devaras.jpg" data-background-size="100% 100%" data-background-color=" " data-background-position="center" -->
+
 
 ## Template Help
 
@@ -81,7 +198,9 @@ http.createServer(function (request, response) {
 - [Slide-specific Background Images](https://github.com/gitpitch/gitpitch/wiki/Image-Slides#background)
 - [Custom Logo](https://github.com/gitpitch/gitpitch/wiki/Logo-Setting), [TOC](https://github.com/gitpitch/gitpitch/wiki/Table-of-Contents), and [Footnotes](https://github.com/gitpitch/gitpitch/wiki/Footnote-Setting)
 
----?image=assets/image/kyle-gregory-devaras.jpg
+---
+<!-- .slide: data-background-image="./assets/md/assets/kyle-gregory-devaras.jpg" data-background-size="100% 100%" data-background-color=" " data-background-position="center" -->
+
 
 ## Go GitPitch Pro!
 
@@ -101,22 +220,25 @@ http.createServer(function (request, response) {
     </ul>
 </div>
 
----?image=assets/image/kyle-gregory-devaras.jpg
+---
+<!-- .slide: data-background-image="./assets/md/assets/kyle-gregory-devaras.jpg" data-background-size="100% 100%" data-background-color=" " data-background-position="center" -->
+
 
 ### Questions?
 
 <br>
 
-@fa[twitter gp-contact](@gitpitch)
+<i class="fa fa-twitter gp-contact" aria-hidden="true"> @gitpitch</i>
 
-@fa[github gp-contact](gitpitch)
+<i class="fa fa-github gp-contact" aria-hidden="true"> gitpitch</i>
 
-@fa[medium gp-contact](@gitpitch)
+<i class="fa fa-medium gp-contact" aria-hidden="true"> @gitpitch</i>
 
----?image=assets/image/gitpitch-audience.jpg
+---
+<!-- .slide: data-background-image="./assets/md/assets/gitpitch-audience.jpg" data-background-size="100% 100%" data-background-color=" " data-background-position="center" -->
 
-@title[Download this Template!]
+
+<span class="menu-title" style="display: none">Download this Template!</span>
 
 ### Get your presentation started!
-### [Download this template @fa[external-link gp-download]](https://gitpitch.com/template/download/space)
-
+### [Download this template <i class="fa fa-external-link gp-download" aria-hidden="true"> </i>](https://gitpitch.com/template/download/space)
