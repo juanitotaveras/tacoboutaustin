@@ -74,8 +74,6 @@
 - We don't use Flask RESTless, and our API is custom-made.
 - We also did categories, searching, and filtering on the backend.
 
-- The real question is: what _didn't_ we do well?
-
 ---
 
 ## What did we learn?
@@ -102,33 +100,43 @@
 ---
 
 
-# Other-critique
+# Other-critique - Learn2Earn
 
 ---
 
 ## What did they do well?
 
-They made a lot of improvements from when we initially reviewed their site two weeks ago. They managed to save filters when returning to model pages which we wanted to do, but did not have time for, and they also managed to add loading icons to their website, which really improved the professional appearance of their website. We really liked their searching which was able to find keywords across a wide range of data within an instance and it displayed that information in a very clean way.
+- When the user goes back from another page their filters are not lost.
+- They have loading icons for everything, which is nice.
+- Their search returns lots of results and works very well.
 
 ---
 
 ## What did we learn from their api / website?
 
-We learned that drop down filter menus with react-select are very convenient and easier to use than text boxes, which we implemented in our own site as a result.
+- Their API allows you to use a subject ID under the course endpoint to see all the courses related to a subject.
+- Their filters use a dropdown menu, which inspired us to do a similar design.
+- We like how they have a summary of their data on their Splash Page.
 
 ---
 
 ## What can they do better?
 
-We felt that the website didn't look very nice and that the instance detail pages didn't display enough information and were too static. Many of the images on the model pages look blurry and they used these even more blown up versions of these images for the details pages. The details pages themselves didn't display very much information or have anything to in interact with.
+- Detail pages could have more information and interactivity.
+
+- Their images are low resolution and are frequently duplicated.
+
 
 ---
 
 ## What puzzles us about their api / website?
 
-We felt that we should be able to filter courses and jobs by related subject since that seemed like something a user might want to know. We also felt that the way they display related models on the details page of each instance was very unappealing and confusing.
+- On their courses page, you can filter by subject but the subject is not shown on the Course cards.
+
 
 --- 
+
+# VISUALIZATION
 
 
 ## Tips!
