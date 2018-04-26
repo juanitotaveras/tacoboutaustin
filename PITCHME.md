@@ -15,7 +15,8 @@
 
 ## James Crabtree
 
-- test content
+- I'm a junior CS student focusing on AI and game development
+- I worked on the back-end side of the website and was mainly responsible for server management, data scraping, and api searching, sorting, and filtering
 
 --- 
 
