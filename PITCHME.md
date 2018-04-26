@@ -7,7 +7,7 @@
 ---
 
 ## Juanito Taveras
-- I'm finishing college next week.
+- I'm finishing college next week. I enjoy making multi-media content.
 - I worked mainly on front-end content. I made drawings and animations for the site, and wrote a lot of JSX code to put together our React components, such as Searching, Highlighting, and Loading components.
 
 ---
@@ -24,10 +24,29 @@
 - I'm a third year student and a unicorn (a native Austinite!)
 - I worked on the front-end, including writing React components and unit tests. Specifically, I worked on things such as the sorting, filtering, splash page, and grid cards. 
 
+---
 ## An Vo
--  hai
+ - I moved to the U.S about five years ago.
+ - I worked mostly on the back-end.
+ - I created tables, relationships, API endpoints and wrote unit tests.
+
+---
 
 ## Eduardo Campos
+ - test content
+
+---
+
+---
+
+# DEMO
+## Prepare to be amazed
+
+---
+
+## Unit test screenshot
+
+--- 
 
 ## Tips!
 
