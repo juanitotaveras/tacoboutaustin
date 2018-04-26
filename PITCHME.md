@@ -54,43 +54,81 @@
 
 # Self-Critique
 
-##What did we do well?
+## What did we do well?
 
-###Frontend
+### Frontend
 
-- We completely remodeled our site for Phase 4. Now that we had almost everything working, we could mainly focus on the aesthetics of our site. We made the Splash Page fullscreen and beautiful. We redesigned our logo and made it larger and made the text inside more legible. We added actual tacos instead of a numerical rating for all our cards. We re-designed our Search page to make it more intuitive and are using tabs instead of divs to categorize our search results. We also put significant time into making our time more mobile-friendly by making everything look appropriate for mobile devices. We had a loading animations for the search pages.
+- The Splash Page is beautiful.
+- The logo, loading animation, and rating icons are custom-made, original, and relevant to the site.
+- The site is very user-friendly, easy to navigate, and looks good overall.
+- We implemented our own pagination and highlighting components without dependencies.
+- Filtering and sorting work very well also.
+- Our site also looks pretty good on mobile devices.
 
 ---
 
-###Backend
-
-- For the backend, we combined three models: Restaurant, Hotel, and Attraction into one model, Place. The three models inherit from the Place model and also have their own unique data. We also refactored all the backend to reduce duplicate code. We scraped and implemented a category, zip code, open hours and distances system. The two most complex systems were category and distance. Category needs to have many-to-many relationship with Place model, and distance needs to have two many-to-one relationships with Place. Now, each place has the distances between it and all other places that are calculated using latitude and longitude stored in the Distance table.
+## What did we do well?
+### Backend
+- Our data models are structured in a very logical and clean way.
+- Our API is easy-to-use and has many options for developers.
+- We don't use Flask RESTless, and our API is custom-made.
+- We also did categories, searching, and filtering on the backend.
 
 - The real question is: what _didn't_ we do well?
 
 ---
 
-##What did we learn?
+## What did we learn?
 
-- We learned how to use custom-made images to make our site really POP. We learned how to refactor our code and make it modular and portable.
-
-- We became familiar with implementing and using relationships in our database, especially one-to-many and many-to-many relationships. We learned how to write queries that involve joining tables and group fields.
+- We learned how to design an attractive site using React and Bootstrap.
+- We learend how to make API calls to our own API and other APIs, and how to organize and display this data efficiently.
+- We learned how to create tables in our database and query data using SQLAlchemy.
+- We learned how to work as a team and depend on one another <3.
 
 ---
 
-##What can we do better?
+## What can we do better?
+- Our API could have closeby places as a separate endpoint.
+- We would have a search bar in the navigation bar instead of the word "Search".
+- We could have a way for users to submit ratings and reviews for places.
+- We could make improvements on mobile.
 
-- There is a lot that we would do if we had more time.
+---
 
-- We would have a search bar in the navigation bar instead of the word "Search". We would make the navigation bar collapse and stay fixed at the top of the page while the user scrolls down - we did not have time to do this.
-
-##What puzzles us?
-
-- Though our site looks fine on mobile devices, it could use a lot more work - the navigation bar still looks strange on smart phones.
-
+## What puzzles us?
 - We would also like to save filters and user preferences when users navigate throughout the site - we can use cookies for this, but we didn't put time into implementing these details.
+- We would like to get better data, but found it difficult because the best APIs were closed off to us.
 
 ---
+
+
+# Other-critique
+
+---
+
+## What did they do well?
+
+They made a lot of improvements from when we initially reviewed their site two weeks ago. They managed to save filters when returning to model pages which we wanted to do, but did not have time for, and they also managed to add loading icons to their website, which really improved the professional appearance of their website. We really liked their searching which was able to find keywords across a wide range of data within an instance and it displayed that information in a very clean way.
+
+---
+
+## What did we learn from their api / website?
+
+We learned that drop down filter menus with react-select are very convenient and easier to use than text boxes, which we implemented in our own site as a result.
+
+---
+
+## What can they do better?
+
+We felt that the website didn't look very nice and that the instance detail pages didn't display enough information and were too static. Many of the images on the model pages look blurry and they used these even more blown up versions of these images for the details pages. The details pages themselves didn't display very much information or have anything to in interact with.
+
+---
+
+## What puzzles us about their api / website?
+
+We felt that we should be able to filter courses and jobs by related subject since that seemed like something a user might want to know. We also felt that the way they display related models on the details page of each instance was very unappealing and confusing.
+
+--- 
 
 ## Tips!
 
