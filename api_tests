@@ -1,0 +1,2068 @@
+{
+	"id": "79e5d9d3-88af-44a8-aa3d-7e5037778729",
+	"name": "tacoboutaustin api tests",
+	"allTests": [],
+	"timestamp": "2018-04-26T16:54:37.089Z",
+	"collection_id": "ac5670a2-1a74-e30b-54f2-e1b44211f45e",
+	"folder_id": 0,
+	"target_type": "collection",
+	"environment_id": "no-environment",
+	"data": [],
+	"delay": 0,
+	"count": 1,
+	"collection": {
+		"id": "ac5670a2-1a74-e30b-54f2-e1b44211f45e",
+		"name": "tacoboutaustin api tests",
+		"description": "",
+		"order": [
+			"8e0585d9-991c-7bf8-62b1-55db9575d9a1",
+			"d7dadf57-94c6-2c61-9543-5c8b79d3d33a",
+			"9da0ca7f-2c64-1883-d0dc-d0d6bee0d20b",
+			"cf126f18-df20-c641-9ca3-59eaf1ed8289",
+			"35c1cd9f-7952-ec2f-2429-c1889f74dcd8",
+			"31ddfca1-b3b6-f6a4-fd0e-b1a187240710",
+			"378dc67e-2e37-ff29-4241-feb3aa87755c",
+			"4b89e1d1-9beb-c76e-db80-c50ade69b741",
+			"26b27d7b-bbc1-2e3c-bf45-46832dbddc9e",
+			"942ad90f-36d4-1bca-284b-aee50e98feda",
+			"3bc54399-2bb2-d470-33df-b3a909460c12",
+			"c4eaec26-44cb-2833-0a12-5505839bae83",
+			"2b094eca-5f1e-aa83-53ee-fd58cdbbac69",
+			"c044060b-ced4-caaa-05e1-d43833f9faba",
+			"1a312c28-4bb1-593c-7e7f-8fb01fa816c4",
+			"a7985738-faf2-75af-fd2e-c12f36d50aa4",
+			"510d8d74-2b2a-7f31-6890-2551f78e01c0",
+			"bdfcc001-d887-288a-76d8-a3165e071805",
+			"941f1cda-6603-8d82-3ad1-241ffe557fb2",
+			"1d3bbc80-d981-ff88-d29a-e2c33b8fd979",
+			"8c926fef-ad52-6c73-ae47-34e9c5713bcb"
+		],
+		"folders": [],
+		"folders_order": [],
+		"timestamp": 1524171883265,
+		"synced": true,
+		"remote_id": 0,
+		"owner": "3735989",
+		"sharedWithTeam": false,
+		"subscribed": false,
+		"remoteLink": "",
+		"remoteLinkUpdatedAt": null,
+		"public": false,
+		"createdAt": 1524171883265,
+		"updatedAt": 1524171896042,
+		"write": true,
+		"published": false,
+		"favorite": false,
+		"permissions": {},
+		"syncedPermissions": {},
+		"events": [],
+		"variables": [],
+		"auth": null
+	},
+	"folder": null,
+	"environment": null,
+	"globals": [],
+	"results": [
+		{
+			"name": "restaurants",
+			"id": "8e0585d9-991c-7bf8-62b1-55db9575d9a1",
+			"url": "http://api.tacoboutaustin.me/restaurants",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Valid schema": true,
+				"ID's are unique": true,
+				"Ratings are valid": true,
+				"All instances have frontpage images": true,
+				"Addresses are not NULL": true,
+				"Names are not NULL": true,
+				"All instances have >= 1 category": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID's are unique": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Ratings are valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All instances have frontpage images": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Addresses are not NULL": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Names are not NULL": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All instances have >= 1 category": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"968"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Valid schema": true,
+					"ID's are unique": true,
+					"Ratings are valid": true,
+					"All instances have frontpage images": true,
+					"Addresses are not NULL": true,
+					"Names are not NULL": true,
+					"All instances have >= 1 category": true
+				}
+			],
+			"time": "968",
+			"totalRequestTime": "968",
+			"iterationResults": {}
+		},
+		{
+			"name": "restaraunt pagination & filter",
+			"id": "d7dadf57-94c6-2c61-9543-5c8b79d3d33a",
+			"url": "http://api.tacoboutaustin.me/restaurants?page=1&rating=4&zipcode=78704&categories=mexican",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"return 12 items": true,
+				"Response matches filter": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"return 12 items": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"91"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"return 12 items": true,
+					"Response matches filter": true
+				}
+			],
+			"time": "91",
+			"totalRequestTime": "91",
+			"iterationResults": {}
+		},
+		{
+			"name": "restaraunt search or",
+			"id": "9da0ca7f-2c64-1883-d0dc-d0d6bee0d20b",
+			"url": "http://api.tacoboutaustin.me/restaurants?search=taco,78704",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Response matches filter": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"231"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Response matches filter": true
+				}
+			],
+			"time": "231",
+			"totalRequestTime": "231",
+			"iterationResults": {}
+		},
+		{
+			"name": "restaraunt search and",
+			"id": "cf126f18-df20-c641-9ca3-59eaf1ed8289",
+			"url": "http://api.tacoboutaustin.me/restaurants?search=taco,78704&search_type=and",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Response matches filter": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"96"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Response matches filter": true
+				}
+			],
+			"time": "96",
+			"totalRequestTime": "96",
+			"iterationResults": {}
+		},
+		{
+			"name": "hotels",
+			"id": "35c1cd9f-7952-ec2f-2429-c1889f74dcd8",
+			"url": "http://api.tacoboutaustin.me/hotels",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Valid schema": true,
+				"ID's are unique": true,
+				"Ratings are valid": true,
+				"All instances have frontpage images": true,
+				"Addresses are not NULL": true,
+				"Names are not NULL": true,
+				"All instances have >= 1 category": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID's are unique": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Ratings are valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All instances have frontpage images": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Addresses are not NULL": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Names are not NULL": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All instances have >= 1 category": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"417"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Valid schema": true,
+					"ID's are unique": true,
+					"Ratings are valid": true,
+					"All instances have frontpage images": true,
+					"Addresses are not NULL": true,
+					"Names are not NULL": true,
+					"All instances have >= 1 category": true
+				}
+			],
+			"time": "417",
+			"totalRequestTime": "417",
+			"iterationResults": {}
+		},
+		{
+			"name": "hotel pagination & filter",
+			"id": "31ddfca1-b3b6-f6a4-fd0e-b1a187240710",
+			"url": "http://api.tacoboutaustin.me/hotels?page=1&rating=4&zipcode=78704",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"return 12 items": true,
+				"Response matches filter": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"return 12 items": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"84"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"return 12 items": true,
+					"Response matches filter": true
+				}
+			],
+			"time": "84",
+			"totalRequestTime": "84",
+			"iterationResults": {}
+		},
+		{
+			"name": "hotel search or",
+			"id": "378dc67e-2e37-ff29-4241-feb3aa87755c",
+			"url": "http://api.tacoboutaustin.me/hotels?search=driskill,78704",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Response matches filter": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"95"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Response matches filter": true
+				}
+			],
+			"time": "95",
+			"totalRequestTime": "95",
+			"iterationResults": {}
+		},
+		{
+			"name": "hotels search and",
+			"id": "4b89e1d1-9beb-c76e-db80-c50ade69b741",
+			"url": "http://api.tacoboutaustin.me/hotels?search=driskill,78701&search_type=and",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Response matches filter": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"77"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Response matches filter": true
+				}
+			],
+			"time": "77",
+			"totalRequestTime": "77",
+			"iterationResults": {}
+		},
+		{
+			"name": "attractions",
+			"id": "26b27d7b-bbc1-2e3c-bf45-46832dbddc9e",
+			"url": "http://api.tacoboutaustin.me/attractions",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Valid schema": true,
+				"ID's are unique": true,
+				"Ratings are valid": true,
+				"All instances have frontpage images": true,
+				"Addresses are not NULL": true,
+				"Names are not NULL": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID's are unique": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Ratings are valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All instances have frontpage images": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Addresses are not NULL": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Names are not NULL": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"681"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Valid schema": true,
+					"ID's are unique": true,
+					"Ratings are valid": true,
+					"All instances have frontpage images": true,
+					"Addresses are not NULL": true,
+					"Names are not NULL": true
+				}
+			],
+			"time": "681",
+			"totalRequestTime": "681",
+			"iterationResults": {}
+		},
+		{
+			"name": "attraction pagination & filter",
+			"id": "942ad90f-36d4-1bca-284b-aee50e98feda",
+			"url": "http://api.tacoboutaustin.me/attractions?page=1&rating=2&zipcode=78701&categories=landmarks",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"return 12 items": true,
+				"Response matches filter": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"return 12 items": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"93"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"return 12 items": true,
+					"Response matches filter": true
+				}
+			],
+			"time": "93",
+			"totalRequestTime": "93",
+			"iterationResults": {}
+		},
+		{
+			"name": "attraction search or",
+			"id": "3bc54399-2bb2-d470-33df-b3a909460c12",
+			"url": "http://api.tacoboutaustin.me/attractions?search=alamo,78704",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Response matches filter": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"141"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Response matches filter": true
+				}
+			],
+			"time": "141",
+			"totalRequestTime": "141",
+			"iterationResults": {}
+		},
+		{
+			"name": "attraction search and",
+			"id": "c4eaec26-44cb-2833-0a12-5505839bae83",
+			"url": "http://api.tacoboutaustin.me/attractions?search=alamo,78704&search_type=and",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Response matches filter": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"78"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Response matches filter": true
+				}
+			],
+			"time": "78",
+			"totalRequestTime": "78",
+			"iterationResults": {}
+		},
+		{
+			"name": "restaurants/<id> valid",
+			"id": "2b094eca-5f1e-aa83-53ee-fd58cdbbac69",
+			"url": "http://api.tacoboutaustin.me/restaurants/1",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Valid schema": true,
+				"4 Nearby Attractions": true,
+				"Attractions have valid information": true,
+				"4 Nearby Hotels": true,
+				"Hotels have valid information": true,
+				"Address is Valid": true,
+				"ID is valid": true,
+				"Rating is valid": true,
+				"Images are Valid": true,
+				"Name is valid": true,
+				"Phone Number is Valid": true,
+				"Reviews are Valid": true,
+				"Location is Valid": true,
+				"Hours are Valid": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Attractions": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Attractions have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Hotels": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Hotels have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Address is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Rating is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Images are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Phone Number is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Reviews are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Location is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Hours are Valid": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"93"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Valid schema": true,
+					"4 Nearby Attractions": true,
+					"Attractions have valid information": true,
+					"4 Nearby Hotels": true,
+					"Hotels have valid information": true,
+					"Address is Valid": true,
+					"ID is valid": true,
+					"Rating is valid": true,
+					"Images are Valid": true,
+					"Name is valid": true,
+					"Phone Number is Valid": true,
+					"Reviews are Valid": true,
+					"Location is Valid": true,
+					"Hours are Valid": true
+				}
+			],
+			"time": "93",
+			"totalRequestTime": "93",
+			"iterationResults": {}
+		},
+		{
+			"name": "attractions/<id> valid",
+			"id": "c044060b-ced4-caaa-05e1-d43833f9faba",
+			"url": "http://api.tacoboutaustin.me/attractions/1",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Valid schema": true,
+				"4 Nearby Hotels": true,
+				"Hotels have valid information": true,
+				"4 Nearby Restaurants": true,
+				"Restaurants have valid information": true,
+				"Address is Valid": true,
+				"ID is valid": true,
+				"Rating is valid": true,
+				"Images are Valid": true,
+				"Name is valid": true,
+				"Reviews are Valid": true,
+				"Location is valid": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Hotels": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Hotels have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Restaurants": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Restaurants have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Address is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Rating is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Images are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Reviews are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Location is valid": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"91"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Valid schema": true,
+					"4 Nearby Hotels": true,
+					"Hotels have valid information": true,
+					"4 Nearby Restaurants": true,
+					"Restaurants have valid information": true,
+					"Address is Valid": true,
+					"ID is valid": true,
+					"Rating is valid": true,
+					"Images are Valid": true,
+					"Name is valid": true,
+					"Reviews are Valid": true,
+					"Location is valid": true
+				}
+			],
+			"time": "91",
+			"totalRequestTime": "91",
+			"iterationResults": {}
+		},
+		{
+			"name": "hotels/<id> valid",
+			"id": "1a312c28-4bb1-593c-7e7f-8fb01fa816c4",
+			"url": "http://api.tacoboutaustin.me/hotels/1",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Returns json": true,
+				"Valid schema": true,
+				"4 Nearby Attractions": true,
+				"Attractions have valid information": true,
+				"4 Nearby Restaurants": true,
+				"Restaurants have valid information": true,
+				"Address is Valid": true,
+				"ID is valid": true,
+				"Rating is valid": true,
+				"Images are Valid": true,
+				"Name is valid": true,
+				"Phone Number is Valid": true,
+				"Reviews are Valid": true,
+				"Location is valid": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Attractions": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Attractions have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Restaurants": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Restaurants have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Address is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Rating is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Images are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Phone Number is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Reviews are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Location is valid": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"92"
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Returns json": true,
+					"Valid schema": true,
+					"4 Nearby Attractions": true,
+					"Attractions have valid information": true,
+					"4 Nearby Restaurants": true,
+					"Restaurants have valid information": true,
+					"Address is Valid": true,
+					"ID is valid": true,
+					"Rating is valid": true,
+					"Images are Valid": true,
+					"Name is valid": true,
+					"Phone Number is Valid": true,
+					"Reviews are Valid": true,
+					"Location is valid": true
+				}
+			],
+			"time": "92",
+			"totalRequestTime": "92",
+			"iterationResults": {}
+		},
+		{
+			"name": "restaurants/<id> invalid",
+			"id": "a7985738-faf2-75af-fd2e-c12f36d50aa4",
+			"url": "http://api.tacoboutaustin.me/restaurants/500",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"tests": {
+				"Invalid ID Response fails": true
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"74"
+			],
+			"allTests": [
+				{
+					"Invalid ID Response fails": true
+				}
+			],
+			"time": "74",
+			"totalRequestTime": "74",
+			"iterationResults": {}
+		},
+		{
+			"name": "restaurants/<id> invalid 2",
+			"id": "510d8d74-2b2a-7f31-6890-2551f78e01c0",
+			"url": "http://api.tacoboutaustin.me/restaurants/kladfjlk;asdkfj",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"tests": {
+				"Invalid ID Response fails": true
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"74"
+			],
+			"allTests": [
+				{
+					"Invalid ID Response fails": true
+				}
+			],
+			"time": "74",
+			"totalRequestTime": "74",
+			"iterationResults": {}
+		},
+		{
+			"name": "attractions/<id> invalid",
+			"id": "bdfcc001-d887-288a-76d8-a3165e071805",
+			"url": "http://api.tacoboutaustin.me/attractions/500",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"tests": {
+				"Invalid ID Response fails": true
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"75"
+			],
+			"allTests": [
+				{
+					"Invalid ID Response fails": true
+				}
+			],
+			"time": "75",
+			"totalRequestTime": "75",
+			"iterationResults": {}
+		},
+		{
+			"name": "attractions/<id> invalid 2",
+			"id": "941f1cda-6603-8d82-3ad1-241ffe557fb2",
+			"url": "http://api.tacoboutaustin.me/attractions/ldfhkldfhklasdhfilah",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"tests": {
+				"Invalid ID Response fails": true
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"88"
+			],
+			"allTests": [
+				{
+					"Invalid ID Response fails": true
+				}
+			],
+			"time": "88",
+			"totalRequestTime": "88",
+			"iterationResults": {}
+		},
+		{
+			"name": "hotels/<id> invalid",
+			"id": "1d3bbc80-d981-ff88-d29a-e2c33b8fd979",
+			"url": "http://api.tacoboutaustin.me/hotels/500",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"tests": {
+				"Invalid ID Response fails": true
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"88"
+			],
+			"allTests": [
+				{
+					"Invalid ID Response fails": true
+				}
+			],
+			"time": "88",
+			"totalRequestTime": "88",
+			"iterationResults": {}
+		},
+		{
+			"name": "hotels/<id> invalid 2",
+			"id": "8c926fef-ad52-6c73-ae47-34e9c5713bcb",
+			"url": "http://api.tacoboutaustin.me/hotels/adfkjadfkljahfkjfdah",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"tests": {
+				"Invalid ID Response fails": true
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				"74"
+			],
+			"allTests": [
+				{
+					"Invalid ID Response fails": true
+				}
+			],
+			"time": "74",
+			"totalRequestTime": "74",
+			"iterationResults": {}
+		}
+	],
+	"totalPass": 107,
+	"totalFail": 0,
+	"totalTime": 3801,
+	"lifecycle": "done",
+	"requests": [
+		{
+			"name": "restaurants",
+			"id": "8e0585d9-991c-7bf8-62b1-55db9575d9a1",
+			"url": "http://api.tacoboutaustin.me/restaurants",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID's are unique": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Ratings are valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All instances have frontpage images": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Addresses are not NULL": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Names are not NULL": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All instances have >= 1 category": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "restaraunt pagination & filter",
+			"id": "d7dadf57-94c6-2c61-9543-5c8b79d3d33a",
+			"url": "http://api.tacoboutaustin.me/restaurants?page=1&rating=4&zipcode=78704&categories=mexican",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"return 12 items": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "restaraunt search or",
+			"id": "9da0ca7f-2c64-1883-d0dc-d0d6bee0d20b",
+			"url": "http://api.tacoboutaustin.me/restaurants?search=taco,78704",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "restaraunt search and",
+			"id": "cf126f18-df20-c641-9ca3-59eaf1ed8289",
+			"url": "http://api.tacoboutaustin.me/restaurants?search=taco,78704&search_type=and",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "hotels",
+			"id": "35c1cd9f-7952-ec2f-2429-c1889f74dcd8",
+			"url": "http://api.tacoboutaustin.me/hotels",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID's are unique": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Ratings are valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All instances have frontpage images": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Addresses are not NULL": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Names are not NULL": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All instances have >= 1 category": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "hotel pagination & filter",
+			"id": "31ddfca1-b3b6-f6a4-fd0e-b1a187240710",
+			"url": "http://api.tacoboutaustin.me/hotels?page=1&rating=4&zipcode=78704",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"return 12 items": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "hotel search or",
+			"id": "378dc67e-2e37-ff29-4241-feb3aa87755c",
+			"url": "http://api.tacoboutaustin.me/hotels?search=driskill,78704",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "hotels search and",
+			"id": "4b89e1d1-9beb-c76e-db80-c50ade69b741",
+			"url": "http://api.tacoboutaustin.me/hotels?search=driskill,78701&search_type=and",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "attractions",
+			"id": "26b27d7b-bbc1-2e3c-bf45-46832dbddc9e",
+			"url": "http://api.tacoboutaustin.me/attractions",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID's are unique": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Ratings are valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All instances have frontpage images": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Addresses are not NULL": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Names are not NULL": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "attraction pagination & filter",
+			"id": "942ad90f-36d4-1bca-284b-aee50e98feda",
+			"url": "http://api.tacoboutaustin.me/attractions?page=1&rating=2&zipcode=78701&categories=landmarks",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"return 12 items": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "attraction search or",
+			"id": "3bc54399-2bb2-d470-33df-b3a909460c12",
+			"url": "http://api.tacoboutaustin.me/attractions?search=alamo,78704",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "attraction search and",
+			"id": "c4eaec26-44cb-2833-0a12-5505839bae83",
+			"url": "http://api.tacoboutaustin.me/attractions?search=alamo,78704&search_type=and",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response matches filter": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "restaurants/<id> valid",
+			"id": "2b094eca-5f1e-aa83-53ee-fd58cdbbac69",
+			"url": "http://api.tacoboutaustin.me/restaurants/1",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Attractions": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Attractions have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Hotels": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Hotels have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Address is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Rating is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Images are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Phone Number is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Reviews are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Location is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Hours are Valid": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "attractions/<id> valid",
+			"id": "c044060b-ced4-caaa-05e1-d43833f9faba",
+			"url": "http://api.tacoboutaustin.me/attractions/1",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Hotels": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Hotels have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Restaurants": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Restaurants have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Address is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Rating is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Images are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Reviews are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Location is valid": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "hotels/<id> valid",
+			"id": "1a312c28-4bb1-593c-7e7f-8fb01fa816c4",
+			"url": "http://api.tacoboutaustin.me/hotels/1",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": {
+					"name": "OK",
+					"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+				}
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Valid schema": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Attractions": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Attractions have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"4 Nearby Restaurants": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Restaurants have valid information": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Address is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ID is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Rating is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Images are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name is valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Phone Number is Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Reviews are Valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Location is valid": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "restaurants/<id> invalid",
+			"id": "a7985738-faf2-75af-fd2e-c12f36d50aa4",
+			"url": "http://api.tacoboutaustin.me/restaurants/500",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "restaurants/<id> invalid 2",
+			"id": "510d8d74-2b2a-7f31-6890-2551f78e01c0",
+			"url": "http://api.tacoboutaustin.me/restaurants/kladfjlk;asdkfj",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "attractions/<id> invalid",
+			"id": "bdfcc001-d887-288a-76d8-a3165e071805",
+			"url": "http://api.tacoboutaustin.me/attractions/500",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "attractions/<id> invalid 2",
+			"id": "941f1cda-6603-8d82-3ad1-241ffe557fb2",
+			"url": "http://api.tacoboutaustin.me/attractions/ldfhkldfhklasdhfilah",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "hotels/<id> invalid",
+			"id": "1d3bbc80-d981-ff88-d29a-e2c33b8fd979",
+			"url": "http://api.tacoboutaustin.me/hotels/500",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		},
+		{
+			"name": "hotels/<id> invalid 2",
+			"id": "8c926fef-ad52-6c73-ae47-34e9c5713bcb",
+			"url": "http://api.tacoboutaustin.me/hotels/adfkjadfkljahfkjfdah",
+			"time": "2018-04-26T16:54:37.089Z",
+			"responseCode": {
+				"code": 404,
+				"name": "NOT FOUND",
+				"detail": {
+					"name": "Not Found",
+					"detail": "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible."
+				}
+			},
+			"testPassFailCounts": {
+				"Invalid ID Response fails": {
+					"pass": 1,
+					"fail": 0
+				}
+			}
+		}
+	],
+	"synced": false
+}
