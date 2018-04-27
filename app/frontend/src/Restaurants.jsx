@@ -163,7 +163,6 @@ export default class Restaurants extends Component {
     });
   }
 
-
   doneLoading() {
     this.setState({loading: false});
   }
@@ -183,9 +182,10 @@ export default class Restaurants extends Component {
 
   render() {
     const loadingImage =
-      <div className="text-center">
-        <img src={TacoAnimation} alt="Loading Image" width="10%" height="auto" style={{float: 'center'}}/>
+      <div>
+        <img src={TacoAnimation} alt="Loading Image" width="65%" height="auto" style={{marginLeft: '60%'}}/>
       </div>;
+
     var pages_count = Math.floor(resCount/per_page);
     if (!((resCount%per_page) == 0))
       pages_count++;
@@ -194,43 +194,53 @@ export default class Restaurants extends Component {
             return <Col xs="12" md="4"><RestaurantCard restaurant={restaurant} /></Col>;
           })
 
-    const container =
-            <Container id="jump">
-            <Row>
-                <Col xs="12" md="2">
-                  <RestaurantFilter handler={this.filterPage}/>
-                  <br />
-                  <Sort handler={this.sortPage}/>
-                </Col>
 
-                <Col xs="12" md="10">
-                {
-                  resCount > 0 &&
-                  cards
-                }
-                {
-                  resCount == 0 &&
-                  <h1>No results found.</h1>
-                }
-                </Col>
-            </Row>
-            <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick} />
-        </Container>;
+    const container =
+        <Col xs="12" md="10">
+        {
+          resCount > 0 &&
+          cards
+        }
+        {
+          resCount == 0 &&
+          <h1>No results found.</h1>
+        }
+        </Col>
+
 
     return (
-      <div className="background">
-        <Header
-          title="World-class Restaurants"
-          description="From mouth-watering barbeque to spicy Tex-Mex, our wide selection is bound to make your belly happy."
-          image={HeaderBackground}
-        />
-        <br />
-        {
-          this.state.loading ?
-          loadingImage
-          :
-          container
-        }
+        <div className="background">
+          <Header
+            title="World-class Restaurants"
+            description="From mouth-watering barbeque to spicy Tex-Mex, our wide selection is bound to make your belly happy."
+            image={HeaderBackground}
+          />
+          
+          <br />
+
+          <Container id="jump">
+            <Row>
+              <Col xs="12" md="2">
+                <RestaurantFilter handler={this.filterPage}/>
+                <br />
+                <Sort handler={this.sortPage}/>
+              </Col>
+
+              {
+                this.state.loading ?
+                loadingImage
+                :
+                container
+              }
+
+            </Row>
+
+              {
+                !this.state.loading &&
+                <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick} />
+              }
+
+        </Container>
       </div>
     );
   }

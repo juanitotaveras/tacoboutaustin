@@ -174,6 +174,7 @@ export default class Attractions extends Component {
   }
 
   handlePageClick(pageNum) {
+    document.getElementById('jump').scrollIntoView();
     this.getPage(pageNum, this.state.sorted, this.state.filters);
   }
 
@@ -181,8 +182,9 @@ export default class Attractions extends Component {
   render() {
     const loadingImage =
       <div className="text-center">
-        <img src={TacoAnimation} alt="Loading Image" width="10%" height="auto" style={{float: 'center'}}/>
+        <img src={TacoAnimation} alt="Loading Image" width="65%" height="auto" style={{marginLeft: '60%'}}/>
       </div>;
+
     var pages_count = Math.floor(att_count/per_page);
     if (!((att_count%per_page) == 0))
       pages_count++;
@@ -192,27 +194,16 @@ export default class Attractions extends Component {
           })
 
     const container = 
-            <Container>
-            <Row>
-                <Col xs="12" md="2">
-                  <Filter type="Attractions" handler={this.filterPage}/>
-                  <br />
-                  <Sort handler={this.sortPage}/>
-                </Col>
-
-                <Col xs="12" md="10">
-                {
-                  att_count > 0 &&
-                  cards
-                }
-                {
-                  att_count == 0 &&
-                  <h1>No results found.</h1>
-                }
-                </Col>
-            </Row>
-            <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick}/>
-          </Container>;
+      <Col xs="12" md="10">
+      {
+        att_count > 0 &&
+        cards
+      }
+      {
+        att_count == 0 &&
+        <h1>No results found.</h1>
+      }
+      </Col>
 
     return (
       <div classname="background">
@@ -224,13 +215,29 @@ export default class Attractions extends Component {
           image={HeaderBackground}
           />
         <br />
-        {
-          this.state.loading ?
-          loadingImage
-          :
-          container
-        }
-        </div>
+
+        <Container id="jump">
+          <Row>
+              <Col xs="12" md="2">
+                <Filter type="Attractions" handler={this.filterPage}/>
+                <br />
+                <Sort handler={this.sortPage}/>
+              </Col>
+          
+          {
+            this.state.loading ?
+            loadingImage
+            :
+            container
+          }
+
+        </Row>
+            {
+              !this.state.loading &&
+              <Paginator pageCount={pages_count} activePage={this.state.onPage} onPageClicked={this.handlePageClick} />
+            }
+        </Container>;
+      </div>
     );
   }
 }
