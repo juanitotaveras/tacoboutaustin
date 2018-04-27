@@ -52,6 +52,15 @@
 
 --- 
 
+---?image=/unit_test_pics/gui_test.png
+
+
+
+## GUI Unit test screenshot
+
+---?image=/unit_test_pics/backend_tests.png
+
+--- 
 
 # Self-Critique
 
