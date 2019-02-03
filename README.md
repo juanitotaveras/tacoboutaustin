@@ -1,5 +1,5 @@
 # tacoboutaustin
-Tacoboutaustin award-winning website, check it out: http://tacoboutaustin.me/
+Tacoboutaustin award-winning website
 
 ## Setting up:
 
